@@ -80,11 +80,7 @@ namespace PCon.View
             var size = WindowInfo.GetMainProcessWindowSize(snapper.WindowHandle);
             overlaySettings.Width = size.Width;
             overlaySettings.Height = size.Height;
-            while (!cancellationTokenSource.Token.IsCancellationRequested)
-            {
-                WaitChangedOverlaySettingsVisibility();
-            }
-            WaitChangedOverlaySettingsVisibility();
+            WaitChangeOverlaySettingsVisibility();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -124,7 +120,7 @@ namespace PCon.View
             Hide();
         }
 
-        private async void WaitChangedOverlaySettingsVisibility()
+        private async void WaitChangeOverlaySettingsVisibility()
         {
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {

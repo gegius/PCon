@@ -10,7 +10,6 @@
         ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static domain:HotKeys.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:HotKeys.ScrollDownCommand}" Executed="ScrollDownCommand_Execute"/>
     </Window.CommandBindings>
     <Window.Background>
         <SolidColorBrush Opacity="0.3" Color="White"/>
@@ -26,23 +25,25 @@
             <GroupBox.Background>
                     <SolidColorBrush Color="White"/>
                 </GroupBox.Background>
-            <ScrollViewer x:Name="ScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <StackPanel x:Name="BodyPanel">
-                    <StackPanel x:Name = "SearchBody" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                        <TextBox x:Name = "SearchField" Width="400" FontSize="20" FontStyle="Italic" >
-                        </TextBox>
-                        <Button x:Name="Find" Width="80" Content="Find" Click="Find_Media_OnClick"></Button>
-                        <Button x:Name="Trend" Width="80" Height="30" Content="Trends" Click="Find_Trends_OnClick"></Button>
-                    </StackPanel>
-                    <StackPanel x:Name="ResultBody" Orientation="Horizontal">
-                        <StackPanel x:Name="ResultPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        </StackPanel>
-                            
-                        <StackPanel x:Name="BoxPanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top">
-                        </StackPanel>
+            <StackPanel x:Name="BodyPanel">
+                <StackPanel x:Name = "SearchBody" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <TextBox x:Name = "SearchField" Width="400" FontSize="20" FontStyle="Italic" >
+                    </TextBox>
+                    <Button x:Name="Find" Width="80" Content="Find" Click="Find_Media_OnClick"></Button>
+                    <Button x:Name="Trend" Width="80" Height="30" Content="Trends" Click="Find_Trends_OnClick"></Button>
+                </StackPanel>
+                <StackPanel x:Name="ResultBody" Orientation="Horizontal">
+                    <GroupBox x:Name="ResultBox" Height="760" Width="360" Visibility="Hidden" BorderBrush="Black">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <StackPanel x:Name="ResultPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            </StackPanel>
+                        </ScrollViewer>
+                    </GroupBox>
+
+                    <StackPanel x:Name="BoxPanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top">
                     </StackPanel>
                 </StackPanel>
-                </ScrollViewer >
-            </GroupBox>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>

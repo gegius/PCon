@@ -50,6 +50,7 @@ namespace PCon.View
             _serviceCollection.Replace<IHosting>(_ => new YouTubeHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
             Box.Visibility = Visibility.Visible;
+            ResultBox.Visibility = Visibility.Hidden;
             CancelSearch();
             ClearEverything();
             ChangeColor(sender);
@@ -60,6 +61,7 @@ namespace PCon.View
             _serviceCollection.Replace<IHosting>(_ => new TwitchHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
             Box.Visibility = Visibility.Visible;
+            ResultBox.Visibility = Visibility.Hidden;
             CancelSearch();
             ClearEverything();
             ChangeColor(sender);
@@ -71,6 +73,7 @@ namespace PCon.View
             _serviceCollection.Replace<IHosting>(_ => new WasdHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
             Box.Visibility = Visibility.Visible;
+            ResultBox.Visibility = Visibility.Hidden;
             CancelSearch();
             ClearEverything();
             ChangeColor(sender);
@@ -129,6 +132,7 @@ namespace PCon.View
 
         private async void Find_Media_OnClick(object sender, RoutedEventArgs e)
         {
+            ResultBox.Visibility = Visibility.Visible;
             CancelSearch();
             ClearResult();
             ClearBox();
@@ -145,6 +149,7 @@ namespace PCon.View
 
         private async void Find_Trends_OnClick(object sender, RoutedEventArgs e)
         {
+            ResultBox.Visibility = Visibility.Visible;
             CancelSearch();
             ClearResult();
             ClearSearchField();
@@ -183,8 +188,13 @@ namespace PCon.View
 
             panel.Children.Add(img);
             panel.Children.Add(label);
-
-            resultBox.Content = panel;
+            var scrollBoxSelected = new ScrollViewer
+            {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+                Content = panel
+            };
+            resultBox.Content = scrollBoxSelected;
             mainPanel.Children.Add(resultBox);
             var buttonStart = new Button {Width = 300, Height = 30, Content = "Start", Margin = new Thickness(10)};
             if (video.Duration >= TimeSpan.Zero) buttonStart.Click += Button_Click_Show;
@@ -209,11 +219,6 @@ namespace PCon.View
         private void StartSearchCommand_Execute(object sender, ExecutedRoutedEventArgs e)
         {
             if (ResultPanel.Visibility == Visibility.Visible) Find_Media_OnClick(sender, e);
-        }
-
-        private void ScrollDownCommand_Execute(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (ResultPanel.Children.Count > 5) ScrollViewer.LineDown();
         }
     }
 }
