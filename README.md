@@ -40,10 +40,3 @@
 ## DI контейнер:
  Создается в классе App.cs, в методе OnStartup, задается начальная конфигурация в методе ConfigureServices. Пробрасывается через OverlaySettings.cs и Overlay.cs, где и используется.
  
-## Слои программы:
-
-### Domain
-
-### Services
-
-### View
