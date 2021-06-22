@@ -49,8 +49,7 @@ namespace PCon.View
         {
             _serviceCollection.Replace<IHosting>(_ => new YouTubeHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            Box.Visibility = Visibility.Visible;
-            ResultBox.Visibility = Visibility.Hidden;
+            SetDefaultSettings();
             CancelSearch();
             ClearEverything();
             ChangeColor(sender);
@@ -60,8 +59,7 @@ namespace PCon.View
         {
             _serviceCollection.Replace<IHosting>(_ => new TwitchHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            Box.Visibility = Visibility.Visible;
-            ResultBox.Visibility = Visibility.Hidden;
+            SetDefaultSettings();
             CancelSearch();
             ClearEverything();
             ChangeColor(sender);
@@ -72,8 +70,7 @@ namespace PCon.View
         {
             _serviceCollection.Replace<IHosting>(_ => new WasdHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            Box.Visibility = Visibility.Visible;
-            ResultBox.Visibility = Visibility.Hidden;
+            SetDefaultSettings();
             CancelSearch();
             ClearEverything();
             ChangeColor(sender);
@@ -86,6 +83,12 @@ namespace PCon.View
             ClearBox();
         }
 
+        private void SetDefaultSettings()
+        {
+            Box.Visibility = Visibility.Visible;
+            ResultBox.Visibility = Visibility.Hidden;
+            ResultScrollViewer.ScrollToTop();
+        }
         private void ClearResult()
         {
             ResultPanel.Children.Clear();

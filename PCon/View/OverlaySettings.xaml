@@ -34,7 +34,7 @@
                 </StackPanel>
                 <StackPanel x:Name="ResultBody" Orientation="Horizontal">
                     <GroupBox x:Name="ResultBox" Height="760" Width="360" Visibility="Hidden" BorderBrush="Black">
-                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer x:Name="ResultScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                             <StackPanel x:Name="ResultPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                             </StackPanel>
                         </ScrollViewer>
