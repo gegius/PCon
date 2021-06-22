@@ -49,8 +49,6 @@ namespace PCon.View
             ChangeColor(sender);
         }
 
-
-        
         private void Twitch_OnClick(object sender, RoutedEventArgs e)
         {
             _serviceCollection.Replace<IHosting>(_ => new TwitchHost(), ServiceLifetime.Singleton);
