@@ -11,19 +11,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 using PCon.Domain;
+using PCon.Extensions;
 using PCon.Services.HostingService;
 using Vlc.DotNet.Wpf;
 
 namespace PCon.View
 {
-    public partial class OverlaySettings : Window
+    public partial class OverlaySettings
     {
         private Overlay overlay;
         private readonly string mainProcess;
         public DesktopSettings DesktopSettings { get; set; }
         private MediaObject currentMediaObject;
         private VlcControl vlcControlElement;
-        private ServiceCollection _serviceCollection;
+        private readonly ServiceCollection _serviceCollection;
         private ServiceProvider _serviceProvider;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
@@ -54,7 +55,7 @@ namespace PCon.View
             ClearEverything();
             ChangeColor(sender);
         }
-        
+
         private void Twitch_OnClick(object sender, RoutedEventArgs e)
         {
             _serviceCollection.Replace<IHosting>(_ => new TwitchHost(), ServiceLifetime.Singleton);
@@ -64,13 +65,13 @@ namespace PCon.View
             ClearEverything();
             ChangeColor(sender);
         }
-        
+
         // ReSharper disable once IdentifierTypo
         private void Wasd_OnClick(object sender, RoutedEventArgs e)
         {
             _serviceCollection.Replace<IHosting>(_ => new WasdHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            Box.Visibility = Visibility.Visible;    
+            Box.Visibility = Visibility.Visible;
             CancelSearch();
             ClearEverything();
             ChangeColor(sender);
@@ -82,7 +83,7 @@ namespace PCon.View
             ClearSearchField();
             ClearBox();
         }
-        
+
         private void ClearResult()
         {
             ResultPanel.Children.Clear();
@@ -126,8 +127,8 @@ namespace PCon.View
 
             var anotherResultButton = new Button {Content = panel};
             anotherResultButton.Click += Button_Click_Result;
-            
-            
+
+
             return anotherResultButton;
         }
 
@@ -138,14 +139,15 @@ namespace PCon.View
             ClearBox();
             var text = SearchField.Text;
             var cancelToken = cancellationTokenSource.Token;
-            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text).WithCancellation(cancelToken))
+            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text)
+                .WithCancellation(cancelToken))
             {
                 if (cancelToken.IsCancellationRequested) break;
                 var anotherResultButton = CreateResultButton(video);
                 ResultPanel.Children.Add(anotherResultButton);
             }
         }
-        
+
         private async void Find_Trends_OnClick(object sender, RoutedEventArgs e)
         {
             CancelSearch();
@@ -153,7 +155,8 @@ namespace PCon.View
             ClearSearchField();
             ClearBox();
             var cancelToken = cancellationTokenSource.Token;
-            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends().WithCancellation(cancelToken))
+            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends()
+                .WithCancellation(cancelToken))
             {
                 if (cancelToken.IsCancellationRequested) break;
                 var anotherResultButton = CreateResultButton(video);
@@ -166,7 +169,7 @@ namespace PCon.View
             ClearBox();
             var mainPanel = new StackPanel
                 {VerticalAlignment = VerticalAlignment.Top, Orientation = Orientation.Vertical};
-            var video = (MediaObject)((GroupBox)((StackPanel)((Button) sender).Content).Children[2]).Content;
+            var video = (MediaObject) ((GroupBox) ((StackPanel) ((Button) sender).Content).Children[2]).Content;
             currentMediaObject = video;
             var resultBox = new GroupBox
             {
@@ -174,16 +177,15 @@ namespace PCon.View
                 BorderBrush = Brushes.Black, Margin = new Thickness(10)
             };
             var img = new Image();
-            if (video.DescriptionThumbnails != null) 
+            if (video.DescriptionThumbnails != null)
                 img = new Image {Source = new BitmapImage(new Uri(video.DescriptionThumbnails))};
 
             var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10)};
-            var label = new Label
+            var label = new TextBlock
             {
-                Content = video.Author + "\n" + video.Duration + "\n" + video.Title + "\n" +
-                          video.Url
+                Text = video.Author + "\n" + video.Duration + "\n" + video.Description, TextWrapping = TextWrapping.Wrap
             };
-            
+
             panel.Children.Add(img);
             panel.Children.Add(label);
 
@@ -211,20 +213,12 @@ namespace PCon.View
 
         private void StartSearchCommand_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (ResultPanel.Visibility == Visibility.Visible)
-            {
-                Find_Media_OnClick(sender, e);
-            }
+            if (ResultPanel.Visibility == Visibility.Visible) Find_Media_OnClick(sender, e);
         }
 
         private void ScrollDownCommand_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            Console.WriteLine("aaaaaaaaaaaa");
-            if (ResultPanel.Children.Count > 5)
-            {
-                Console.WriteLine("bbbbb");
-                ScrollViewer.LineDown();
-            }
+            if (ResultPanel.Children.Count > 5) ScrollViewer.LineDown();
         }
     }
 }

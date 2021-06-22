@@ -5,7 +5,7 @@ namespace TwitchAPI
 {
     public static class Requests
     {
-        private static readonly string replacedString = "##REPLACETHIS##";
+        private const string ReplacedString = "##REPLACETHIS##";
 
         public static string GetPlaybackAccessToken_TemplateRequest(string input)
         {
@@ -13,7 +13,7 @@ namespace TwitchAPI
             if (!TryGetRequest(fileName, out var result))
                 throw new Exception($"File {fileName} not exists.");
 
-            return result.Replace(replacedString, input);
+            return result.Replace(ReplacedString, input);
         }
 
         public static string GetStreamsRequest()
@@ -33,7 +33,7 @@ namespace TwitchAPI
             if (!TryGetRequest(fileName, out var result))
                 throw new Exception($"File {fileName} not exists.");
 
-            return result.Replace(replacedString, input);
+            return result.Replace(ReplacedString, input);
         }
 
         private static bool TryGetRequest(string fileName, out string result)
@@ -54,7 +54,7 @@ namespace TwitchAPI
             if (!TryGetRequest(fileName, out var result))
                 throw new Exception($"File {fileName} not exists.");
 
-            return result.Replace(replacedString, input);
+            return result.Replace(ReplacedString, input);
         }
 
         private static string GetRelativePath(string fileName)

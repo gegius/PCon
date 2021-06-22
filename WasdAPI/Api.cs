@@ -8,17 +8,19 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WasdAPI.Domain;
 
+// ReSharper disable once IdentifierTypo
 namespace WasdAPI
 {
-    public class Api
+    public static class Api
     {
-        public async Task<IEnumerable<UserInfo>> SearchUsersByName(string username)
+        public static async Task<IEnumerable<UserInfo>> SearchUsersByName(string username)
         {
             var uri = $"https://wasd.tv/api/search/channels?limit=15&offset=0&search_phrase={username}";
             var responseContent = await SendRequestAsync(uri);
             return JsonParser.SearchUsersByNameParse(responseContent);
         }
-        public async Task<string> GetIdByName(string username)
+
+        public static async Task<string> GetIdByName(string username)
         {
             var uri = $"https://wasd.tv/api/v2/broadcasts/public?channel_name={username.ToLower()}";
             var responseContent = await SendRequestAsync(uri);
@@ -37,7 +39,7 @@ namespace WasdAPI
             var uri = $"https://wasd.tv/api/v2/broadcasts/public?channel_name={username.ToLower()}";
             try
             {
-                var responseContent = await SendRequestAsync(uri);
+                await SendRequestAsync(uri);
                 return true;
             }
             catch
@@ -45,18 +47,18 @@ namespace WasdAPI
                 return false;
             }
         }
-        
-        public async Task<IEnumerable<StreamInfo>> GetTopStreams()
+
+        public static async Task<IEnumerable<StreamInfo>> GetTopStreams()
         {
             const string uri =
                 "https://wasd.tv/api/v2/media-containers?limit=15&offset=0&media_container_status=RUNNING&media_container_type=SINGLE&order_type=VIEWERS&order_direction=DESC";
-       
+
             var responseContent = await SendRequestAsync(uri);
-       
+
             return JsonParser.TopStreamsParse(responseContent);
         }
 
-        public async Task<Dictionary<string, string>> GetM3U8WithQuality(string userId)
+        public static async Task<Dictionary<string, string>> GetM3U8WithQuality(string userId)
         {
             var m3U8Url = GetM3U8Url(userId);
             using var client = new WebClient();
@@ -86,10 +88,10 @@ namespace WasdAPI
             request.Headers.Add("Referer", "https://wasd.tv/");
             using var response = await request.GetResponseAsync();
             await using var responseStream = response.GetResponseStream();
-        
+
             if (responseStream is null)
                 throw new ArgumentException("Response stream was null.");
-        
+
             using var reader = new StreamReader(responseStream, Encoding.UTF8);
             return await reader.ReadToEndAsync();
         }

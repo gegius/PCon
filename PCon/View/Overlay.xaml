@@ -11,10 +11,10 @@
         AllowsTransparency="True" WindowStyle="None"
         ShowInTaskbar="False" MouseEnter="Overlay_OnMouseEnter" MouseLeave="Overlay_OnMouseLeave">
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static domain:Commands.PlayPlayerCommand}" Executed="PlayPlayerCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:Commands.PausePlayerCommand}" Executed="PausePlayerCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:Commands.HideOverlayCommand}" Executed="HideOverlayCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:Commands.ShowOverlayCommand}" Executed="ShowOverlayCommand_Execute"/>
+        <CommandBinding Command="{x:Static domain:HotKeys.PlayPlayerCommand}" Executed="PlayPlayerCommand_Execute"/>
+        <CommandBinding Command="{x:Static domain:HotKeys.PausePlayerCommand}" Executed="PausePlayerCommand_Execute"/>
+        <CommandBinding Command="{x:Static domain:HotKeys.HideOverlayCommand}" Executed="HideOverlayCommand_Execute"/>
+        <CommandBinding Command="{x:Static domain:HotKeys.ShowOverlayCommand}" Executed="ShowOverlayCommand_Execute"/>
     </Window.CommandBindings>
     <Window.Resources>
         <!--Control colors.-->

@@ -7,8 +7,8 @@
         public string PreviewImageUrl { get; }
         public string GameName { get; }
         public int ViewersCount { get; }
-        
-        
+
+
         public StreamDto(string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount)
         {
             Title = title;
@@ -17,8 +17,9 @@
             ViewersCount = viewersCount;
             Broadcaster = broadcaster;
         }
-        
-        public StreamDto((string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount) args)
+
+        public StreamDto(
+            (string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount) args)
         {
             Broadcaster = args.broadcaster;
             Title = args.title;
@@ -26,6 +27,5 @@
             GameName = args.gameName;
             ViewersCount = args.viewersCount;
         }
-      
     }
 }

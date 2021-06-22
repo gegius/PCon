@@ -1,8 +1,11 @@
-﻿namespace WasdAPI.Domain
+﻿// ReSharper disable once IdentifierTypo
+
+namespace WasdAPI.Domain
 {
     public class UserInfo
     {
-        public UserInfo(string name,int id, string profileImageUrl, string userDescription, int followersCount, bool isLive)
+        public UserInfo(string name, int id, string profileImageUrl, string userDescription, int followersCount,
+            bool isLive)
         {
             Name = name;
             ProfileImageUrl = profileImageUrl;
@@ -18,6 +21,5 @@
         public string UserDescription { get; }
         public int FollowersCount { get; }
         public bool IsLive { get; }
-       
     }
 }

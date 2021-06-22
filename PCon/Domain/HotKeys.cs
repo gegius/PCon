@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace PCon.Domain
 {
-    public static class Commands
+    public static class HotKeys
     {
         public static readonly RoutedCommand StartSearchCommand = new RoutedCommand();
         public static readonly RoutedCommand PausePlayerCommand = new RoutedCommand();
@@ -11,7 +11,7 @@ namespace PCon.Domain
         public static readonly RoutedCommand ShowOverlayCommand = new RoutedCommand();
         public static readonly RoutedCommand ScrollDownCommand = new RoutedCommand();
 
-        static Commands()
+        static HotKeys()
         {
             StartSearchCommand.InputGestures.Add(new KeyGesture(Key.Enter));
             PausePlayerCommand.InputGestures.Add(new KeyGesture(Key.P, ModifierKeys.Control));

@@ -1,4 +1,6 @@
-﻿namespace WasdAPI.Domain
+﻿// ReSharper disable once IdentifierTypo
+
+namespace WasdAPI.Domain
 {
     public class StreamInfo
     {
@@ -8,8 +10,9 @@
         public string PreviewImageUrl { get; }
         public int ViewersCount { get; }
         public string Title { get; }
-        
-        public StreamInfo(string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount, string m3U8Url)
+
+        public StreamInfo(string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount,
+            string m3U8Url)
         {
             Title = title;
             PreviewImageUrl = previewImageUrl;

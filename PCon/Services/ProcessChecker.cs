@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Monitor = PCon.Domain.Monitor;
 
-namespace PCon.Services.ProcessServices
+namespace PCon.Services
 {
-    public class ProcessChecker : IProcessChecker
+    public class ProcessChecker
     {
         private readonly string mainProcess;
 
@@ -12,8 +12,8 @@ namespace PCon.Services.ProcessServices
         {
             this.mainProcess = mainProcess;
         }
-        
-        public async Task WaitShowAsync(CancellationToken cancellationToken) //Wait show async
+
+        public async Task WaitShowAsync(CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
@@ -37,7 +37,7 @@ namespace PCon.Services.ProcessServices
             }, cancellationToken);
         }
 
-        public bool IsWindowShowed(string handle)
+        public static bool IsWindowShowed(string handle)
         {
             var topWindowText = Monitor.GetTopWindowText();
             return topWindowText.Contains(handle);

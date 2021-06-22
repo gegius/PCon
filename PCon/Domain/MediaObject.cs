@@ -6,13 +6,16 @@ namespace PCon.Domain
     {
         public string Url { get; }
         public string Title { get; }
-        
+
+        // ReSharper disable once MemberCanBePrivate.Global
         public string Description { get; }
         public string Author { get; }
         public TimeSpan? Duration { get; }
         public string DescriptionThumbnails { get; }
         public string TitleThumbnails { get; }
-        public MediaObject(string url, string title=default, string description=default, string author=default, TimeSpan? duration=default, string descriptionThumbnails=default, string titleThumbnails=default)
+
+        public MediaObject(string url, string title = default, string description = default, string author = default,
+            TimeSpan? duration = default, string descriptionThumbnails = default, string titleThumbnails = default)
         {
             Url = url;
             Title = title;
@@ -22,7 +25,7 @@ namespace PCon.Domain
             DescriptionThumbnails = descriptionThumbnails;
             TitleThumbnails = titleThumbnails;
         }
-        
+
         public override string ToString() => $"{Author}. {Title}";
     }
 }

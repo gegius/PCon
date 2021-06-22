@@ -25,7 +25,7 @@ namespace PCon.Services.HostingService
         public async Task<Uri> GetUri(string link)
         {
             var userName = link.Replace("https://www.twitch.tv/", "");
-            var media = await _twitchApi.GetM3U8WithQuality(userName);
+            var media = await Api.GetM3U8WithQuality(userName);
             return new Uri(media.First().Value);
         }
 
@@ -48,7 +48,7 @@ namespace PCon.Services.HostingService
 
         public async IAsyncEnumerable<MediaObject> SearchTrends()
         {
-            foreach (var video in await _twitchApi.GetTopStreams())
+            foreach (var video in await Api.GetTopStreams())
             {
                 yield return new MediaObject($"https://www.twitch.tv/{video.Broadcaster}",
                     $"Игра: {video.GameName}. Количество зрителей: {video.ViewersCount}. Трансляция идёт",

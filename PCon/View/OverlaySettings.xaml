@@ -9,8 +9,8 @@
         Title="OverlaySettings" Visibility="Hidden"
         ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static domain:Commands.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:Commands.ScrollDownCommand}" Executed="ScrollDownCommand_Execute"/>
+        <CommandBinding Command="{x:Static domain:HotKeys.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
+        <CommandBinding Command="{x:Static domain:HotKeys.ScrollDownCommand}" Executed="ScrollDownCommand_Execute"/>
     </Window.CommandBindings>
     <Window.Background>
         <SolidColorBrush Opacity="0.3" Color="White"/>

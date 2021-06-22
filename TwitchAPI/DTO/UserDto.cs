@@ -7,7 +7,7 @@
         public string UserDescription { get; }
         public int FollowersCount { get; }
         public StreamDto StreamInfo { get; }
-        
+
         public UserDto(string name, string profileImageUrl, string userDescription, int followersCount,
             StreamDto streamDto)
         {
@@ -17,8 +17,9 @@
             StreamInfo = streamDto;
             FollowersCount = followersCount;
         }
-        
-        public UserDto((string name, string profileImageUrl, string userDescription, int followersCount) args, StreamDto streamDto)
+
+        public UserDto((string name, string profileImageUrl, string userDescription, int followersCount) args,
+            StreamDto streamDto)
         {
             Name = args.name;
             ProfileImageUrl = args.profileImageUrl;

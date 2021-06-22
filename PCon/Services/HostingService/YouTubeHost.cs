@@ -37,7 +37,7 @@ namespace PCon.Services.HostingService
             {
                 yield return new MediaObject(videoInfo.Url, videoInfo.Title,
                     videoInfo.Title, videoInfo.Author.Title,
-                    videoInfo.Duration ,videoInfo.Thumbnails[1].Url,
+                    videoInfo.Duration, videoInfo.Thumbnails[1].Url,
                     videoInfo.Thumbnails[0].Url);
             }
         }

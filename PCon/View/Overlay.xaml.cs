@@ -7,15 +7,15 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PCon.Domain;
+using PCon.Services;
 using PCon.Services.HostingService;
-using PCon.Services.ProcessServices;
 using Vlc.DotNet.Core;
 using Vlc.DotNet.Core.Interops.Signatures;
 using Vlc.DotNet.Wpf;
 
 namespace PCon.View
 {
-    public partial class Overlay : Window
+    public partial class Overlay
     {
         private readonly string mainProcess;
         private WindowSnapper snapper;
@@ -23,7 +23,7 @@ namespace PCon.View
         private double duration;
         private Uri mediaUri;
         private DispatcherTimer timerVideoTime;
-        private IProcessChecker processChecker;
+        private ProcessChecker processChecker;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private ServiceProvider _serviceProvider;
 
@@ -50,7 +50,7 @@ namespace PCon.View
                 Visibility = Visibility.Visible;
             }
         }
-        
+
         private async void InitAll(MediaObject video)
         {
             InitTimer();
@@ -86,6 +86,7 @@ namespace PCon.View
                 VideoSlider.Maximum = totalSeconds;
                 duration = totalSeconds;
             }
+
             await SetMedia(video);
         }
 

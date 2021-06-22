@@ -105,7 +105,7 @@ namespace TwitchAPI
                 string.Format(previewImageUrl.ToString().Replace("width", "0").Replace("height", "1"), 360, 240),
                 gameName.ToString(),
                 viewersCount);
-            
+
             return true;
         }
 
@@ -192,7 +192,7 @@ namespace TwitchAPI
                     gameName = gameNameToken.ToString();
                 }
             }
-            
+
             if (!stream.TryGetValue("previewImageURL", out var previewImageUrl))
                 return false;
 

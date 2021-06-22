@@ -12,7 +12,7 @@ namespace TwitchAPI
 {
     public class Api
     {
-        public async Task<Dictionary<string, string>> GetM3U8WithQuality(string userLogin)
+        public static async Task<Dictionary<string, string>> GetM3U8WithQuality(string userLogin)
         {
             if (!await UserIsOnline(userLogin))
                 return new Dictionary<string, string>();
@@ -71,7 +71,7 @@ namespace TwitchAPI
             return JsonResponseParser.SearchResultsPage_SearchResultsResponseParse(responseContent);
         }
 
-        public async Task<bool> UserIsOnline(string userLogin)
+        private static async Task<bool> UserIsOnline(string userLogin)
         {
             var requestData = Requests.GetVideoPlayerStatusOverlayChannelRequest(userLogin);
             var response = await SendRequestAsync(requestData);
@@ -87,7 +87,7 @@ namespace TwitchAPI
             return JsonResponseParser.VideoPlayerStatusOverlayChannelResponseParseUserAvailable(responseContent);
         }
 
-        public async Task<IEnumerable<StreamDto>> GetTopStreams()
+        public static async Task<IEnumerable<StreamDto>> GetTopStreams()
         {
             var requestData = Requests.GetStreamsRequest();
             var response = await SendRequestAsync(requestData);
@@ -110,13 +110,10 @@ namespace TwitchAPI
         {
             using var client = new WebClient();
             var htmlCode = await client.DownloadStringTaskAsync($"https://www.twitch.tv/{channelName}");
-
             var regex = new Regex("\"Client-ID\":\"(.*?)\"", RegexOptions.Compiled);
             var match = regex.Match(htmlCode);
-
             if (!match.Success)
                 throw new ArgumentException("Client-ID not found.");
-
             return match.Groups[1].Value;
         }
     }
