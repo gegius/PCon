@@ -10,6 +10,7 @@
         ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static domain:Commands.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
+        <CommandBinding Command="{x:Static domain:Commands.ScrollDownCommand}" Executed="ScrollDownCommand_Execute"/>
     </Window.CommandBindings>
     <Window.Background>
         <SolidColorBrush Opacity="0.3" Color="White"/>
@@ -21,11 +22,11 @@
             <Button x:Name="Twitch" Width="200" Height="50" Content="Twitch" Click="Twitch_OnClick"></Button>
             <Button x:Name="Wasd" Width="200" Height="50" Content="Wasd" Click="Wasd_OnClick"></Button>
         </StackPanel>
-        <StackPanel x:Name = "SearchPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden">
-            <GroupBox x:Name = "Box" VerticalAlignment="Center" HorizontalAlignment="Center" Height="700" Width="600">
-                <GroupBox.Background>
+        <GroupBox x:Name = "Box" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden" Height="800" Width="700">
+            <GroupBox.Background>
                     <SolidColorBrush Color="White"/>
                 </GroupBox.Background>
+            <ScrollViewer x:Name="ScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="BodyPanel">
                     <StackPanel x:Name = "SearchBody" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
                         <TextBox x:Name = "SearchField" Width="400" FontSize="20" FontStyle="Italic" >
@@ -36,13 +37,12 @@
                     <StackPanel x:Name="ResultBody" Orientation="Horizontal">
                         <StackPanel x:Name="ResultPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                         </StackPanel>
+                            
                         <StackPanel x:Name="BoxPanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top">
-                            <GroupBox Width="175" Height="250" Margin="20" BorderBrush="Black" Visibility="Hidden">
-                            </GroupBox>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
+                </ScrollViewer >
             </GroupBox>
-        </StackPanel>
     </Grid>
 </Window>

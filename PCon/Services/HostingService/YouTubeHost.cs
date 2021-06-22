@@ -51,7 +51,7 @@ namespace PCon.Services.HostingService
         {
             using var client = new WebClient();
             var htmlCode = await client.DownloadStringTaskAsync(url);
-            var regex = new Regex("(/watch\\?v=.*?)\"");
+            var regex = new Regex("{\"url\":\"(/watch.*?)\"");
             var trends = regex.Matches(htmlCode).Select(x => x.Groups[1]).ToArray();
             foreach (var trend in trends)
             {

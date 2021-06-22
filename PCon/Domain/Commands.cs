@@ -9,6 +9,7 @@ namespace PCon.Domain
         public static readonly RoutedCommand PlayPlayerCommand = new RoutedCommand();
         public static readonly RoutedCommand HideOverlayCommand = new RoutedCommand();
         public static readonly RoutedCommand ShowOverlayCommand = new RoutedCommand();
+        public static readonly RoutedCommand ScrollDownCommand = new RoutedCommand();
 
         static Commands()
         {
@@ -17,6 +18,7 @@ namespace PCon.Domain
             PlayPlayerCommand.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control));
             HideOverlayCommand.InputGestures.Add(new KeyGesture(Key.H, ModifierKeys.Control));
             ShowOverlayCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control));
+            ScrollDownCommand.InputGestures.Add(new KeyGesture(Key.Down));
         }
     }
 }

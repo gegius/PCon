@@ -2,10 +2,14 @@
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using AngleSharp;
 using Microsoft.Extensions.DependencyInjection;
 using PCon.Domain;
 using PCon.Services.HostingService;
@@ -22,6 +26,7 @@ namespace PCon.View
         private VlcControl vlcControlElement;
         private ServiceCollection _serviceCollection;
         private ServiceProvider _serviceProvider;
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         public OverlaySettings(string mainProcess, ServiceCollection serviceCollection)
         {
@@ -45,15 +50,19 @@ namespace PCon.View
         {
             _serviceCollection.Replace<IHosting>(_ => new YouTubeHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            SearchPanel.Visibility = Visibility.Visible;    
+            Box.Visibility = Visibility.Visible;
+            CancelSearch();
+            ClearEverything();
             ChangeColor(sender);
         }
-
+        
         private void Twitch_OnClick(object sender, RoutedEventArgs e)
         {
             _serviceCollection.Replace<IHosting>(_ => new TwitchHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            SearchPanel.Visibility = Visibility.Visible;    
+            Box.Visibility = Visibility.Visible;
+            CancelSearch();
+            ClearEverything();
             ChangeColor(sender);
         }
         
@@ -62,8 +71,38 @@ namespace PCon.View
         {
             _serviceCollection.Replace<IHosting>(_ => new WasdHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            SearchPanel.Visibility = Visibility.Visible;    
+            Box.Visibility = Visibility.Visible;    
+            CancelSearch();
+            ClearEverything();
             ChangeColor(sender);
+        }
+
+        private void ClearEverything()
+        {
+            ClearResult();
+            ClearSearchField();
+            ClearBox();
+        }
+        
+        private void ClearResult()
+        {
+            ResultPanel.Children.Clear();
+        }
+
+        private void ClearBox()
+        {
+            BoxPanel.Children.Clear();
+        }
+
+        private void ClearSearchField()
+        {
+            SearchField.Text = "";
+        }
+
+        private void CancelSearch()
+        {
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         private void ChangeColor(object sender)
@@ -75,63 +114,83 @@ namespace PCon.View
             }
         }
 
+        private Button CreateResultButton(MediaObject video)
+        {
+            var img = new Image {Source = new BitmapImage(new Uri(video.TitleThumbnails))};
+
+            var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10)};
+            var boxTitle = new GroupBox {Content = video.Title, Width = 300, Height = 30};
+            var boxHidden = new GroupBox {Content = video, Visibility = Visibility.Hidden, Width = 300, Height = 30};
+            panel.Children.Add(img);
+            panel.Children.Add(boxTitle);
+            panel.Children.Add(boxHidden);
+
+            var anotherResultButton = new Button {Content = panel};
+            anotherResultButton.Click += Button_Click_Result;
+            
+            
+            return anotherResultButton;
+        }
+
         private async void Find_Media_OnClick(object sender, RoutedEventArgs e)
         {
+            CancelSearch();
+            ClearResult();
+            ClearBox();
             var text = SearchField.Text;
-            ResultPanel.Children.Clear();
-            if (BoxPanel.Children.Count > 1)
-                BoxPanel.Children.RemoveAt(1);
-            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text))
+            var cancelToken = cancellationTokenSource.Token;
+            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text).WithCancellation(cancelToken))
             {
-                var anotherResultButton = new Button
-                {
-                    Content = video, ContentStringFormat = null, Visibility = Visibility.Visible, Width = 400,
-                    Height = 30
-                };
-                anotherResultButton.Click += Button_Click_Result;
+                if (cancelToken.IsCancellationRequested) break;
+                var anotherResultButton = CreateResultButton(video);
                 ResultPanel.Children.Add(anotherResultButton);
             }
         }
         
         private async void Find_Trends_OnClick(object sender, RoutedEventArgs e)
         {
-            ResultPanel.Children.Clear();
-            if (BoxPanel.Children.Count > 1)
-                BoxPanel.Children.RemoveAt(1);
-            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends())
+            CancelSearch();
+            ClearResult();
+            ClearSearchField();
+            ClearBox();
+            var cancelToken = cancellationTokenSource.Token;
+            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends().WithCancellation(cancelToken))
             {
-                var anotherResultButton = new Button
-                {
-                    Content = video, ContentStringFormat = null, Visibility = Visibility.Visible, Width = 400,
-                    Height = 30
-                };
-                anotherResultButton.Click += Button_Click_Result;
+                if (cancelToken.IsCancellationRequested) break;
+                var anotherResultButton = CreateResultButton(video);
                 ResultPanel.Children.Add(anotherResultButton);
             }
         }
 
         private void Button_Click_Result(object sender, RoutedEventArgs e)
         {
+            ClearBox();
             var mainPanel = new StackPanel
                 {VerticalAlignment = VerticalAlignment.Top, Orientation = Orientation.Vertical};
-            if (BoxPanel.Children.Count > 1)
-                BoxPanel.Children.RemoveAt(1);
-            var video = (MediaObject) ((Button) sender).Content;
+            var video = (MediaObject)((GroupBox)((StackPanel)((Button) sender).Content).Children[2]).Content;
             currentMediaObject = video;
             var resultBox = new GroupBox
             {
-                Name = "ResultBox", Width = 175, Height = 300, Visibility = Visibility.Visible,
+                Name = "ResultBox", Width = 300, Height = 400, Visibility = Visibility.Visible,
                 BorderBrush = Brushes.Black, Margin = new Thickness(10)
             };
+            var img = new Image();
+            if (video.DescriptionThumbnails != null) 
+                img = new Image {Source = new BitmapImage(new Uri(video.DescriptionThumbnails))};
+
+            var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10)};
             var label = new Label
             {
                 Content = video.Author + "\n" + video.Duration + "\n" + video.Title + "\n" +
                           video.Url
             };
+            
+            panel.Children.Add(img);
+            panel.Children.Add(label);
 
-            resultBox.Content = label;
+            resultBox.Content = panel;
             mainPanel.Children.Add(resultBox);
-            var buttonStart = new Button {Width = 175, Content = "Start", Margin = new Thickness(10)};
+            var buttonStart = new Button {Width = 300, Height = 30, Content = "Start", Margin = new Thickness(10)};
             if (video.Duration >= TimeSpan.Zero) buttonStart.Click += Button_Click_Show;
             mainPanel.Children.Add(buttonStart);
             BoxPanel.Children.Add(mainPanel);
@@ -156,6 +215,16 @@ namespace PCon.View
             if (ResultPanel.Visibility == Visibility.Visible)
             {
                 Find_Media_OnClick(sender, e);
+            }
+        }
+
+        private void ScrollDownCommand_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Console.WriteLine("aaaaaaaaaaaa");
+            if (ResultPanel.Children.Count > 5)
+            {
+                Console.WriteLine("bbbbb");
+                ScrollViewer.LineDown();
             }
         }
     }

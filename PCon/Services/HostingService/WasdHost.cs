@@ -12,12 +12,12 @@ namespace PCon.Services.HostingService
     public class WasdHost : IHosting
     {
         // ReSharper disable once IdentifierTypo
-        private readonly Api _wasdApi;
+        private readonly WasdApi _wasdApi;
         
         // ReSharper disable once IdentifierTypo
         public WasdHost()
         {
-            _wasdApi = new Api();
+            _wasdApi = new WasdApi();
         }
         public IPlayerSettings GetPlayerSettings()
         {

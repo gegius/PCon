@@ -5,8 +5,8 @@ namespace PCon.Services.ProcessServices
 {
     internal interface IProcessChecker
     {
-        Task ShowChecker(CancellationToken cancellationToken);
-        Task HideChecker(string windowHandle, CancellationToken cancellationToken);
+        Task WaitShowAsync(CancellationToken cancellationToken);
+        Task WaitHideAsync(string windowHandle, CancellationToken cancellationToken);
 
         bool IsWindowShowed(string handle);
     }

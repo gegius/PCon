@@ -13,7 +13,7 @@ namespace PCon.Services.ProcessServices
             this.mainProcess = mainProcess;
         }
         
-        public async Task ShowChecker(CancellationToken cancellationToken) //Wait show async
+        public async Task WaitShowAsync(CancellationToken cancellationToken) //Wait show async
         {
             await Task.Run(() =>
             {
@@ -25,7 +25,7 @@ namespace PCon.Services.ProcessServices
             }, cancellationToken);
         }
 
-        public async Task HideChecker(string windowHandle, CancellationToken cancellationToken)
+        public async Task WaitHideAsync(string windowHandle, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {

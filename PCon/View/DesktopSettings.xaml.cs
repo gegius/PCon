@@ -143,11 +143,11 @@ namespace PCon.View
             Console.WriteLine("зашел оверлейнастройки");
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
-                await processChecker.HideChecker("OverlaySettings", cancellationTokenSource.Token);
+                await processChecker.WaitHideAsync("OverlaySettings", cancellationTokenSource.Token);
                 Console.WriteLine("прошел чекпоинт1 оверлейнастройки");
                 if (cancellationTokenSource.Token.IsCancellationRequested) break;
                 overlaySettings.Visibility = Visibility.Hidden;
-                await processChecker.ShowChecker(cancellationTokenSource.Token);
+                await processChecker.WaitShowAsync(cancellationTokenSource.Token);
                 if (cancellationTokenSource.Token.IsCancellationRequested) break;
                 Console.WriteLine("прошел чекпоинт2 оверлейнастройки");
                 overlaySettings.Visibility = Visibility.Visible;

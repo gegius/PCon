@@ -43,20 +43,20 @@ namespace PCon.View
         {
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
-                await processChecker.HideChecker("Overlay", cancellationTokenSource.Token);
+                await processChecker.WaitHideAsync("Overlay", cancellationTokenSource.Token);
                 if (cancellationTokenSource.Token.IsCancellationRequested) break;
                 Visibility = Visibility.Hidden;
-                await processChecker.ShowChecker(cancellationTokenSource.Token);
+                await processChecker.WaitShowAsync(cancellationTokenSource.Token);
                 if (cancellationTokenSource.Token.IsCancellationRequested) break;
                 Visibility = Visibility.Visible;
             }
         }
-
-        private void InitAll(MediaObject video)
+        
+        private async void InitAll(MediaObject video)
         {
             InitTimer();
             InitSnapper();
-            InitOverlaySettings(video);
+            await InitOverlaySettings(video);
             processChecker = new ProcessChecker(mainProcess);
             CheckMainProcess();
             Show();
@@ -77,7 +77,7 @@ namespace PCon.View
             CheckMainProcess();
         }
 
-        private void InitOverlaySettings(MediaObject video)
+        private async Task InitOverlaySettings(MediaObject video)
         {
             var settings = _serviceProvider.GetService<IHosting>().GetPlayerSettings();
             VideoSlider.Visibility = settings.GetSliderVisibility();
@@ -87,7 +87,7 @@ namespace PCon.View
                 VideoSlider.Maximum = totalSeconds;
                 duration = totalSeconds;
             }
-            SetMedia(video);
+            await SetMedia(video);
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -135,7 +135,7 @@ namespace PCon.View
             timerVideoTime.Start();
         }
 
-        private async void SetMedia(MediaObject video)
+        private async Task SetMedia(MediaObject video)
         {
             mediaUri = await _serviceProvider.GetService<IHosting>().GetUri(video.Url);
             mainPlayer.SetMedia(mediaUri);
