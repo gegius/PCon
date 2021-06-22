@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PCon.Application.HostingService;
-using PCon.Domain;
 using PCon.Infrastructure;
 using Vlc.DotNet.Core;
 using Vlc.DotNet.Core.Interops.Signatures;
@@ -86,7 +85,6 @@ namespace PCon.View
                 VideoSlider.Maximum = totalSeconds;
                 duration = totalSeconds;
             }
-
             await SetMedia(video);
         }
 
