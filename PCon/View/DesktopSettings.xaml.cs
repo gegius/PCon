@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,9 +10,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Win32;
 using PCon.Domain;
-using PCon.Services;
 using PCon.Services.ProcessServices;
 
 namespace PCon.View

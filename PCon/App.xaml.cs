@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using PCon.Services;
 using PCon.Services.HostingService;
 using PCon.View;
 

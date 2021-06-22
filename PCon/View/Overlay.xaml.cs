@@ -7,7 +7,6 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using PCon.Domain;
-using PCon.Services;
 using PCon.Services.HostingService;
 using PCon.Services.ProcessServices;
 using Vlc.DotNet.Core;

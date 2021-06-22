@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using AngleSharp;
 using Microsoft.Extensions.DependencyInjection;
 using PCon.Domain;
 using PCon.Services.HostingService;
