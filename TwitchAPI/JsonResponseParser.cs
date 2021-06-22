@@ -88,6 +88,7 @@ namespace TwitchAPI
             if (!node.TryGetValue("previewImageURL", out var previewImageUrl))
                 return false;
 
+
             if (!node.ContainsKey("game") || !(node["game"] is JObject game))
                 return false;
 
@@ -100,8 +101,11 @@ namespace TwitchAPI
             if (!broadcaster.TryGetValue("login", out var broadcasterName))
                 return false;
 
-            result = (broadcasterName.ToString(), title.ToString(), previewImageUrl.ToString(), gameName.ToString(),
+            result = (broadcasterName.ToString(), title.ToString(),
+                string.Format(previewImageUrl.ToString().Replace("width", "0").Replace("height", "1"), 360, 240),
+                gameName.ToString(),
                 viewersCount);
+            
             return true;
         }
 
