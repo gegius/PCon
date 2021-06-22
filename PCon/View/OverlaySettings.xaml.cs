@@ -89,6 +89,7 @@ namespace PCon.View
             ResultBox.Visibility = Visibility.Hidden;
             ResultScrollViewer.ScrollToTop();
         }
+        
         private void ClearResult()
         {
             ResultPanel.Children.Clear();
@@ -123,22 +124,23 @@ namespace PCon.View
         {
             var img = new Image {Source = new BitmapImage(new Uri(video.TitleThumbnails))};
             var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10), Width = 300};
-            var boxTitle = new GroupBox {Content = video.Title, Width = 300, Height = 30};
+            var textTitle = new TextBox {Text = video.Title, Width = 300, TextWrapping = TextWrapping.Wrap, IsEnabled = false, Background = FindResource("Empty") as Brush};
             var boxHidden = new GroupBox {Content = video, Visibility = Visibility.Hidden, Width = 300, Height = 30};
             panel.Children.Add(img);
-            panel.Children.Add(boxTitle);
+            panel.Children.Add(textTitle);
             panel.Children.Add(boxHidden);
-            var anotherResultButton = new Button {Content = panel, Background = Brushes.White};
+            var anotherResultButton = new Button {Content = panel, Background = Brushes.White, Margin = new Thickness(2), Style = FindResource("RoundCorner") as Style};
             anotherResultButton.Click += Button_Click_Result;
             return anotherResultButton;
         }
 
         private async void Find_Media_OnClick(object sender, RoutedEventArgs e)
         {
-            ResultBox.Visibility = Visibility.Visible;
+            SetDefaultSettings();
             CancelSearch();
             ClearResult();
             ClearBox();
+            ResultBox.Visibility = Visibility.Visible;
             var text = SearchField.Text;
             var cancelToken = cancellationTokenSource.Token;
             await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text)
@@ -152,11 +154,12 @@ namespace PCon.View
 
         private async void Find_Trends_OnClick(object sender, RoutedEventArgs e)
         {
-            ResultBox.Visibility = Visibility.Visible;
+            SetDefaultSettings();
             CancelSearch();
             ClearResult();
             ClearSearchField();
             ClearBox();
+            ResultBox.Visibility = Visibility.Visible;
             var cancelToken = cancellationTokenSource.Token;
             await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends()
                 .WithCancellation(cancelToken))
@@ -176,7 +179,7 @@ namespace PCon.View
             currentMediaObject = video;
             var resultBox = new GroupBox
             {
-                Name = "ResultBox", Width = 300, Height = 400, Visibility = Visibility.Visible,
+                Name = "ResultBox", Width = 300, Height = 650, Visibility = Visibility.Visible,
                 BorderBrush = Brushes.Black, Margin = new Thickness(10)
             };
             var img = new Image();
@@ -199,7 +202,7 @@ namespace PCon.View
             };
             resultBox.Content = scrollBoxSelected;
             mainPanel.Children.Add(resultBox);
-            var buttonStart = new Button {Width = 300, Height = 30, Content = "Start", Margin = new Thickness(10)};
+            var buttonStart = new Button {Width = 300, Height = 60, Content = "Start", FontSize = 30, FontStyle = FontStyles.Oblique, Margin = new Thickness(10), Style = FindResource("RoundCorner") as Style};
             if (video.Duration >= TimeSpan.Zero) buttonStart.Click += Button_Click_Show;
             mainPanel.Children.Add(buttonStart);
             BoxPanel.Children.Add(mainPanel);

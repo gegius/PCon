@@ -57,8 +57,6 @@ namespace PCon.View
                         break;
                     case Visibility.Collapsed:
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             }
 

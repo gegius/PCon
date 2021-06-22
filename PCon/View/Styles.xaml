@@ -58,4 +58,9 @@
                 </Setter.Value>
             </Setter>
         </Style>
+    
+    
+    <SolidColorBrush x:Key="AwesomeAquamarineColor" Color="Aquamarine" Opacity="0.5"/>  
+    <SolidColorBrush x:Key="Empty" Color="Aquamarine" Opacity="0"/>  
+    <SolidColorBrush x:Key="AwesomeGreenColor" Color="Green" Opacity="0.5"/>  
 </ResourceDictionary>

@@ -23,17 +23,23 @@
         </StackPanel>
         <GroupBox x:Name = "Box" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden" Height="800" Width="700">
             <GroupBox.Background>
-                    <SolidColorBrush Color="White"/>
-                </GroupBox.Background>
+                <VisualBrush Stretch="Uniform">
+                    <VisualBrush.Visual>
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/View/ImageFolder/white.jpg"></Image>
+                        </StackPanel>
+                    </VisualBrush.Visual>
+                </VisualBrush >
+            </GroupBox.Background>
             <StackPanel x:Name="BodyPanel">
                 <StackPanel x:Name = "SearchBody" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
-                    <TextBox x:Name = "SearchField" Width="400" FontSize="20" FontStyle="Italic" >
+                    <TextBox x:Name = "SearchField" Width="400" Height="30" FontSize="20" FontStyle="Italic" >
                     </TextBox>
-                    <Button x:Name="Find" Width="80" Content="Find" Click="Find_Media_OnClick"></Button>
-                    <Button x:Name="Trend" Width="80" Height="30" Content="Trends" Click="Find_Trends_OnClick"></Button>
+                    <Button x:Name="Find" Width="80" Height="30" Content="Find" Click="Find_Media_OnClick" Margin="5" Style="{DynamicResource RoundCorner}"></Button>
+                    <Button x:Name="Trend" Width="80" Height="30" Content="Trends" Click="Find_Trends_OnClick" Style="{DynamicResource RoundCorner}"></Button>
                 </StackPanel>
                 <StackPanel x:Name="ResultBody" Orientation="Horizontal">
-                    <GroupBox x:Name="ResultBox" Height="760" Width="360" Visibility="Hidden" BorderBrush="Black">
+                    <GroupBox x:Name="ResultBox" Height="750" Width="360" Visibility="Hidden" BorderBrush="Black">
                         <ScrollViewer x:Name="ResultScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                             <StackPanel x:Name="ResultPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                             </StackPanel>

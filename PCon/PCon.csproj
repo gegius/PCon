@@ -25,6 +25,17 @@
       <Resource Include="View\ImageFolder\prev.jpg" />
       <None Remove="View\ImageFolder\672771.png" />
       <Resource Include="View\ImageFolder\672771.png" />
+      <None Remove="View\ImageFolder\color_red.jpg" />
+      <None Remove="View\ImageFolder\ByC44on.jpg" />
+      <Resource Include="View\ImageFolder\ByC44on.jpg" />
+      <None Remove="View\ImageFolder\photo_2021-06-23_02-54-29.jpg" />
+      <Resource Include="View\ImageFolder\photo_2021-06-23_02-54-29.jpg" />
+      <None Remove="View\ImageFolder\photo_2021-06-23_02-58-07.jpg" />
+      <Resource Include="View\ImageFolder\photo_2021-06-23_02-58-07.jpg" />
+      <None Remove="View\ImageFolder\yellow.jpg" />
+      <Resource Include="View\ImageFolder\yellow.jpg" />
+      <None Remove="View\ImageFolder\white.jpg" />
+      <Resource Include="View\ImageFolder\white.jpg" />
     </ItemGroup>
 
     <ItemGroup>

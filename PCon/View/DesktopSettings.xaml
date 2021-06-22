@@ -6,11 +6,6 @@
         xmlns:local="clr-namespace:PCon.View"
         mc:Ignorable="d"
         Title="DesktopSettings" Height="900" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
-    <Window.Resources>
-        <SolidColorBrush x:Key="AwesomeAquamarineColor" Color="Aquamarine" Opacity="0.5"/>  
-        <SolidColorBrush x:Key="Empty" Color="Aquamarine" Opacity="0"/>  
-        <SolidColorBrush x:Key="AwesomeGreenColor" Color="Green" Opacity="0.5"/>  
-    </Window.Resources>
     <Grid>
         <Label Content="PCon" FontSize="70" FontStyle="Italic" Foreground="Yellow" VerticalAlignment="Top" HorizontalAlignment="Center"></Label>
         
