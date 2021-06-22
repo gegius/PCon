@@ -37,8 +37,8 @@ namespace PCon.Services.HostingService
             {
                 yield return new MediaObject(videoInfo.Url, videoInfo.Title,
                     videoInfo.Title, videoInfo.Author.Title,
-                    videoInfo.Duration, videoInfo.Thumbnails[1].Url,
-                    videoInfo.Thumbnails[0].Url);
+                    videoInfo.Duration, videoInfo.Thumbnails[2].Url,
+                    videoInfo.Thumbnails[2].Url);
             }
         }
 
@@ -58,7 +58,7 @@ namespace PCon.Services.HostingService
                 var video = await _youtubeClient.Videos.GetAsync("https://www.youtube.com" + trend);
                 yield return new MediaObject(video.Url, video.Title,
                     video.Description, video.Author.Title, video.Duration,
-                    video.Thumbnails[1].Url, video.Thumbnails[0].Url);
+                    video.Thumbnails[2].Url, video.Thumbnails[2].Url);
             }
         }
     }

@@ -117,18 +117,14 @@ namespace PCon.View
         private Button CreateResultButton(MediaObject video)
         {
             var img = new Image {Source = new BitmapImage(new Uri(video.TitleThumbnails))};
-
-            var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10)};
+            var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10), Width = 300};
             var boxTitle = new GroupBox {Content = video.Title, Width = 300, Height = 30};
             var boxHidden = new GroupBox {Content = video, Visibility = Visibility.Hidden, Width = 300, Height = 30};
             panel.Children.Add(img);
             panel.Children.Add(boxTitle);
             panel.Children.Add(boxHidden);
-
-            var anotherResultButton = new Button {Content = panel};
+            var anotherResultButton = new Button {Content = panel, Background = Brushes.White};
             anotherResultButton.Click += Button_Click_Result;
-
-
             return anotherResultButton;
         }
 

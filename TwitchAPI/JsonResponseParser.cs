@@ -102,7 +102,7 @@ namespace TwitchAPI
                 return false;
 
             result = (broadcasterName.ToString(), title.ToString(),
-                string.Format(previewImageUrl.ToString().Replace("width", "0").Replace("height", "1"), 360, 240),
+                string.Format(previewImageUrl.ToString().Replace("width", "0").Replace("height", "1"), 480, 360),
                 gameName.ToString(),
                 viewersCount);
 
