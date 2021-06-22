@@ -6,17 +6,15 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WasdAPI.Domain;
 using WasdAPI.DTO;
 
-// ReSharper disable once IdentifierTypo
 namespace WasdAPI
 {
-    // ReSharper disable once IdentifierTypo
     public static class WasdApi
     {
         public static async Task<IEnumerable<UserInfo>> SearchUsersByName(string username)
         {
+            if (username == string.Empty) return Enumerable.Empty<UserInfo>();
             var uri = $"https://wasd.tv/api/search/channels?limit=15&offset=0&search_phrase={username}";
             var responseContent = await SendRequestAsync(uri);
             return JsonParser.ParseUsers(responseContent);
@@ -90,10 +88,8 @@ namespace WasdAPI
             request.Headers.Add("Referer", "https://wasd.tv/");
             using var response = await request.GetResponseAsync();
             await using var responseStream = response.GetResponseStream();
-
             if (responseStream is null)
                 throw new ArgumentException("Response stream was null.");
-
             using var reader = new StreamReader(responseStream, Encoding.UTF8);
             return await reader.ReadToEndAsync();
         }

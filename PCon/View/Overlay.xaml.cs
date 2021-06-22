@@ -37,7 +37,7 @@ namespace PCon.View
             InitAll(video);
         }
 
-        private async void WaitChangedOverlayVisibility()
+        private async void WaitChangedOverlayVisibility() //Поменять название/подумать над работой метода
         {
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
@@ -54,7 +54,7 @@ namespace PCon.View
         {
             InitTimer();
             InitSnapper();
-            await InitOverlaySettings(video);
+            await InitOverlaysSettings(video);
             processChecker = new ProcessChecker(mainProcess);
             WaitChangedOverlayVisibility();
             Show();
@@ -75,7 +75,7 @@ namespace PCon.View
             WaitChangedOverlayVisibility();
         }
 
-        private async Task InitOverlaySettings(MediaObject video)
+        private async Task InitOverlaysSettings(MediaObject video)
         {
             var settings = _serviceProvider.GetService<IHosting>().GetPlayerSettings();
             VideoSlider.Visibility = settings.GetSliderVisibility();

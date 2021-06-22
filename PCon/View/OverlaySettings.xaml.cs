@@ -143,12 +143,20 @@ namespace PCon.View
             ResultBox.Visibility = Visibility.Visible;
             var text = SearchField.Text;
             var cancelToken = cancellationTokenSource.Token;
-            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text)
-                .WithCancellation(cancelToken))
+            try
             {
-                if (cancelToken.IsCancellationRequested) break;
-                var anotherResultButton = CreateResultButton(video);
-                ResultPanel.Children.Add(anotherResultButton);
+                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text)
+                    .WithCancellation(cancelToken))
+                {
+                    if (cancelToken.IsCancellationRequested) break;
+                    var anotherResultButton = CreateResultButton(video);
+                    ResultPanel.Children.Add(anotherResultButton);
+                }
+            }
+            catch (Exception ase)
+            {
+                Console.WriteLine(ase);
+                MessageBox.Show("ПОШЁЛ НАХУЙ ИНТЕРНЕТА НЕТУ!");
             }
         }
 
@@ -189,7 +197,7 @@ namespace PCon.View
             var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10)};
             var label = new TextBlock
             {
-                Text = video.Author + "\n" + video.Duration + "\n" + video.Description, TextWrapping = TextWrapping.Wrap
+                Text = video.Author + "\n\n" + video.Description, TextWrapping = TextWrapping.Wrap
             };
 
             panel.Children.Add(img);

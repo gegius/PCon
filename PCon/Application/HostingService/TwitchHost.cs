@@ -28,20 +28,20 @@ namespace PCon.Application.HostingService
             return new Uri(media.First().Value);
         }
 
-        public async IAsyncEnumerable<MediaObject> SearchMedia(string request)
+        public async IAsyncEnumerable<MediaObject> SearchMedia(string query)
         {
-            foreach (var media in await twitchTwitchApi.SearchUsersByName(request))
+            foreach (var media in await twitchTwitchApi.SearchUsersByName(query))
             {
                 yield return !(media.StreamInfo is null)
                     ? new MediaObject(
                         $"https://www.twitch.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция идёт",
-                        $"Игра: {media.StreamInfo.GameName}.\nКоличество зрителей: {media.StreamInfo.ViewersCount}\nОписание: {media.StreamInfo.Title}",
+                        $"Трансляция идёт\n\nИгра: {media.StreamInfo.GameName}.\n\nКоличество зрителей: {media.StreamInfo.ViewersCount}\n\nОписание: {media.StreamInfo.Title}",
                         media.Name, TimeSpan.Zero, media.StreamInfo.PreviewImageUrl, media.ProfileImageUrl)
                     : new MediaObject(
                         $"https://www.twitch.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция не идёт",
-                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue);
+                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue, description: media.UserDescription);
             }
         }
 
@@ -51,7 +51,7 @@ namespace PCon.Application.HostingService
             {
                 yield return new MediaObject($"https://www.twitch.tv/{video.Broadcaster}",
                     $"Игра: {video.GameName}. Количество зрителей: {video.ViewersCount}. Трансляция идёт",
-                    $"Игра: {video.GameName}.\nКоличество зрителей: {video.ViewersCount}\nОписание: {video.Title}",
+                    $"Трансляция идёт\n\nИгра: {video.GameName}.\n\nКоличество зрителей: {video.ViewersCount}\n\nОписание: {video.Title}",
                     video.Broadcaster, TimeSpan.Zero, video.PreviewImageUrl, video.PreviewImageUrl);
             }
         }

@@ -5,11 +5,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:PCon.View"
         xmlns:domain="clr-namespace:PCon.Domain"
+        xmlns:hotKeys="clr-namespace:PCon.Domain.HotKeys"
         mc:Ignorable="d"
         Title="OverlaySettings" Visibility="Hidden"
         ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static domain:HotKeys.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
     </Window.CommandBindings>
     <Window.Background>
         <SolidColorBrush Opacity="0.3" Color="White"/>
