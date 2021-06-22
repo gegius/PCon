@@ -135,10 +135,17 @@ namespace PCon.View
 
         private async Task SetMedia(MediaObject video)
         {
-            mediaUri = await _serviceProvider.GetService<IHosting>().GetUri(video.Url);
-            mainPlayer.SetMedia(mediaUri);
-            VolumeSlider.Value = 100;
-            Button_Play(null, null);
+            try
+            {
+                mediaUri = await _serviceProvider.GetService<IHosting>().GetUri(video.Url);
+                mainPlayer.SetMedia(mediaUri);
+                VolumeSlider.Value = 100;
+                Button_Play(null, null);
+            }
+            catch
+            {
+                ErrorHandler.ThrowErrorConnection();
+            }
         }
 
         private void InitTimer()

@@ -155,8 +155,7 @@ namespace PCon.View
             }
             catch (Exception ase)
             {
-                Console.WriteLine(ase);
-                MessageBox.Show("ПОШЁЛ НАХУЙ ИНТЕРНЕТА НЕТУ!");
+                ErrorHandler.ThrowErrorConnection();
             }
         }
 
@@ -169,12 +168,19 @@ namespace PCon.View
             ClearBox();
             ResultBox.Visibility = Visibility.Visible;
             var cancelToken = cancellationTokenSource.Token;
-            await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends()
-                .WithCancellation(cancelToken))
+            try
             {
-                if (cancelToken.IsCancellationRequested) break;
-                var anotherResultButton = CreateResultButton(video);
-                ResultPanel.Children.Add(anotherResultButton);
+                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends()
+                    .WithCancellation(cancelToken))
+                {
+                    if (cancelToken.IsCancellationRequested) break;
+                    var anotherResultButton = CreateResultButton(video);
+                    ResultPanel.Children.Add(anotherResultButton);
+                }
+            }
+            catch
+            {
+                ErrorHandler.ThrowErrorConnection();
             }
         }
 

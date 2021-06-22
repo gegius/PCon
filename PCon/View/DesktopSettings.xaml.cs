@@ -97,8 +97,7 @@ namespace PCon.View
         {
             if (mainProcess is null)
             {
-                PanelInsideBoxPrograms.Children.Add(new Label
-                    {Content = "Вы не выбрали программу", Foreground = Brushes.Red});
+                ErrorHandler.ThrowErrorNotSelectedProcess();
                 return;
             }
             processChecker = new ProcessChecker(mainProcess);
