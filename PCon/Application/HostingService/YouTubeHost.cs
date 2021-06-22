@@ -45,10 +45,9 @@ namespace PCon.Application.HostingService
             using var client = new WebClient();
             var htmlCode = await client.DownloadStringTaskAsync(url);
             var regex = new Regex("{\"url\":\"(/watch.*?)\"");
-            var trends = regex.Matches(htmlCode).Select(x => x.Groups[1]).ToArray();
-            foreach (var trend in trends)
+            foreach (Match trend in regex.Matches(htmlCode))
             {
-                var video = await _youtubeClient.Videos.GetAsync("https://www.youtube.com" + trend);
+                var video = await _youtubeClient.Videos.GetAsync("https://www.youtube.com" + trend.Groups[1]);
                 yield return new MediaObject(video.Url, video.Title,
                     $"Длительность: {video.Duration}\n\n{video.Description}", video.Author.Title, video.Duration,
                     video.Thumbnails[2].Url, video.Thumbnails[2].Url);

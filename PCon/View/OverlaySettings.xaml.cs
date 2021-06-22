@@ -65,7 +65,6 @@ namespace PCon.View
             ChangeColor(sender);
         }
 
-        // ReSharper disable once IdentifierTypo
         private void Wasd_OnClick(object sender, RoutedEventArgs e)
         {
             _serviceCollection.Replace<IHosting>(_ => new WasdHost(), ServiceLifetime.Singleton);

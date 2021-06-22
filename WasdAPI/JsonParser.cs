@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using WasdAPI.DTO;
 
-// ReSharper disable once IdentifierTypo
 namespace WasdAPI
 {
     public static class JsonParser
