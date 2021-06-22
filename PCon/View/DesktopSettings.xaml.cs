@@ -83,7 +83,7 @@ namespace PCon.View
         {
             cancellationTokenSource = new CancellationTokenSource();
             overlaySettings.Visibility = Visibility.Visible;
-            var size = snapper.GetMainProcessWindowSize();
+            var size = WindowInfo.GetMainProcessWindowSize(snapper.WindowHandle);
             overlaySettings.Width = size.Width;
             overlaySettings.Height = size.Height;
             CheckMainProcess();
@@ -142,7 +142,7 @@ namespace PCon.View
         private void InitSnapper()
         {
             snapper = new WindowSnapper(overlaySettings, mainProcess);
-            snapper.Attach();
+            snapper.AttachAsync();
         }
 
         private void Label_OnClick(object sender, RoutedEventArgs e)

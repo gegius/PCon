@@ -9,9 +9,8 @@ namespace PCon.Infrastructure
     public class WindowSnapper
     {
         private readonly DispatcherTimer _timer;
-        private IntPtr _windowHandle;
+        public IntPtr WindowHandle { get; private set; }
         private Rect _lastBounds;
-        private bool isFoundProcess;
         private readonly Window _window;
         private readonly string _windowTitle;
 
@@ -20,21 +19,20 @@ namespace PCon.Infrastructure
             _window = window;
             _window.Topmost = true;
             _windowTitle = windowTitle;
-            isFoundProcess = false;
             _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(1)};
             _timer.Tick += (x, y) => SnapToWindow();
             _timer.IsEnabled = false;
         }
 
-        public async void Attach()
+        public async void AttachAsync()
         {
-            _windowHandle = await WindowInfo.GetWindowHandle(_windowTitle);
+            WindowHandle = await WindowInfo.GetWindowHandleAsync(_windowTitle);
             _timer.Start();
         }
 
         private void SnapToWindow()
         {
-            var bounds = WindowInfo.GetWindowBounds(_windowHandle);
+            var bounds = WindowInfo.GetWindowBounds(WindowHandle);
 
             if (bounds == _lastBounds) return;
             switch (_window.ToString())

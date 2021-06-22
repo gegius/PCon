@@ -106,7 +106,7 @@ namespace PCon.View
         private void InitSnapper()
         {
             snapper = new WindowSnapper(this, mainProcess);
-            snapper.Attach();
+            snapper.AttachAsync();
         }
 
         private void Overlay_OnMouseEnter(object sender, MouseEventArgs e)

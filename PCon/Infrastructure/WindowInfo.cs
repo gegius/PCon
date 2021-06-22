@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 namespace PCon.Infrastructure
 {
     public class WindowInfo
     {
-        private bool isFoundProcess;
-
         public static Rect GetWindowBounds(IntPtr handle)
         {
             var bounds = new Rect();
@@ -24,24 +23,10 @@ namespace PCon.Infrastructure
             return size;
         }
         
-        public static async Task<IntPtr> GetWindowHandle(string windowTitle)
+        public static async Task<IntPtr> GetWindowHandleAsync(string windowTitle)
         {
-            var result = await Task.Run(() =>
-            {
-                while (!isFoundProcess)
-                {
-                    var listProcesses = Process.GetProcesses();
-                    foreach (var pList in listProcesses)
-                    {
-                        if (!pList.MainWindowTitle.Contains(windowTitle)) continue;
-                        isFoundProcess = true;
-                        return pList.MainWindowHandle;
-                    }
-                }
-
-                return default;
-            });
-            return result;
+            await new ProcessChecker(windowTitle).WaitShowAsync(new CancellationToken());
+            return WinApi.GetForegroundWindow();
         }
     }
 }
