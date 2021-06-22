@@ -49,13 +49,7 @@ namespace PCon.View
             ChangeColor(sender);
         }
 
-        private void Youывывbe_OnClick(object sender, RoutedEventArgs e)
-        {
-            _serviceCollection.Replace<IHosting>(_ => new YouTubeHost(), ServiceLifetime.Singleton);
-            _serviceProvider = _serviceCollection.BuildServiceProvider();
-            SearchPanel.Visibility = Visibility.Visible;    
-            ChangeColor(sender);
-        }
+
         
         private void Twitch_OnClick(object sender, RoutedEventArgs e)
         {
