@@ -16,7 +16,11 @@
         
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
             <GroupBox BorderBrush="Black" HorizontalAlignment="Left" Margin="50" Width="250" Height="400">
-                <Label Content="Добрый вечер это альфа версия." Foreground="Black"></Label>
+                <TextBlock Text="Здравствуйте, это оверлей приложение для просмотра видео. Нажмите кнопку update, выберите процесс, к которому вы хотите прицепить оверлей. После выбора он будет указан в боксе ниже, откуда, если вы захотите, можно его убрать. Нажмите кнопку старт для начала работы оверлея и в выбранной программе введите комбинацию клавиш Ctrl+Tab. Приятного использования!" FontSize="16" TextWrapping="Wrap" Foreground="Black">
+                    <TextBlock.Background>
+                        <StaticResource ResourceKey="Empty" />
+                    </TextBlock.Background>
+                </TextBlock>
             </GroupBox>
             <StackPanel Orientation="Vertical" Margin="50">
                 <Button x:Name="Update" Width="50" Height="30" Content="Update"  Click="Update_OnClick" HorizontalAlignment="Right"></Button>
@@ -27,7 +31,6 @@
                 </GroupBox>
                 <GroupBox x:Name = "BoxPrograms" BorderBrush="Black" HorizontalAlignment="Right" Width="250" Height="300" VerticalAlignment="Top">
                     <StackPanel x:Name="PanelInsideBoxPrograms" Orientation="Vertical">
-                        
                     </StackPanel>
                 </GroupBox>
                 <Button x:Name="Show" Width="200" Height="30" Content="Start" VerticalAlignment="Bottom" Click="Button_Click_Show" HorizontalAlignment="Right" Margin="50"></Button>  

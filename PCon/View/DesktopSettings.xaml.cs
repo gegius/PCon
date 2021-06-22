@@ -120,6 +120,11 @@ namespace PCon.View
 
         private void Button_Click_Show(object sender, RoutedEventArgs e)
         {
+            if (mainProcess is null)
+            {
+                PanelInsideBoxPrograms.Children.Add(new Label{Content = "Вы не выбрали программу. CODE=101", Foreground = Brushes.Red});
+                return;
+            }
             processChecker = new ProcessChecker(mainProcess);
             overlaySettings = new OverlaySettings(mainProcess, _serviceCollection) {DesktopSettings = this};
             InitSnapper();
@@ -158,10 +163,9 @@ namespace PCon.View
                 mainProcess = label.Content.ToString();
             }
 
-            if (PanelInsideBoxPrograms.Children.Contains(label))
-            {
-                PanelInsideBoxPrograms.Children.Remove(label);
-            }
+            if (!PanelInsideBoxPrograms.Children.Contains(label)) return;
+            mainProcess = null;
+            PanelInsideBoxPrograms.Children.Remove(label);
         }
 
         private void Label_MouseEnter(object sender, RoutedEventArgs e)
@@ -195,7 +199,7 @@ namespace PCon.View
 
         private Label CreateLabel(object content)
         {
-            var label = new Label {Foreground = Brushes.Red, Content = content};
+            var label = new Label {Foreground = Brushes.Black, Content = content};
             label.MouseDown += Label_OnClick;
             label.MouseEnter += Label_MouseEnter;
             label.MouseLeave += Label_MouseLeave;
