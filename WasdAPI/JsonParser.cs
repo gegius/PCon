@@ -19,10 +19,7 @@ namespace WasdAPI
             
             if (!int.TryParse(countToken.ToString(), out var count))
                 throw new ArgumentException($"Wrong response. {countToken}");
-            
-            // if (count == 0)
-            //     return Enumerable.Empty<UserInfo>();
-            
+
             if (!result.ContainsKey("rows") || !(result["rows"] is JArray rows))
                 throw new ArgumentException($"Wrong response. {result}");
             
@@ -57,8 +54,7 @@ namespace WasdAPI
             
             if (!user.ContainsKey("channel_image") || !(user["channel_image"] is JObject channelImages))
                 throw new ArgumentException($"Wrong response. {user}");
-            //channel_description
-            
+
             if (!user.TryGetValue("channel_description", out var description))
                 throw new ArgumentException($"Wrong response. {user}");
             
@@ -124,7 +120,7 @@ namespace WasdAPI
             if (!stream.TryGetValue("user_id", out var userId))
                 throw new ArgumentException($"Wrong response {stream}");
 
-            var previewImageUrl = $"https://cdn.wasd.tv/medium/live/{userId}/preview.jpg";
+            var previewImageUrl = $"https://cdn.wasd.tv/small/live/{userId}/preview.jpg";
 
             if (!stream.TryGetValue("game", out var gameToken))
                 throw new ArgumentException($"Wrong response {stream}");
