@@ -1,0 +1,48 @@
+﻿<Window x:Class="PCon.View.DesktopSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PCon.View"
+        mc:Ignorable="d"
+        Title="DesktopSettings" Height="900" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <SolidColorBrush x:Key="AwesomeAquamarineColor" Color="Aquamarine" Opacity="0.5"/>  
+        <SolidColorBrush x:Key="Empty" Color="Aquamarine" Opacity="0"/>  
+        <SolidColorBrush x:Key="AwesomeGreenColor" Color="Green" Opacity="0.5"/>  
+    </Window.Resources>
+    <Grid>
+        <Label Content="PCon" FontSize="70" FontStyle="Italic" Foreground="Yellow" VerticalAlignment="Top" HorizontalAlignment="Center"></Label>
+        
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
+            <GroupBox BorderBrush="Black" HorizontalAlignment="Left" Margin="50" Width="250" Height="400">
+                <Label Content="Добрый вечер это альфа версия." Foreground="Black"></Label>
+            </GroupBox>
+            <StackPanel Orientation="Vertical" Margin="50">
+                <Button x:Name="Update" Width="50" Height="30" Content="Update"  Click="Update_OnClick" HorizontalAlignment="Right"></Button>
+                <GroupBox x:Name = "ProcessPrograms" BorderBrush="Black" HorizontalAlignment="Right" Width="250" Height="300" VerticalAlignment="Top">
+                    <StackPanel x:Name="PanelInsideProcessPrograms" Orientation="Vertical">
+                        
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox x:Name = "BoxPrograms" BorderBrush="Black" HorizontalAlignment="Right" Width="250" Height="300" VerticalAlignment="Top">
+                    <StackPanel x:Name="PanelInsideBoxPrograms" Orientation="Vertical">
+                        
+                    </StackPanel>
+                </GroupBox>
+                <Button x:Name="Show" Width="200" Height="30" Content="Start" VerticalAlignment="Bottom" Click="Button_Click_Show" HorizontalAlignment="Right" Margin="50"></Button>  
+            </StackPanel>
+            
+        </StackPanel>
+        
+        <Grid.Background>
+            <VisualBrush Stretch="Uniform">
+                <VisualBrush.Visual>
+                    <StackPanel>
+                        <Image Source="pack://application:,,,/View/ImageFolder/prev.jpg"></Image>
+                    </StackPanel>
+                </VisualBrush.Visual>
+            </VisualBrush >
+        </Grid.Background>
+    </Grid>
+</Window>

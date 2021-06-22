@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCon", "PCon\PCon.csproj", "{0EC70734-5F70-4BDF-8060-38EA19C0F83A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitchAPI", "TwitchAPI\TwitchAPI.csproj", "{66D55C3E-C45F-4737-B964-BBDEF54B1FB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WasdAPI", "WasdAPI\WasdAPI.csproj", "{7DBA111E-2EC9-4514-991D-492DE14A9CBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EC70734-5F70-4BDF-8060-38EA19C0F83A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC70734-5F70-4BDF-8060-38EA19C0F83A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC70734-5F70-4BDF-8060-38EA19C0F83A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC70734-5F70-4BDF-8060-38EA19C0F83A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66D55C3E-C45F-4737-B964-BBDEF54B1FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66D55C3E-C45F-4737-B964-BBDEF54B1FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66D55C3E-C45F-4737-B964-BBDEF54B1FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66D55C3E-C45F-4737-B964-BBDEF54B1FB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DBA111E-2EC9-4514-991D-492DE14A9CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DBA111E-2EC9-4514-991D-492DE14A9CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DBA111E-2EC9-4514-991D-492DE14A9CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DBA111E-2EC9-4514-991D-492DE14A9CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

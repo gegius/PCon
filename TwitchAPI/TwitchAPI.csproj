@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Update="Requests\SearchResultsPage_SearchResultsRequest.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Requests\StreamsRequest.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Requests\PlaybackAccessToken_TemplateRequest.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Requests\VideoPlayerStatusOverlayChannelRequest.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+</Project>

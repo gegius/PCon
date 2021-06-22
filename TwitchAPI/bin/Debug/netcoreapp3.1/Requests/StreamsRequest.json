@@ -1,0 +1,1 @@
+﻿[{"query": "query {streams(first: 15) { edges { node { id title viewersCount previewImageURL broadcaster { displayName login} game {name}}}}}"}]

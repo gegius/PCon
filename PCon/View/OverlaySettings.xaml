@@ -1,0 +1,48 @@
+﻿<Window x:Class="PCon.View.OverlaySettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PCon.View"
+        xmlns:domain="clr-namespace:PCon.Domain"
+        mc:Ignorable="d"
+        Title="OverlaySettings" Visibility="Hidden"
+        ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static domain:Commands.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
+    </Window.CommandBindings>
+    <Window.Background>
+        <SolidColorBrush Opacity="0.3" Color="White"/>
+    </Window.Background>
+    
+    <Grid>
+        <StackPanel x:Name = "Hostings" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Button x:Name="Youtube" Width="200" Height="50" Content="Youtube" Click="Youtube_OnClick"></Button>
+            <Button x:Name="Twitch" Width="200" Height="50" Content="Twitch" Click="Twitch_OnClick"></Button>
+            <Button x:Name="Wasd" Width="200" Height="50" Content="Wasd" Click="Wasd_OnClick"></Button>
+        </StackPanel>
+        <StackPanel x:Name = "SearchPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden">
+            <GroupBox x:Name = "Box" VerticalAlignment="Center" HorizontalAlignment="Center" Height="700" Width="600">
+                <GroupBox.Background>
+                    <SolidColorBrush Color="White"/>
+                </GroupBox.Background>
+                <StackPanel x:Name="BodyPanel">
+                    <StackPanel x:Name = "SearchBody" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <TextBox x:Name = "SearchField" Width="400" FontSize="20" FontStyle="Italic" >
+                        </TextBox>
+                        <Button x:Name="Find" Width="80" Content="Find" Click="Find_Media_OnClick"></Button>
+                        <Button x:Name="Trend" Width="80" Height="30" Content="Trends" Click="Find_Trends_OnClick"></Button>
+                    </StackPanel>
+                    <StackPanel x:Name="ResultBody" Orientation="Horizontal">
+                        <StackPanel x:Name="ResultPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        </StackPanel>
+                        <StackPanel x:Name="BoxPanel" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top">
+                            <GroupBox Width="175" Height="250" Margin="20" BorderBrush="Black" Visibility="Hidden">
+                            </GroupBox>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Window>
