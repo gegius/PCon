@@ -124,7 +124,7 @@ namespace PCon.View
         {
             var img = new Image {Source = new BitmapImage(new Uri(video.TitleThumbnails))};
             var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10), Width = 300};
-            var textTitle = new TextBox {Text = video.Title, Width = 300, TextWrapping = TextWrapping.Wrap, IsEnabled = false, Background = FindResource("Empty") as Brush};
+            var textTitle = new TextBlock {Text = video.Title, Width = 300, TextWrapping = TextWrapping.Wrap};
             var boxHidden = new GroupBox {Content = video, Visibility = Visibility.Hidden, Width = 300, Height = 30};
             panel.Children.Add(img);
             panel.Children.Add(textTitle);

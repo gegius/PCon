@@ -30,6 +30,10 @@
       <Resource Include="View\ImageFolder\yellow.jpg" />
       <None Remove="View\ImageFolder\white.jpg" />
       <Resource Include="View\ImageFolder\white.jpg" />
+      <None Remove="View\ImageFolder\stars.jpg" />
+      <Resource Include="View\ImageFolder\stars.jpg" />
+      <None Remove="View\ImageFolder\stars2.jpg" />
+      <Resource Include="View\ImageFolder\stars2.jpg" />
     </ItemGroup>
 
     <ItemGroup>

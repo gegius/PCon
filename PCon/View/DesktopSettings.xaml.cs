@@ -97,9 +97,9 @@ namespace PCon.View
         {
             if (mainProcess is null)
             {
-                PanelInsideBoxPrograms.Children.Add(new Label
+                /*PanelInsideBoxPrograms.Children.Add(new Label
                     {Content = "Вы не выбрали программу", Foreground = Brushes.Red});
-                return;
+                return;*/
             }
             processChecker = new ProcessChecker(mainProcess);
             overlaySettings = new OverlaySettings(mainProcess, _serviceCollection) {DesktopSettings = this};
@@ -134,13 +134,9 @@ namespace PCon.View
             label.Background = FindResource("AwesomeGreenColor") as Brush;
             if (PanelInsideProcessPrograms.Children.Contains(label))
             {
-                PanelInsideBoxPrograms.Children.Clear();
-                PanelInsideBoxPrograms.Children.Add(CreateProcessLabel(label.Content));
+                ChangeColor(sender);
                 mainProcess = label.Content.ToString();
             }
-            if (!PanelInsideBoxPrograms.Children.Contains(label)) return;
-            mainProcess = null;
-            PanelInsideBoxPrograms.Children.Remove(label);
         }
 
         private void Update_OnClick(object sender, RoutedEventArgs e)
@@ -169,20 +165,32 @@ namespace PCon.View
             label.MouseUp += ProcessLabel_MouseUp;
             return label;
         }
+        
+        private void ChangeColor(object sender)
+        {
+            foreach (var child in PanelInsideProcessPrograms.Children)
+            {
+                var label = (Label) child;
+                label.Background = label == (Label) sender ? FindResource("AwesomeGreenColor") as Brush : FindResource("Empty") as Brush;
+            }
+        }
 
         private void ProcessLabel_MouseEnter(object sender, RoutedEventArgs e)
         {
-            ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
+            if (((Label) sender).Background != FindResource("AwesomeGreenColor") as Brush)
+                ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
         }
 
         private void ProcessLabel_MouseLeave(object sender, RoutedEventArgs e)
         {
-            ((Label) sender).Background = FindResource("Empty") as Brush;
+            if (((Label) sender).Background != FindResource("AwesomeGreenColor") as Brush)
+                ((Label) sender).Background = FindResource("Empty") as Brush;
         }
 
         private void ProcessLabel_MouseUp(object sender, RoutedEventArgs e)
         {
-            ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
+            if (((Label) sender).Background != FindResource("AwesomeGreenColor") as Brush)
+                ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
         }
     }
 }

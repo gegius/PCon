@@ -5,30 +5,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:PCon.View"
         mc:Ignorable="d"
-        Title="DesktopSettings" Height="900" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="DesktopSettings" Height="910" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
     <Grid>
         <Label Content="PCon" FontSize="70" FontStyle="Italic" Foreground="Yellow" VerticalAlignment="Top" HorizontalAlignment="Center"></Label>
         
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
-            <GroupBox BorderBrush="Black" HorizontalAlignment="Left" Margin="50" Width="250" Height="400">
-                <TextBlock Text="Здравствуйте, это оверлей приложение для просмотра видео. Нажмите кнопку update, выберите процесс, к которому вы хотите прицепить оверлей. После выбора он будет указан в боксе ниже, откуда, если вы захотите, можно его убрать. Нажмите кнопку старт для начала работы оверлея и в выбранной программе введите комбинацию клавиш Ctrl+Tab. Приятного использования!" FontSize="16" TextWrapping="Wrap" Foreground="Black">
-                    <TextBlock.Background>
-                        <StaticResource ResourceKey="Empty" />
-                    </TextBlock.Background>
-                </TextBlock>
+            <GroupBox BorderBrush="Black" HorizontalAlignment="Left" Margin="50" Width="250" Height="500">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <TextBlock Text="Здравствуйте, это оверлей приложение для просмотра видео. Нажмите кнопку update, выберите процесс, к которому вы хотите прицепить оверлей. После выбора он будет указан в боксе ниже, откуда, если вы захотите, можно его убрать. Нажмите кнопку старт для начала работы оверлея и в выбранной программе введите комбинацию клавиш Ctrl+Tab. Приятного использования!" FontSize="16" TextWrapping="Wrap" Foreground="Black">
+                        <TextBlock.Background>
+                            <StaticResource ResourceKey="Empty" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                </ScrollViewer>
             </GroupBox>
             <StackPanel Orientation="Vertical" Margin="50">
-                <Button x:Name="Update" Width="50" Height="30" Content="Update"  Click="Update_OnClick" HorizontalAlignment="Right"></Button>
-                <GroupBox x:Name = "ProcessPrograms" BorderBrush="Black" HorizontalAlignment="Right" Width="250" Height="300" VerticalAlignment="Top">
-                    <StackPanel x:Name="PanelInsideProcessPrograms" Orientation="Vertical">
-                        
-                    </StackPanel>
+                <Button x:Name="Update" Width="50" Height="30" Content="Update"  Click="Update_OnClick" HorizontalAlignment="Right" Style="{DynamicResource RoundCorner}"></Button>
+                <GroupBox x:Name = "ProcessPrograms" BorderBrush="Black" HorizontalAlignment="Right" Width="250" Height="400" VerticalAlignment="Top">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="PanelInsideProcessPrograms" Orientation="Vertical">
+                        </StackPanel>
+                    </ScrollViewer>
                 </GroupBox>
-                <GroupBox x:Name = "BoxPrograms" BorderBrush="Black" HorizontalAlignment="Right" Width="250" Height="300" VerticalAlignment="Top">
-                    <StackPanel x:Name="PanelInsideBoxPrograms" Orientation="Vertical">
-                    </StackPanel>
-                </GroupBox>
-                <Button x:Name="Show" Width="200" Height="30" Content="Start" VerticalAlignment="Bottom" Click="Button_Click_Start" HorizontalAlignment="Right" Margin="50"></Button>  
+                <Button x:Name="Show" Width="200" Height="60" Content="Start" FontSize="30" FontStyle="Oblique" VerticalAlignment="Bottom" Click="Button_Click_Start" HorizontalAlignment="Right" Margin="50" Style="{DynamicResource RoundCorner}"></Button>  
             </StackPanel>
             
         </StackPanel>
@@ -37,7 +36,7 @@
             <VisualBrush Stretch="Uniform">
                 <VisualBrush.Visual>
                     <StackPanel>
-                        <Image Source="pack://application:,,,/View/ImageFolder/prev.jpg"></Image>
+                        <Image Source="pack://application:,,,/View/ImageFolder/stars2.jpg"></Image>
                     </StackPanel>
                 </VisualBrush.Visual>
             </VisualBrush >
