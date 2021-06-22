@@ -33,7 +33,7 @@
                     <StackPanel x:Name="PanelInsideBoxPrograms" Orientation="Vertical">
                     </StackPanel>
                 </GroupBox>
-                <Button x:Name="Show" Width="200" Height="30" Content="Start" VerticalAlignment="Bottom" Click="Button_Click_Show" HorizontalAlignment="Right" Margin="50"></Button>  
+                <Button x:Name="Show" Width="200" Height="30" Content="Start" VerticalAlignment="Bottom" Click="Button_Click_Start" HorizontalAlignment="Right" Margin="50"></Button>  
             </StackPanel>
             
         </StackPanel>

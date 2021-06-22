@@ -15,12 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="msedgedriver.exe">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="View\ImageFolder\prev.jpg" />
       <Resource Include="View\ImageFolder\prev.jpg" />
       <None Remove="View\ImageFolder\672771.png" />

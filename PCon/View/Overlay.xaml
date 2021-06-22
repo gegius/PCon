@@ -6,15 +6,16 @@
         xmlns:local="clr-namespace:PCon.View"
         xmlns:vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
         xmlns:domain="clr-namespace:PCon.Domain"
+        xmlns:hotKeys="clr-namespace:PCon.Domain.HotKeys"
         mc:Ignorable="d"
         Title="Overlay" Height="400" Width="700"
         AllowsTransparency="True" WindowStyle="None"
         ShowInTaskbar="False" MouseEnter="Overlay_OnMouseEnter" MouseLeave="Overlay_OnMouseLeave">
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static domain:HotKeys.PlayPlayerCommand}" Executed="PlayPlayerCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:HotKeys.PausePlayerCommand}" Executed="PausePlayerCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:HotKeys.HideOverlayCommand}" Executed="HideOverlayCommand_Execute"/>
-        <CommandBinding Command="{x:Static domain:HotKeys.ShowOverlayCommand}" Executed="ShowOverlayCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.PlayPlayerCommand}" Executed="PlayPlayerCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.PausePlayerCommand}" Executed="PausePlayerCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.HideOverlayCommand}" Executed="HideOverlayCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.ShowOverlayCommand}" Executed="ShowOverlayCommand_Execute"/>
     </Window.CommandBindings>
     <Window.Resources>
         <!--Control colors.-->

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using WasdAPI.Domain;
 using WasdAPI.DTO;
 
 // ReSharper disable once IdentifierTypo

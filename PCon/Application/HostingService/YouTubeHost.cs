@@ -30,20 +30,14 @@ namespace PCon.Application.HostingService
             return new Uri(streamManifest.GetMuxedStreams().TryGetWithHighestVideoQuality().Url);
         }
 
-        public async IAsyncEnumerable<MediaObject> SearchMedia(string request)
-        {
-            await foreach (var videoInfo in _youtubeClient.Search.GetVideosAsync(request))
-            {
-                yield return new MediaObject(videoInfo.Url, videoInfo.Title,
-                    videoInfo.Title, videoInfo.Author.Title,
-                    videoInfo.Duration, videoInfo.Thumbnails[2].Url,
-                    videoInfo.Thumbnails[2].Url);
-            }
-        }
-
         public IAsyncEnumerable<MediaObject> SearchTrends()
         {
             return GetVideoFromPage("https://www.youtube.com/feed/trending");
+        }
+
+        public IAsyncEnumerable<MediaObject> SearchMedia(string query)
+        {
+            return GetVideoFromPage($"https://www.youtube.com/results?search_query={query}");
         }
 
         private async IAsyncEnumerable<MediaObject> GetVideoFromPage(string url)
@@ -56,7 +50,7 @@ namespace PCon.Application.HostingService
             {
                 var video = await _youtubeClient.Videos.GetAsync("https://www.youtube.com" + trend);
                 yield return new MediaObject(video.Url, video.Title,
-                    video.Description, video.Author.Title, video.Duration,
+                    $"Длительность: {video.Duration}\n\n{video.Description}", video.Author.Title, video.Duration,
                     video.Thumbnails[2].Url, video.Thumbnails[2].Url);
             }
         }

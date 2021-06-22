@@ -22,21 +22,21 @@ namespace PCon.Application.HostingService
             return new Uri(media.First().Value);
         }
 
-        public async IAsyncEnumerable<MediaObject> SearchMedia(string request)
+        public async IAsyncEnumerable<MediaObject> SearchMedia(string query)
         {
-            foreach (var media in await WasdApi.SearchUsersByName(request))
+            foreach (var media in await WasdApi.SearchUsersByName(query))
             {
                 if (media.IsLive)
                     yield return new MediaObject(
                         $"https://wasd.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция идёт",
-                        $"Описание: {media.UserDescription}.\nТрансляция идёт",
+                        $"Трансляция идёт\n\nОписание: {media.UserDescription}.",
                         media.Name, TimeSpan.Zero, media.ProfileImageUrl, media.ProfileImageUrl);
                 else
                     yield return new MediaObject(
                         $"https://wasd.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция не идёт",
-                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue);
+                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue, description: media.UserDescription);
             }
         }
 
@@ -46,7 +46,7 @@ namespace PCon.Application.HostingService
             {
                 yield return new MediaObject($"https://wasd.tv/{video.Broadcaster}",
                     $"Игра: {video.GameName}. Количество зрителей: {video.ViewersCount}. Трансляция идёт",
-                    $"Игра: {video.GameName}.\nКоличество зрителей: {video.ViewersCount}\nОписание: {video.Title}",
+                    $"Трансляция идёт\n\nИгра: {video.GameName}.\n\nКоличество зрителей: {video.ViewersCount}\n\nОписание: {video.Title}",
                     video.Broadcaster, TimeSpan.Zero, video.PreviewImageUrl, video.PreviewImageUrl);
             }
         }

@@ -9,7 +9,7 @@ namespace PCon.Application.HostingService
     {
         IPlayerSettings GetPlayerSettings();
         Task<Uri> GetUri(string link);
-        IAsyncEnumerable<MediaObject> SearchMedia(string request);
+        IAsyncEnumerable<MediaObject> SearchMedia(string query);
         IAsyncEnumerable<MediaObject> SearchTrends();
     }
 }
