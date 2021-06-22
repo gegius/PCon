@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -37,14 +36,14 @@ namespace PCon.Application.HostingService
 
         public IAsyncEnumerable<MediaObject> SearchMedia(string query)
         {
-            return GetVideoFromPage($"https://www.youtube.com/results?search_query={query}");
+            return GetVideoFromPage($"https://www.youtube.com/results?search_query={query}&sp=EgIQAQ%253D%253D");
         }
 
         private async IAsyncEnumerable<MediaObject> GetVideoFromPage(string url)
         {
             using var client = new WebClient();
             var htmlCode = await client.DownloadStringTaskAsync(url);
-            var regex = new Regex("{\"url\":\"(/watch.*?)\"");
+            var regex = new Regex(@"{""url"":""(/watch\?v=\w+)""");
             foreach (Match trend in regex.Matches(htmlCode))
             {
                 var video = await _youtubeClient.Videos.GetAsync("https://www.youtube.com" + trend.Groups[1]);

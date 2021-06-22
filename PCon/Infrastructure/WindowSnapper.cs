@@ -31,7 +31,6 @@ namespace PCon.Infrastructure
         private void SnapToWindow()
         {
             var bounds = WindowInfo.GetWindowBounds(WindowHandle);
-
             if (bounds == _lastBounds) return;
             switch (_window.ToString())
             {
@@ -44,7 +43,6 @@ namespace PCon.Infrastructure
                     _window.Left = bounds.Right - _window.Width;
                     break;
             }
-
             _lastBounds = bounds;
         }
     }

@@ -13,7 +13,7 @@ namespace PCon.Infrastructure
             this.process = process;
         }
 
-        public async Task<bool> WaitShowAsync(CancellationToken cancellationToken)
+        public async Task WaitShowAsync(CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
@@ -23,10 +23,9 @@ namespace PCon.Infrastructure
                     if (IsWindowShowed(process)) isFound = true;
                 }
             }, cancellationToken);
-            return true;
         }
 
-        public async Task<bool> WaitHideAsync(string windowHandle, CancellationToken cancellationToken)
+        public async Task WaitHideAsync(string windowHandle, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
@@ -36,7 +35,6 @@ namespace PCon.Infrastructure
                     if (IsWindowHidden(windowHandle)) isFound = true;
                 }
             }, cancellationToken);
-            return true;
         }
 
         public static bool IsWindowShowed(string handle)

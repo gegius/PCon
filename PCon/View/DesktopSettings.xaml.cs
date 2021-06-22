@@ -131,11 +131,9 @@ namespace PCon.View
         {
             var label = (Label) sender;
             label.Background = FindResource("AwesomeGreenColor") as Brush;
-            if (PanelInsideProcessPrograms.Children.Contains(label))
-            {
-                ChangeColor(sender);
-                mainProcess = label.Content.ToString();
-            }
+            if (!PanelInsideProcessPrograms.Children.Contains(label)) return;
+            ChangeColor(sender);
+            mainProcess = label.Content.ToString();
         }
 
         private void Update_OnClick(object sender, RoutedEventArgs e)
