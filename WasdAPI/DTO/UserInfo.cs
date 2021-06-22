@@ -1,6 +1,6 @@
 ﻿// ReSharper disable once IdentifierTypo
 
-namespace WasdAPI.Domain
+namespace WasdAPI.DTO
 {
     public class UserInfo
     {

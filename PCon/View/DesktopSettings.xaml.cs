@@ -6,47 +6,52 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Microsoft.Extensions.DependencyInjection;
+using PCon.Domain.HotKeys;
 using PCon.Infrastructure;
 
 namespace PCon.View
 {
     public partial class DesktopSettings
     {
-
-        // ReSharper disable once IdentifierTypo
-        private const int HotkeyId = 9000;
-        private const uint VkTab = 0x09;
-        private const uint ModControl = 0x0002;
-
-
+        public Overlay Overlay { get; set; }
         private readonly ServiceCollection _serviceCollection;
         private IntPtr _windowHandle;
         private HwndSource _source;
+        private OverlaySettings overlaySettings;
+        private ProcessChecker processChecker;
+        private string mainProcess;
+        private WindowSnapper snapper;
+        private bool overlaySettingsStarted;
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+        public DesktopSettings(ServiceCollection serviceCollection)
+        {
+            _serviceCollection = serviceCollection;
+            InitializeComponent();
+        }
 
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
-
             _windowHandle = new WindowInteropHelper(this).Handle;
             _source = HwndSource.FromHwnd(_windowHandle);
             _source?.AddHook(HwndHook);
-
-            WinApi.RegisterHotKey(_windowHandle, HotkeyId, ModControl, VkTab);
+            WinApi.RegisterHotKey(_windowHandle, WindowsHotKeys.HotKeyId, WindowsHotKeys.ModControl,
+                WindowsHotKeys.VkTab);
         }
 
-        // ReSharper disable once IdentifierTypo
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            const int wmHotkey = 0x0312;
-            if (msg != wmHotkey) return IntPtr.Zero;
-            if (wParam.ToInt32() != HotkeyId) return IntPtr.Zero;
-            var vkey = ((int) lParam >> 16) & 0xFFFF;
-            if (vkey == VkTab && overlaySettingsStarted)
+            if (msg != WindowsHotKeys.WmHotKey) return IntPtr.Zero;
+            if (wParam.ToInt32() != WindowsHotKeys.HotKeyId) return IntPtr.Zero;
+            var vKey = ((int) lParam >> 16) & 0xFFFF;
+            if (vKey == WindowsHotKeys.VkTab && overlaySettingsStarted)
             {
+                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (overlaySettings.Visibility)
                 {
-                    case Visibility.Visible when (ProcessChecker.IsWindowShowed("OverlaySettings") ||
-                                                  ProcessChecker.IsWindowShowed(mainProcess)):
+                    case Visibility.Visible when ProcessChecker.IsWindowShowed("OverlaySettings") ||
+                                                 ProcessChecker.IsWindowShowed(mainProcess):
                         StopOverlaySettingsAttach();
                         Overlay?.StartOverlayAttach();
                         break;
@@ -57,13 +62,10 @@ namespace PCon.View
                         break;
                     case Visibility.Collapsed:
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             }
 
             handled = true;
-
             return IntPtr.Zero;
         }
 
@@ -80,36 +82,23 @@ namespace PCon.View
             var size = WindowInfo.GetMainProcessWindowSize(snapper.WindowHandle);
             overlaySettings.Width = size.Width;
             overlaySettings.Height = size.Height;
-            WaitChangeOverlaySettingsVisibility();
+            WaitChangedOverlaySettingsVisibility();
         }
 
         protected override void OnClosed(EventArgs e)
         {
             _source.RemoveHook(HwndHook);
-            WinApi.UnregisterHotKey(_windowHandle, HotkeyId);
+            WinApi.UnregisterHotKey(_windowHandle, WindowsHotKeys.HotKeyId);
             base.OnClosed(e);
         }
 
-        private OverlaySettings overlaySettings;
-        private ProcessChecker processChecker;
-        private string mainProcess;
-        private WindowSnapper snapper;
-        private bool overlaySettingsStarted;
-        public Overlay Overlay { get; set; }
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        public DesktopSettings(ServiceCollection serviceCollection)
-        {
-            _serviceCollection = serviceCollection;
-            InitializeComponent();
-        }
-
-
-        private void Button_Click_Show(object sender, RoutedEventArgs e)
+        private void Button_Click_Start(object sender, RoutedEventArgs e) //добавить вплывающее окно
         {
             if (mainProcess is null)
             {
-                PanelInsideBoxPrograms.Children.Add(new Label{Content = "Вы не выбрали программу. CODE=101", Foreground = Brushes.Red});
+                PanelInsideBoxPrograms.Children.Add(new Label
+                    {Content = "Вы не выбрали программу", Foreground = Brushes.Red});
                 return;
             }
             processChecker = new ProcessChecker(mainProcess);
@@ -120,7 +109,7 @@ namespace PCon.View
             Hide();
         }
 
-        private async void WaitChangeOverlaySettingsVisibility()
+        private async void WaitChangedOverlaySettingsVisibility() //Поменять название/подумать над работой метода
         {
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
@@ -139,59 +128,61 @@ namespace PCon.View
             snapper.AttachAsync();
         }
 
-        private void Label_OnClick(object sender, RoutedEventArgs e)
+        private void ProcessLabel_OnClick(object sender, RoutedEventArgs e) //переписать заменив перенос процесса выделением
         {
             var label = (Label) sender;
             label.Background = FindResource("AwesomeGreenColor") as Brush;
             if (PanelInsideProcessPrograms.Children.Contains(label))
             {
                 PanelInsideBoxPrograms.Children.Clear();
-                PanelInsideBoxPrograms.Children.Add(CreateLabel(label.Content));
+                PanelInsideBoxPrograms.Children.Add(CreateProcessLabel(label.Content));
                 mainProcess = label.Content.ToString();
             }
-
             if (!PanelInsideBoxPrograms.Children.Contains(label)) return;
             mainProcess = null;
             PanelInsideBoxPrograms.Children.Remove(label);
-        }
-
-        private void Label_MouseEnter(object sender, RoutedEventArgs e)
-        {
-            ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
-        }
-
-        private void Label_MouseLeave(object sender, RoutedEventArgs e)
-        {
-            ((Label) sender).Background = FindResource("Empty") as Brush;
-        }
-
-        private void Label_MouseUp(object sender, RoutedEventArgs e)
-        {
-            ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
         }
 
         private void Update_OnClick(object sender, RoutedEventArgs e)
         {
             PanelInsideProcessPrograms.Children.Clear();
             var processlist = Process.GetProcesses();
-
             foreach (var process in processlist)
             {
                 var name = process.MainWindowTitle;
-                if (string.IsNullOrEmpty(name) || name == "DesktopSettings") continue;
-                var label = CreateLabel(name);
-                PanelInsideProcessPrograms.Children.Add(label);
+                if (IsCorrectProcess(name))
+                    PanelInsideProcessPrograms.Children.Add(CreateProcessLabel(name));
             }
         }
 
-        private Label CreateLabel(object content)
+        private static bool IsCorrectProcess(string name)
+        {
+            return !string.IsNullOrEmpty(name) && name != "DesktopSettings";
+        }
+
+        private Label CreateProcessLabel(object content)
         {
             var label = new Label {Foreground = Brushes.Black, Content = content};
-            label.MouseDown += Label_OnClick;
-            label.MouseEnter += Label_MouseEnter;
-            label.MouseLeave += Label_MouseLeave;
-            label.MouseUp += Label_MouseUp;
+            label.MouseDown += ProcessLabel_OnClick;
+            label.MouseEnter += ProcessLabel_MouseEnter;
+            label.MouseLeave += ProcessLabel_MouseLeave;
+            label.MouseUp += ProcessLabel_MouseUp;
             return label;
+        }
+
+        private void ProcessLabel_MouseEnter(object sender, RoutedEventArgs e)
+        {
+            ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
+        }
+
+        private void ProcessLabel_MouseLeave(object sender, RoutedEventArgs e)
+        {
+            ((Label) sender).Background = FindResource("Empty") as Brush;
+        }
+
+        private void ProcessLabel_MouseUp(object sender, RoutedEventArgs e)
+        {
+            ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
         }
     }
 }
