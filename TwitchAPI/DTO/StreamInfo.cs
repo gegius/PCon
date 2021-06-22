@@ -1,6 +1,6 @@
 ﻿namespace TwitchAPI.DTO
 {
-    public class StreamDto
+    public class StreamInfo
     {
         public string Broadcaster { get; }
         public string Title { get; }
@@ -8,8 +8,7 @@
         public string GameName { get; }
         public int ViewersCount { get; }
 
-
-        public StreamDto(string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount)
+        public StreamInfo(string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount)
         {
             Title = title;
             PreviewImageUrl = previewImageUrl;
@@ -18,7 +17,7 @@
             Broadcaster = broadcaster;
         }
 
-        public StreamDto(
+        public StreamInfo(
             (string broadcaster, string title, string previewImageUrl, string gameName, int viewersCount) args)
         {
             Broadcaster = args.broadcaster;

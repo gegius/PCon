@@ -8,7 +8,7 @@ namespace TwitchAPI
 {
     public static class JsonResponseParser
     {
-        public static IEnumerable<StreamDto> SteamsResponseParse(string responseContent)
+        public static IEnumerable<StreamInfo> SteamsResponseParse(string responseContent)
         {
             var jArr = JArray.Parse(responseContent);
             if (!(jArr.First() is JObject jArrElement))
@@ -34,7 +34,7 @@ namespace TwitchAPI
                 if (!TryParseNode(node, out var streamInfo))
                     throw new ArgumentException($"Wrong response. {node}");
 
-                yield return new StreamDto(streamInfo);
+                yield return new StreamInfo(streamInfo);
             }
         }
 
@@ -126,7 +126,7 @@ namespace TwitchAPI
             return (token, signature);
         }
 
-        public static IEnumerable<UserDto> SearchResultsPage_SearchResultsResponseParse(string responseContent)
+        public static IEnumerable<UserInfo> SearchResultsPage_SearchResultsResponseParse(string responseContent)
         {
             var jArr = JArray.Parse(responseContent);
 
@@ -154,11 +154,11 @@ namespace TwitchAPI
                 if (!edge.ContainsKey("item") || !(edge["item"] is JObject item))
                     throw new ArgumentException($"Wrong response. {edge}");
 
-                var streamDto = TryParseItemForStream(item, out var streamInfo) ? new StreamDto(streamInfo) : null;
+                var streamDto = TryParseItemForStream(item, out var streamInfo) ? new StreamInfo(streamInfo) : null;
                 if (!TryParseItemForUser(item, out var userInfo))
                     throw new ArgumentException();
 
-                yield return new UserDto(userInfo, streamDto);
+                yield return new UserInfo(userInfo, streamDto);
             }
         }
 

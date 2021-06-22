@@ -1,30 +1,30 @@
 ﻿namespace TwitchAPI.DTO
 {
-    public class UserDto
+    public class UserInfo
     {
         public string Name { get; }
         public string ProfileImageUrl { get; }
         public string UserDescription { get; }
         public int FollowersCount { get; }
-        public StreamDto StreamInfo { get; }
+        public StreamInfo StreamInfo { get; }
 
-        public UserDto(string name, string profileImageUrl, string userDescription, int followersCount,
-            StreamDto streamDto)
+        public UserInfo(string name, string profileImageUrl, string userDescription, int followersCount,
+            StreamInfo streamInfo)
         {
             Name = name;
             ProfileImageUrl = profileImageUrl;
             UserDescription = userDescription;
-            StreamInfo = streamDto;
+            StreamInfo = streamInfo;
             FollowersCount = followersCount;
         }
 
-        public UserDto((string name, string profileImageUrl, string userDescription, int followersCount) args,
-            StreamDto streamDto)
+        public UserInfo((string name, string profileImageUrl, string userDescription, int followersCount) args,
+            StreamInfo streamInfo)
         {
             Name = args.name;
             ProfileImageUrl = args.profileImageUrl;
             UserDescription = args.userDescription;
-            StreamInfo = streamDto;
+            StreamInfo = streamInfo;
             FollowersCount = args.followersCount;
         }
     }

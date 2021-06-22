@@ -1,16 +1,16 @@
-﻿using System.Threading;
+﻿using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Monitor = PCon.Domain.Monitor;
 
-namespace PCon.Services
+namespace PCon.Infrastructure
 {
     public class ProcessChecker
     {
-        private readonly string mainProcess;
+        private readonly string process;
 
-        public ProcessChecker(string mainProcess)
+        public ProcessChecker(string process)
         {
-            this.mainProcess = mainProcess;
+            this.process = process;
         }
 
         public async Task WaitShowAsync(CancellationToken cancellationToken)
@@ -20,7 +20,7 @@ namespace PCon.Services
                 var isFound = false;
                 while (!cancellationToken.IsCancellationRequested && !isFound)
                 {
-                    if (IsWindowShowed(mainProcess)) isFound = true;
+                    if (IsWindowShowed(process)) isFound = true;
                 }
             }, cancellationToken);
         }
@@ -39,14 +39,23 @@ namespace PCon.Services
 
         public static bool IsWindowShowed(string handle)
         {
-            var topWindowText = Monitor.GetTopWindowText();
+            var topWindowText = GetTopWindowText();
             return topWindowText.Contains(handle);
         }
 
         private bool IsWindowHidden(string windowHandle)
         {
-            var topWindowText = Monitor.GetTopWindowText();
-            return !topWindowText.Contains(mainProcess) && !topWindowText.Contains(windowHandle);
+            var topWindowText = GetTopWindowText();
+            return !topWindowText.Contains(process) && !topWindowText.Contains(windowHandle);
+        }
+
+        private static string GetTopWindowText()
+        {
+            var hWnd = WinApi.GetForegroundWindow();
+            var length = WinApi.GetWindowTextLength(hWnd);
+            var text = new StringBuilder(length + 1);
+            WinApi.GetWindowText(hWnd, text, text.Capacity);
+            return text.ToString();
         }
     }
 }

@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Microsoft.Extensions.DependencyInjection;
-using PCon.Domain;
-using PCon.Services;
+using PCon.Infrastructure;
 
 namespace PCon.View
 {
     public partial class DesktopSettings
     {
-        [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-
-        [DllImport("user32.dll")]
-        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         // ReSharper disable once IdentifierTypo
         private const int HotkeyId = 9000;
@@ -38,7 +31,7 @@ namespace PCon.View
             _source = HwndSource.FromHwnd(_windowHandle);
             _source?.AddHook(HwndHook);
 
-            RegisterHotKey(_windowHandle, HotkeyId, ModControl, VkTab);
+            WinApi.RegisterHotKey(_windowHandle, HotkeyId, ModControl, VkTab);
         }
 
         // ReSharper disable once IdentifierTypo
@@ -99,7 +92,7 @@ namespace PCon.View
         protected override void OnClosed(EventArgs e)
         {
             _source.RemoveHook(HwndHook);
-            UnregisterHotKey(_windowHandle, HotkeyId);
+            WinApi.UnregisterHotKey(_windowHandle, HotkeyId);
             base.OnClosed(e);
         }
 

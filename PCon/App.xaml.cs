@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using PCon.Services.HostingService;
+using PCon.Application.HostingService;
 using PCon.View;
 
 namespace PCon

@@ -6,9 +6,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using PCon.Application.HostingService;
 using PCon.Domain;
-using PCon.Services;
-using PCon.Services.HostingService;
+using PCon.Infrastructure;
 using Vlc.DotNet.Core;
 using Vlc.DotNet.Core.Interops.Signatures;
 using Vlc.DotNet.Wpf;
@@ -25,7 +25,7 @@ namespace PCon.View
         private DispatcherTimer timerVideoTime;
         private ProcessChecker processChecker;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private ServiceProvider _serviceProvider;
+        private readonly ServiceProvider _serviceProvider;
 
         public Overlay(MediaObject video, string mainProcess, VlcControl vlcControl,
             IServiceCollection serviceCollection)

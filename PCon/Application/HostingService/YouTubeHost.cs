@@ -4,12 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using PCon.Domain;
 using PCon.Domain.Player;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
-namespace PCon.Services.HostingService
+namespace PCon.Application.HostingService
 {
     public class YouTubeHost : IHosting
     {

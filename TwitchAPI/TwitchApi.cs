@@ -10,7 +10,7 @@ using TwitchAPI.DTO;
 
 namespace TwitchAPI
 {
-    public class Api
+    public class TwitchApi
     {
         public static async Task<Dictionary<string, string>> GetM3U8WithQuality(string userLogin)
         {
@@ -60,7 +60,7 @@ namespace TwitchAPI
             return $"https://usher.ttvnw.net/api/channel/hls/{userLogin}.m3u8?sig={signature}&token={token}";
         }
 
-        public async Task<IEnumerable<UserDto>> SearchUsersByName(string userLogin)
+        public async Task<IEnumerable<UserInfo>> SearchUsersByName(string userLogin)
         {
             var requestData = Requests.GetSearchResultsPage_SearchResultsRequest(userLogin);
 
@@ -87,7 +87,7 @@ namespace TwitchAPI
             return JsonResponseParser.VideoPlayerStatusOverlayChannelResponseParseUserAvailable(responseContent);
         }
 
-        public static async Task<IEnumerable<StreamDto>> GetTopStreams()
+        public static async Task<IEnumerable<StreamInfo>> GetTopStreams()
         {
             var requestData = Requests.GetStreamsRequest();
             var response = await SendRequestAsync(requestData);

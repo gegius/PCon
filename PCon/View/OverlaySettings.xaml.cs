@@ -10,9 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
-using PCon.Domain;
-using PCon.Extensions;
-using PCon.Services.HostingService;
+using PCon.Application.HostingService;
+using PCon.Infrastructure.Extensions;
 using Vlc.DotNet.Wpf;
 
 namespace PCon.View

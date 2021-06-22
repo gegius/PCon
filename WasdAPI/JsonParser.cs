@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using WasdAPI.Domain;
+using WasdAPI.DTO;
 
 // ReSharper disable once IdentifierTypo
 namespace WasdAPI
 {
     public static class JsonParser
     {
-        public static IEnumerable<UserInfo> SearchUsersByNameParse(string responseContent)
+        public static IEnumerable<UserInfo> ParseUsers(string responseContent)
         {
             var jObj = JObject.Parse(responseContent);
 
@@ -99,7 +100,7 @@ namespace WasdAPI
             return userId.ToString();
         }
 
-        public static IEnumerable<StreamInfo> TopStreamsParse(string responseContent)
+        public static IEnumerable<StreamInfo> ParseTopStreams(string responseContent)
         {
             var jObj = JObject.Parse(responseContent);
 

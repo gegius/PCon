@@ -7,17 +7,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WasdAPI.Domain;
+using WasdAPI.DTO;
 
 // ReSharper disable once IdentifierTypo
 namespace WasdAPI
 {
-    public static class Api
+    // ReSharper disable once IdentifierTypo
+    public static class WasdApi
     {
         public static async Task<IEnumerable<UserInfo>> SearchUsersByName(string username)
         {
             var uri = $"https://wasd.tv/api/search/channels?limit=15&offset=0&search_phrase={username}";
             var responseContent = await SendRequestAsync(uri);
-            return JsonParser.SearchUsersByNameParse(responseContent);
+            return JsonParser.ParseUsers(responseContent);
         }
 
         public static async Task<string> GetIdByName(string username)
@@ -55,7 +57,7 @@ namespace WasdAPI
 
             var responseContent = await SendRequestAsync(uri);
 
-            return JsonParser.TopStreamsParse(responseContent);
+            return JsonParser.ParseTopStreams(responseContent);
         }
 
         public static async Task<Dictionary<string, string>> GetM3U8WithQuality(string userId)

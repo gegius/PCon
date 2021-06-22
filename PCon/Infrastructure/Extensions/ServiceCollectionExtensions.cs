@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace PCon.Extensions
+namespace PCon.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {

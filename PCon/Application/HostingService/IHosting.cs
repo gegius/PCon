@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PCon.Domain;
 using PCon.Domain.Player;
 
-namespace PCon.Services.HostingService
+namespace PCon.Application.HostingService
 {
     public interface IHosting
     {

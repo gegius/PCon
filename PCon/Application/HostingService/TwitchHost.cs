@@ -2,40 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PCon.Domain;
 using PCon.Domain.Player;
-using WasdAPI;
+using TwitchAPI;
 
-namespace PCon.Services.HostingService
+namespace PCon.Application.HostingService
 {
-    // ReSharper disable once IdentifierTypo
-    public class WasdHost : IHosting
+    public class TwitchHost : IHosting
     {
+        private readonly TwitchApi twitchTwitchApi;
+
+        public TwitchHost()
+        {
+            twitchTwitchApi = new TwitchApi();
+        }
+
         public IPlayerSettings GetPlayerSettings()
         {
-            return new WasdPlayer();
+            return new TwitchPlayer();
         }
 
         public async Task<Uri> GetUri(string link)
         {
-            var userName = link.Replace("https://wasd.tv/", "");
-            var media = await Api.GetM3U8WithQuality(await Api.GetIdByName(userName));
+            var userName = link.Replace("https://www.twitch.tv/", "");
+            var media = await TwitchApi.GetM3U8WithQuality(userName);
             return new Uri(media.First().Value);
         }
 
         public async IAsyncEnumerable<MediaObject> SearchMedia(string request)
         {
-            foreach (var media in await Api.SearchUsersByName(request))
+            foreach (var media in await twitchTwitchApi.SearchUsersByName(request))
             {
-                if (media.IsLive)
-                    yield return new MediaObject(
-                        $"https://wasd.tv/{media.Name}",
+                yield return !(media.StreamInfo is null)
+                    ? new MediaObject(
+                        $"https://www.twitch.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция идёт",
-                        $"Описание: {media.UserDescription}.\nТрансляция идёт",
-                        media.Name, TimeSpan.Zero, media.ProfileImageUrl, media.ProfileImageUrl);
-                else
-                    yield return new MediaObject(
-                        $"https://wasd.tv/{media.Name}",
+                        $"Игра: {media.StreamInfo.GameName}.\nКоличество зрителей: {media.StreamInfo.ViewersCount}\nОписание: {media.StreamInfo.Title}",
+                        media.Name, TimeSpan.Zero, media.StreamInfo.PreviewImageUrl, media.ProfileImageUrl)
+                    : new MediaObject(
+                        $"https://www.twitch.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция не идёт",
                         author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue);
             }
@@ -43,9 +47,9 @@ namespace PCon.Services.HostingService
 
         public async IAsyncEnumerable<MediaObject> SearchTrends()
         {
-            foreach (var video in await Api.GetTopStreams())
+            foreach (var video in await TwitchApi.GetTopStreams())
             {
-                yield return new MediaObject($"https://wasd.tv/{video.Broadcaster}",
+                yield return new MediaObject($"https://www.twitch.tv/{video.Broadcaster}",
                     $"Игра: {video.GameName}. Количество зрителей: {video.ViewersCount}. Трансляция идёт",
                     $"Игра: {video.GameName}.\nКоличество зрителей: {video.ViewersCount}\nОписание: {video.Title}",
                     video.Broadcaster, TimeSpan.Zero, video.PreviewImageUrl, video.PreviewImageUrl);
