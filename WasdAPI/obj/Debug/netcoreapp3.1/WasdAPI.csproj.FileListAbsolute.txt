@@ -1,9 +1,0 @@
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\bin\Debug\netcoreapp3.1\WasdAPI.deps.json
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\bin\Debug\netcoreapp3.1\WasdAPI.dll
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\bin\Debug\netcoreapp3.1\WasdAPI.pdb
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\obj\Debug\netcoreapp3.1\WasdAPI.csprojAssemblyReference.cache
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\obj\Debug\netcoreapp3.1\WasdAPI.AssemblyInfoInputs.cache
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\obj\Debug\netcoreapp3.1\WasdAPI.AssemblyInfo.cs
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\obj\Debug\netcoreapp3.1\WasdAPI.csproj.CoreCompileInputs.cache
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\obj\Debug\netcoreapp3.1\WasdAPI.dll
-C:\Users\User\Desktop\TesstSolution\PCon\WasdAPI\obj\Debug\netcoreapp3.1\WasdAPI.pdb
