@@ -37,7 +37,7 @@ namespace PCon.View
             InitAll(video);
         }
 
-        private async void CheckMainProcess()
+        private async void WaitChangedOverlayVisibility()
         {
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
@@ -56,7 +56,7 @@ namespace PCon.View
             InitSnapper();
             await InitOverlaySettings(video);
             processChecker = new ProcessChecker(mainProcess);
-            CheckMainProcess();
+            WaitChangedOverlayVisibility();
             Show();
         }
 
@@ -72,7 +72,7 @@ namespace PCon.View
             Button_Play(null, null);
             cancellationTokenSource = new CancellationTokenSource();
             Visibility = Visibility.Visible;
-            CheckMainProcess();
+            WaitChangedOverlayVisibility();
         }
 
         private async Task InitOverlaySettings(MediaObject video)

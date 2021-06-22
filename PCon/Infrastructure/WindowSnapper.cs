@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -48,6 +49,17 @@ namespace PCon.Infrastructure
             }
 
             _lastBounds = bounds;
+        }
+
+        public async void WaitChangedOverlaySettingsVisibility(CancellationTokenSource cancellationTokenSource)
+        {
+            await processChecker.WaitHideAsync("OverlaySettings", cancellationTokenSource.Token);
+            if (cancellationTokenSource.Token.IsCancellationRequested) break;
+            _window.Visibility = Visibility.Hidden;
+            await processChecker.WaitShowAsync(cancellationTokenSource.Token);
+            if (cancellationTokenSource.Token.IsCancellationRequested) break;
+            _window.Visibility = Visibility.Visible;
+            
         }
         
     }

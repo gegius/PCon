@@ -38,37 +38,31 @@ namespace PCon.View
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             const int wmHotkey = 0x0312;
-            switch (msg)
+            if (msg != wmHotkey) return IntPtr.Zero;
+            if (wParam.ToInt32() != HotkeyId) return IntPtr.Zero;
+            var vkey = ((int) lParam >> 16) & 0xFFFF;
+            if (vkey == VkTab && overlaySettingsStarted)
             {
-                case wmHotkey:
-                    switch (wParam.ToInt32())
-                    {
-                        case HotkeyId:
-                            var vkey = ((int) lParam >> 16) & 0xFFFF;
-                            if (vkey == VkTab && overlaySettingsStarted)
-                            {
-                                if (overlaySettings.Visibility == Visibility.Visible &&
-                                    (ProcessChecker.IsWindowShowed("OverlaySettings") ||
-                                     ProcessChecker.IsWindowShowed(mainProcess)))
-                                {
-                                    StopOverlaySettingsAttach();
-                                    Overlay?.StartOverlayAttach();
-                                }
-                                else if (overlaySettings.Visibility == Visibility.Hidden &&
-                                         (ProcessChecker.IsWindowShowed(mainProcess) ||
-                                          ProcessChecker.IsWindowShowed("Overlay")))
-                                {
-                                    Overlay?.StopOverlayAttach();
-                                    StartOverlaySettingsAttach();
-                                }
-                            }
-
-                            handled = true;
-                            break;
-                    }
-
-                    break;
+                switch (overlaySettings.Visibility)
+                {
+                    case Visibility.Visible when (ProcessChecker.IsWindowShowed("OverlaySettings") ||
+                                                  ProcessChecker.IsWindowShowed(mainProcess)):
+                        StopOverlaySettingsAttach();
+                        Overlay?.StartOverlayAttach();
+                        break;
+                    case Visibility.Hidden when ProcessChecker.IsWindowShowed(mainProcess) ||
+                                                ProcessChecker.IsWindowShowed("Overlay"):
+                        Overlay?.StopOverlayAttach();
+                        StartOverlaySettingsAttach();
+                        break;
+                    case Visibility.Collapsed:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
+
+            handled = true;
 
             return IntPtr.Zero;
         }
@@ -86,7 +80,11 @@ namespace PCon.View
             var size = WindowInfo.GetMainProcessWindowSize(snapper.WindowHandle);
             overlaySettings.Width = size.Width;
             overlaySettings.Height = size.Height;
-            CheckMainProcess();
+            while (!cancellationTokenSource.Token.IsCancellationRequested)
+            {
+                WaitChangedOverlaySettingsVisibility();
+            }
+            WaitChangedOverlaySettingsVisibility();
         }
 
         protected override void OnClosed(EventArgs e)
@@ -126,7 +124,7 @@ namespace PCon.View
             Hide();
         }
 
-        private async void CheckMainProcess()
+        private async void WaitChangedOverlaySettingsVisibility()
         {
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {

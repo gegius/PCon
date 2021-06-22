@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 namespace PCon.Infrastructure
 {
-    public class WindowInfo
+    public static class WindowInfo
     {
         public static Rect GetWindowBounds(IntPtr handle)
         {
