@@ -182,12 +182,17 @@ namespace TwitchAPI
             if (!broadcastSettings.TryGetValue("title", out var title))
                 return false;
 
-            if (!stream.ContainsKey("game") || !(stream["game"] is JObject game))
-                return false;
-
-            if (!game.TryGetValue("name", out var gameName))
-                return false;
-
+            var gameName = "";
+            if (stream.TryGetValue("game", out var gameToken))
+            {
+                if (gameToken is JObject game)
+                {
+                    if (!game.TryGetValue("name", out var gameNameToken))
+                        return false;
+                    gameName = gameNameToken.ToString();
+                }
+            }
+            
             if (!stream.TryGetValue("previewImageURL", out var previewImageUrl))
                 return false;
 
@@ -197,7 +202,7 @@ namespace TwitchAPI
             if (!int.TryParse(viewersCountJToken.ToString(), out var viewersCount))
                 return false;
 
-            result = (broadcaster.ToString(), title.ToString(), previewImageUrl.ToString(), gameName.ToString(),
+            result = (broadcaster.ToString(), title.ToString(), previewImageUrl.ToString(), gameName,
                 viewersCount);
 
             return true;
