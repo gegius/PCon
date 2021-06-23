@@ -35,6 +35,8 @@
       <None Remove="View\ImageFolder\stars2.jpg" />
       <None Remove="View\ImageFolder\star2.jpg" />
       <None Remove="View\ImageFolder\star3.jpg" />
+      <None Remove="View\ImageFolder\fac.jpg" />
+      <Resource Include="View\ImageFolder\fac.jpg" />
     </ItemGroup>
 
     <ItemGroup>
@@ -46,6 +48,7 @@
     <ItemGroup>
       <ProjectReference Include="..\TwitchAPI\TwitchAPI.csproj" />
       <ProjectReference Include="..\WasdAPI\WasdAPI.csproj" />
+      <ProjectReference Include="..\YouTubeAPI\YouTubeAPI.csproj" />
     </ItemGroup>
 
 </Project>

@@ -12,6 +12,7 @@ namespace TwitchAPI
 {
     public class TwitchApi
     {
+        public static string Url { get; } = "https://www.twitch.tv/";
         public static async Task<Dictionary<string, string>> GetM3U8WithQuality(string userLogin)
         {
             if (!await UserIsOnline(userLogin))
@@ -41,7 +42,7 @@ namespace TwitchAPI
 
             var responseContent = await ReadResponseContentAsync(response);
 
-            return JsonResponseParser.PlaybackAccessToken_TemplateResponseParse(responseContent);
+            return JsonResponseParser.TokenAndSignatureParse(responseContent);
         }
 
         private static async Task<string> ReadResponseContentAsync(WebResponse response)
@@ -68,7 +69,7 @@ namespace TwitchAPI
 
             var responseContent = await ReadResponseContentAsync(response);
 
-            return JsonResponseParser.SearchResultsPage_SearchResultsResponseParse(responseContent);
+            return JsonResponseParser.SearchResultsParse(responseContent);
         }
 
         private static async Task<bool> UserIsOnline(string userLogin)
@@ -76,7 +77,7 @@ namespace TwitchAPI
             var requestData = Requests.GetVideoPlayerStatusOverlayChannelRequest(userLogin);
             var response = await SendRequestAsync(requestData);
             var responseContent = await ReadResponseContentAsync(response);
-            return JsonResponseParser.VideoPlayerStatusOverlayChannelResponseParseUserIsOnline(responseContent);
+            return JsonResponseParser.IsOnlineParse(responseContent);
         }
 
         public async Task<bool> UserAvailable(string userLogin)
@@ -84,7 +85,7 @@ namespace TwitchAPI
             var requestData = Requests.GetVideoPlayerStatusOverlayChannelRequest(userLogin);
             var response = await SendRequestAsync(requestData);
             var responseContent = await ReadResponseContentAsync(response);
-            return JsonResponseParser.VideoPlayerStatusOverlayChannelResponseParseUserAvailable(responseContent);
+            return JsonResponseParser.AvailableParse(responseContent);
         }
 
         public static async Task<IEnumerable<StreamInfo>> GetTopStreams()
@@ -92,7 +93,7 @@ namespace TwitchAPI
             var requestData = Requests.GetStreamsRequest();
             var response = await SendRequestAsync(requestData);
             var responseContent = await ReadResponseContentAsync(response);
-            return JsonResponseParser.SteamsResponseParse(responseContent);
+            return JsonResponseParser.ParseTopStreams(responseContent);
         }
 
         private static async Task<HttpWebResponse> SendRequestAsync(string data)
@@ -109,7 +110,7 @@ namespace TwitchAPI
         private static async Task<string> GetClientId(string channelName)
         {
             using var client = new WebClient();
-            var htmlCode = await client.DownloadStringTaskAsync($"https://www.twitch.tv/{channelName}");
+            var htmlCode = await client.DownloadStringTaskAsync($"{Url}/{channelName}");
             var regex = new Regex("\"Client-ID\":\"(.*?)\"", RegexOptions.Compiled);
             var match = regex.Match(htmlCode);
             if (!match.Success)

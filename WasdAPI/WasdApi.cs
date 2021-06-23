@@ -12,31 +12,33 @@ namespace WasdAPI
 {
     public static class WasdApi
     {
+        public static string Url { get; } = "https://wasd.tv";
+
         public static async Task<IEnumerable<UserInfo>> SearchUsersByName(string username)
         {
             if (username == string.Empty) return Enumerable.Empty<UserInfo>();
-            var uri = $"https://wasd.tv/api/search/channels?limit=15&offset=0&search_phrase={username}";
+            var uri = $"{Url}/api/search/channels?limit=15&offset=0&search_phrase={username}";
             var responseContent = await SendRequestAsync(uri);
             return JsonParser.ParseUsers(responseContent);
         }
 
         public static async Task<string> GetIdByName(string username)
         {
-            var uri = $"https://wasd.tv/api/v2/broadcasts/public?channel_name={username.ToLower()}";
+            var uri = $"{Url}/api/v2/broadcasts/public?channel_name={username.ToLower()}";
             var responseContent = await SendRequestAsync(uri);
             return JsonParser.GetUserIdFromChannelInfo(responseContent);
         }
 
         public static async Task<bool> UserIsOnline(string username)
         {
-            var uri = $"https://wasd.tv/api/v2/broadcasts/public?channel_name={username.ToLower()}";
+            var uri = $"{Url}/api/v2/broadcasts/public?channel_name={username.ToLower()}";
             var responseContent = await SendRequestAsync(uri);
             return JsonParser.GetUserIsOnlineFromChannelInfo(responseContent);
         }
 
         public static async Task<bool> UserAvailable(string username)
         {
-            var uri = $"https://wasd.tv/api/v2/broadcasts/public?channel_name={username.ToLower()}";
+            var uri = $"{Url}/api/v2/broadcasts/public?channel_name={username.ToLower()}";
             try
             {
                 await SendRequestAsync(uri);
@@ -50,8 +52,8 @@ namespace WasdAPI
 
         public static async Task<IEnumerable<StreamInfo>> GetTopStreams()
         {
-            const string uri =
-                "https://wasd.tv/api/v2/media-containers?limit=15&offset=0&media_container_status=RUNNING&media_container_type=SINGLE&order_type=VIEWERS&order_direction=DESC";
+            var uri =
+                $"{Url}/api/v2/media-containers?limit=15&offset=0&media_container_status=RUNNING&media_container_type=SINGLE&order_type=VIEWERS&order_direction=DESC";
 
             var responseContent = await SendRequestAsync(uri);
 
@@ -85,7 +87,7 @@ namespace WasdAPI
         {
             var request = WebRequest.Create(uri);
             request.Method = "GET";
-            request.Headers.Add("Referer", "https://wasd.tv/");
+            request.Headers.Add("Referer", $"{Url}");
             using var response = await request.GetResponseAsync();
             await using var responseStream = response.GetResponseStream();
             if (responseStream is null)

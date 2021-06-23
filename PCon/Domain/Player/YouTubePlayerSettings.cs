@@ -2,7 +2,7 @@
 
 namespace PCon.Domain.Player
 {
-    public class YouTubePlayer : IPlayerSettings
+    public class YouTubePlayerSettings : IPlayerSettings
     {
         public Visibility SliderVisibility { get; } = Visibility.Visible;
         public Visibility PlayButtonVisibility { get; } = Visibility.Visible;

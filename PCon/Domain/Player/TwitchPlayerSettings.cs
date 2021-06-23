@@ -2,7 +2,7 @@
 
 namespace PCon.Domain.Player
 {
-    public class WasdPlayer : IPlayerSettings
+    public class TwitchPlayerSettings : IPlayerSettings
     {
         public Visibility SliderVisibility { get; } = Visibility.Hidden;
         public Visibility PlayButtonVisibility { get; } = Visibility.Hidden;

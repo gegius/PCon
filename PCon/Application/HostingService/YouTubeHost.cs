@@ -4,6 +4,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using PCon.Domain.Player;
+using YoutubeAPI;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
@@ -12,15 +13,17 @@ namespace PCon.Application.HostingService
     public class YouTubeHost : IHosting
     {
         private readonly YoutubeClient _youtubeClient;
+        private readonly YoutubeApi _youtubeApi;
 
         public YouTubeHost()
         {
             _youtubeClient = new YoutubeClient();
+            _youtubeApi = new YoutubeApi();
         }
 
         public IPlayerSettings GetPlayerSettings()
         {
-            return new YouTubePlayer();
+            return new YouTubePlayerSettings();
         }
 
         public async Task<Uri> GetUriAsync(string link)
@@ -29,24 +32,22 @@ namespace PCon.Application.HostingService
             return new Uri(streamManifest.GetMuxedStreams().TryGetWithHighestVideoQuality().Url);
         }
 
-        public IAsyncEnumerable<MediaObject> SearchTrendsAsync()
+        public async IAsyncEnumerable<MediaObject> SearchTrendsAsync()
         {
-            return GetVideoFromPageAsync("https://www.youtube.com/feed/trending");
-        }
-
-        public IAsyncEnumerable<MediaObject> SearchMediaAsync(string query)
-        {
-            return GetVideoFromPageAsync($"https://www.youtube.com/results?search_query={query}&sp=EgIQAQ%253D%253D");
-        }
-
-        private async IAsyncEnumerable<MediaObject> GetVideoFromPageAsync(string url)
-        {
-            using var client = new WebClient();
-            var htmlCode = await client.DownloadStringTaskAsync(url);
-            var regex = new Regex(@"{""url"":""(/watch\?v=\w+)""");
-            foreach (Match trend in regex.Matches(htmlCode))
+            foreach (var trend in await _youtubeApi.GetTrendsVideosAsync())
             {
-                var video = await _youtubeClient.Videos.GetAsync("https://www.youtube.com" + trend.Groups[1]);
+                var video = await _youtubeClient.Videos.GetAsync(YoutubeApi.Url + trend);
+                yield return new MediaObject(video.Url, video.Title,
+                    $"Длительность: {video.Duration}\n\n{video.Description}", video.Author.Title, video.Duration,
+                    video.Thumbnails[2].Url, video.Thumbnails[2].Url);
+            }
+        }
+
+        public async IAsyncEnumerable<MediaObject> SearchMediaAsync(string query)
+        {
+            foreach (var link in await _youtubeApi.SearchByQueryAsync(query))
+            {
+                var video = await _youtubeClient.Videos.GetAsync(YoutubeApi.Url + link);
                 yield return new MediaObject(video.Url, video.Title,
                     $"Длительность: {video.Duration}\n\n{video.Description}", video.Author.Title, video.Duration,
                     video.Thumbnails[2].Url, video.Thumbnails[2].Url);
