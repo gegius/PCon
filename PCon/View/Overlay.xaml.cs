@@ -1,4 +1,3 @@
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,23 +37,22 @@ namespace PCon.View
             InitAll(video);
         }
 
-        private async void ChangedOverlayVisibilityAsync() //Поменять название/подумать над работой метода
+        private async void ChangedOverlayVisibilityAsync()
         {
-
             while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
-                if(await _snapper.TryWaitProcessHideAsync(_processChecker, "Overlay", _cancellationTokenSource)) break;
+                if (await _snapper.TryWaitProcessHideAsync(_processChecker, "Overlay", _cancellationTokenSource)) break;
                 Visibility = Visibility.Hidden;
-                if(await _snapper.TryWaitProcessShowAsync(_mainProcess, _cancellationTokenSource)) break;
+                if (await _snapper.TryWaitProcessShowAsync(_mainProcess, _cancellationTokenSource)) break;
                 Visibility = Visibility.Visible;
             }
         }
-        
+
         private async void InitAll(MediaObject video)
         {
             InitTimer();
             InitSnapper();
-            await InitOverlaySettings(video);
+            await InitOverlaysSettings(video);
             _processChecker = new ProcessChecker(_mainProcess);
             ChangedOverlayVisibilityAsync();
             Show();
@@ -77,7 +75,7 @@ namespace PCon.View
             _mainPlayer.Audio.Volume = (int) VolumeSlider.Value;
         }
 
-        private async Task InitOverlaySettings(MediaObject video)
+        private async Task InitOverlaysSettings(MediaObject video)
         {
             var settings = _serviceProvider.GetService<IHosting>().GetPlayerSettings();
             VideoSlider.Visibility = settings.SliderVisibility;
@@ -89,6 +87,7 @@ namespace PCon.View
                 VideoSlider.Maximum = totalSeconds;
                 _duration = totalSeconds;
             }
+
             await SetMedia(video);
         }
 
@@ -100,7 +99,7 @@ namespace PCon.View
                 _mainPlayer.SetMedia(_mediaUri);
                 _mainPlayer.Play();
             }
-            
+
             if (Math.Abs(e.NewValue - e.OldValue) >= 0.520)
                 _mainPlayer.Position = (float) e.NewValue / (float) _duration;
         }

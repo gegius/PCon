@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,7 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 using PCon.Application.HostingService;
+using PCon.Infrastructure;
 using PCon.Infrastructure.Extensions;
+using PCon.Infrastructure.PCon.Infrastructure;
 using Vlc.DotNet.Wpf;
 
 namespace PCon.View
@@ -49,37 +48,36 @@ namespace PCon.View
         {
             _serviceCollection.Replace<IHosting>(_ => new YouTubeHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            SetDefaultSettings();
-            CancelSearch();
-            ClearEverything();
-            ChangeColor(sender);
+            HostingInit(sender);
         }
 
         private void Twitch_OnClick(object sender, RoutedEventArgs e)
         {
             _serviceCollection.Replace<IHosting>(_ => new TwitchHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            SetDefaultSettings();
-            CancelSearch();
-            ClearEverything();
-            ChangeColor(sender);
+            HostingInit(sender);
         }
 
         private void Wasd_OnClick(object sender, RoutedEventArgs e)
         {
             _serviceCollection.Replace<IHosting>(_ => new WasdHost(), ServiceLifetime.Singleton);
             _serviceProvider = _serviceCollection.BuildServiceProvider();
-            SetDefaultSettings();
-            CancelSearch();
-            ClearEverything();
-            ChangeColor(sender);
+            HostingInit(sender);
         }
 
-        private void ClearEverything()
+        private void HostingInit(object sender)
         {
-            ClearResult();
+            ChangeColor(sender);
             ClearSearchField();
+            SetInitialState();
+        }
+
+        private void SetInitialState()
+        {
+            SetDefaultSettings();
+            ClearResult();
             ClearBox();
+            CancelSearch();
         }
 
         private void SetDefaultSettings()
@@ -88,7 +86,7 @@ namespace PCon.View
             ResultBox.Visibility = Visibility.Hidden;
             ResultScrollViewer.ScrollToTop();
         }
-        
+
         private void ClearResult()
         {
             ResultPanel.Children.Clear();
@@ -110,7 +108,7 @@ namespace PCon.View
             cancellationTokenSource = new CancellationTokenSource();
         }
 
-        private void ChangeColor(object sender) //Вынести
+        private void ChangeColor(object sender)
         {
             foreach (var child in Hostings.Children)
             {
@@ -128,17 +126,18 @@ namespace PCon.View
             panel.Children.Add(img);
             panel.Children.Add(textTitle);
             panel.Children.Add(boxHidden);
-            var anotherResultButton = new Button {Content = panel, Background = Brushes.White, Margin = new Thickness(2), Style = FindResource("RoundCorner") as Style};
+            var anotherResultButton = new Button
+            {
+                Content = panel, Background = Brushes.White, Margin = new Thickness(2),
+                Style = FindResource("RoundCorner") as Style
+            };
             anotherResultButton.Click += Button_Click_Result;
             return anotherResultButton;
         }
 
-        private async void Find_Media_OnClick(object sender, RoutedEventArgs e)
+        private async void FindMedia_OnClick(object sender, RoutedEventArgs e)
         {
-            SetDefaultSettings(); //Вынести в метод
-            CancelSearch();
-            ClearResult();
-            ClearBox();
+            SetInitialState();
             ResultBox.Visibility = Visibility.Visible;
             var text = SearchField.Text;
             var cancelToken = cancellationTokenSource.Token;
@@ -152,19 +151,18 @@ namespace PCon.View
                     ResultPanel.Children.Add(anotherResultButton);
                 }
             }
-            catch
+            catch (Exception exe)
             {
+                Console.WriteLine(exe);
                 ErrorHandler.ThrowErrorConnection();
             }
         }
 
-        private async void Find_Trends_OnClick(object sender, RoutedEventArgs e)
+
+        private async void FindTrends_OnClick(object sender, RoutedEventArgs e)
         {
-            SetDefaultSettings();
-            CancelSearch();
-            ClearResult();
+            SetInitialState();
             ClearSearchField();
-            ClearBox();
             ResultBox.Visibility = Visibility.Visible;
             var cancelToken = cancellationTokenSource.Token;
             try
@@ -177,14 +175,14 @@ namespace PCon.View
                     ResultPanel.Children.Add(anotherResultButton);
                 }
             }
-            catch(Exception es)
+            catch (Exception es)
             {
                 Console.WriteLine(es);
                 ErrorHandler.ThrowErrorConnection();
             }
         }
 
-        private void Button_Click_Result(object sender, RoutedEventArgs e) //Спасти
+        private void Button_Click_Result(object sender, RoutedEventArgs e)
         {
             ClearBox();
             var mainPanel = new StackPanel
@@ -216,7 +214,11 @@ namespace PCon.View
             };
             resultBox.Content = scrollBoxSelected;
             mainPanel.Children.Add(resultBox);
-            var buttonStart = new Button {Width = 300, Height = 60, Content = "Start", FontSize = 30, FontStyle = FontStyles.Oblique, Margin = new Thickness(10), Style = FindResource("RoundCorner") as Style};
+            var buttonStart = new Button
+            {
+                Width = 300, Height = 60, Content = "Start", FontSize = 30, FontStyle = FontStyles.Oblique,
+                Margin = new Thickness(10), Style = FindResource("RoundCorner") as Style
+            };
             if (video.Duration >= TimeSpan.Zero) buttonStart.Click += Button_Click_Show;
             mainPanel.Children.Add(buttonStart);
             BoxPanel.Children.Add(mainPanel);
@@ -224,21 +226,21 @@ namespace PCon.View
 
         private void InitVlcPlayer()
         {
-            var currentAssembly = Assembly.GetEntryAssembly();
-            if (currentAssembly == null) return;
-            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
-            if (!Directory.Exists(Path.Combine(currentDirectory, "libvlc")))
-                ZipFile.ExtractToDirectory(Path.Combine(currentDirectory, "libvlc.zip"), currentDirectory);
-            var libDirectory = new DirectoryInfo(Path.Combine(currentDirectory, "libvlc",
-                Environment.Is64BitOperatingSystem ? "win-x64" : "win-x86"));
-            Console.WriteLine(currentDirectory);
-            vlcControlElement = new VlcControl();
-            vlcControlElement.SourceProvider.CreatePlayer(libDirectory);
+            try
+            {
+                var libDirectory = LibVlcHelper.GetVlcPlayerPath();
+                vlcControlElement = new VlcControl();
+                vlcControlElement.SourceProvider.CreatePlayer(libDirectory);
+            }
+            catch
+            {
+                ErrorHandler.ThrowErrorNoVlcPlayer();
+            }
         }
 
         private void StartSearchCommand_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            if (ResultPanel.Visibility == Visibility.Visible) Find_Media_OnClick(sender, e);
+            if (ResultPanel.Visibility == Visibility.Visible) FindMedia_OnClick(sender, e);
         }
     }
 }

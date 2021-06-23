@@ -93,7 +93,6 @@ namespace PCon.View
             base.OnClosed(e);
         }
 
-
         private void Button_Click_Start(object sender, RoutedEventArgs e)
         {
             if (mainProcess is null)
@@ -101,6 +100,7 @@ namespace PCon.View
                 ErrorHandler.ThrowErrorNotSelectedProcess();
                 return;
             }
+
             processChecker = new ProcessChecker(mainProcess);
             overlaySettings = new OverlaySettings(mainProcess, _serviceCollection) {DesktopSettings = this};
             InitSnapper();

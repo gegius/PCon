@@ -36,8 +36,8 @@
                 <StackPanel x:Name = "SearchBody" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
                     <TextBox x:Name = "SearchField" Width="400" Height="30" FontSize="20" FontStyle="Italic" >
                     </TextBox>
-                    <Button x:Name="Find" Width="80" Height="30" Content="Find" Click="Find_Media_OnClick" Margin="5" Style="{DynamicResource RoundCorner}"></Button>
-                    <Button x:Name="Trend" Width="80" Height="30" Content="Trends" Click="Find_Trends_OnClick" Style="{DynamicResource RoundCorner}"></Button>
+                    <Button x:Name="Find" Width="80" Height="30" Content="Find" Click="FindMedia_OnClick" Margin="5" Style="{DynamicResource RoundCorner}"></Button>
+                    <Button x:Name="Trend" Width="80" Height="30" Content="Trends" Click="FindTrends_OnClick" Style="{DynamicResource RoundCorner}"></Button>
                 </StackPanel>
                 <StackPanel x:Name="ResultBody" Orientation="Horizontal">
                     <GroupBox x:Name="ResultBox" Height="750" Width="360" Visibility="Hidden" BorderBrush="Black">
