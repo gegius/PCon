@@ -8,7 +8,7 @@ namespace TwitchAPI
 {
     public static class JsonResponseParser
     {
-        public static IEnumerable<StreamInfo> SteamsResponseParse(string responseContent)
+        public static IEnumerable<StreamInfo> ParseTopStreams(string responseContent)
         {
             var jArr = JArray.Parse(responseContent);
             if (!(jArr.First() is JObject jArrElement))
@@ -38,7 +38,7 @@ namespace TwitchAPI
             }
         }
 
-        public static bool VideoPlayerStatusOverlayChannelResponseParseUserIsOnline(string responseContent)
+        public static bool IsOnlineParse(string responseContent)
         {
             var jArr = JArray.Parse(responseContent);
             if (!(jArr.First() is JObject jArrElement))
@@ -56,7 +56,7 @@ namespace TwitchAPI
             return stream.HasValues;
         }
 
-        public static bool VideoPlayerStatusOverlayChannelResponseParseUserAvailable(string responseContent)
+        public static bool AvailableParse(string responseContent)
         {
             var jArr = JArray.Parse(responseContent);
             if (!(jArr.First() is JObject jArrElement))
@@ -113,7 +113,7 @@ namespace TwitchAPI
             return true;
         }
 
-        public static (string Token, string Signature) PlaybackAccessToken_TemplateResponseParse(string responseContent)
+        public static (string Token, string Signature) TokenAndSignatureParse(string responseContent)
         {
             var jObj = JObject.Parse(responseContent);
             var dataProperty = jObj.Properties().First();
@@ -130,7 +130,7 @@ namespace TwitchAPI
             return (token, signature);
         }
 
-        public static IEnumerable<UserInfo> SearchResultsPage_SearchResultsResponseParse(string responseContent)
+        public static IEnumerable<UserInfo> SearchResultsParse(string responseContent)
         {
             var jArr = JArray.Parse(responseContent);
 
