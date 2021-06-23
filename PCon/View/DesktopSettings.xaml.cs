@@ -47,7 +47,6 @@ namespace PCon.View
             var vKey = ((int) lParam >> 16) & 0xFFFF;
             if (vKey == WindowsHotKeys.VkTab && overlaySettingsStarted)
             {
-                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (overlaySettings.Visibility)
                 {
                     case Visibility.Visible when ProcessChecker.IsWindowShowed("OverlaySettings") ||
@@ -62,9 +61,10 @@ namespace PCon.View
                         break;
                     case Visibility.Collapsed:
                         break;
+                    default:
+                        break;
                 }
             }
-
             handled = true;
             return IntPtr.Zero;
         }
@@ -93,7 +93,7 @@ namespace PCon.View
         }
 
 
-        private void Button_Click_Start(object sender, RoutedEventArgs e) //добавить вплывающее окно
+        private void Button_Click_Start(object sender, RoutedEventArgs e)
         {
             if (mainProcess is null)
             {
@@ -127,7 +127,7 @@ namespace PCon.View
             snapper.AttachAsync();
         }
 
-        private void ProcessLabel_OnClick(object sender, RoutedEventArgs e) //переписать заменив перенос процесса выделением
+        private void ProcessLabel_OnClick(object sender, RoutedEventArgs e)
         {
             var label = (Label) sender;
             label.Background = FindResource("AwesomeGreenColor") as Brush;
@@ -138,6 +138,7 @@ namespace PCon.View
 
         private void Update_OnClick(object sender, RoutedEventArgs e)
         {
+            mainProcess = null;
             PanelInsideProcessPrograms.Children.Clear();
             var processlist = Process.GetProcesses();
             foreach (var process in processlist)

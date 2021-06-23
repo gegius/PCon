@@ -2,7 +2,7 @@
 
 namespace PCon.View
 {
-    public class ErrorHandler
+    public static class ErrorHandler
     {
         public static void ThrowErrorConnection()
         {

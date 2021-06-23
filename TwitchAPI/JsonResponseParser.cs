@@ -88,12 +88,16 @@ namespace TwitchAPI
             if (!node.TryGetValue("previewImageURL", out var previewImageUrl))
                 return false;
 
-
-            if (!node.ContainsKey("game") || !(node["game"] is JObject game))
-                return false;
-
-            if (!game.TryGetValue("name", out var gameName))
-                return false;
+            var gameName = string.Empty;
+            if (node.TryGetValue("game", out var gameToken))
+            {
+                if (gameToken is JObject game)
+                {
+                    if (!game.TryGetValue("name", out var gameNameToken))
+                        return false;
+                    gameName = gameNameToken.ToString();
+                }
+            }
 
             if (!node.ContainsKey("broadcaster") || !(node["broadcaster"] is JObject broadcaster))
                 return false;
@@ -103,7 +107,7 @@ namespace TwitchAPI
 
             result = (broadcasterName.ToString(), title.ToString(),
                 string.Format(previewImageUrl.ToString().Replace("width", "0").Replace("height", "1"), 480, 360),
-                gameName.ToString(),
+                gameName,
                 viewersCount);
 
             return true;

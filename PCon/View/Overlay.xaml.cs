@@ -85,6 +85,7 @@ namespace PCon.View
                 VideoSlider.Maximum = totalSeconds;
                 duration = totalSeconds;
             }
+
             await SetMedia(video);
         }
 
@@ -97,7 +98,6 @@ namespace PCon.View
                 mainPlayer.Play();
             }
 
-            Console.WriteLine(Math.Abs(e.NewValue - e.OldValue));
             if (Math.Abs(e.NewValue - e.OldValue) >= 0.520)
                 mainPlayer.Position = (float) e.NewValue / (float) duration;
         }
@@ -151,16 +151,16 @@ namespace PCon.View
         private void InitTimer()
         {
             timerVideoTime = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(1)};
-            timerVideoTime.Tick += timer_Tick;
-            timerVideoTime.Tick += show_Time_Video;
+            timerVideoTime.Tick += Timer_Tick;
+            timerVideoTime.Tick += ShowVideosTime;
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             VideoSlider.Value = mainPlayer.Position * duration;
         }
 
-        private void show_Time_Video(object sender, EventArgs e)
+        private void ShowVideosTime(object sender, EventArgs e)
         {
             TimeShow.Content = TimeSpan.FromSeconds(mainPlayer.Position * duration).ToString("hh\\:mm\\:ss");
         }

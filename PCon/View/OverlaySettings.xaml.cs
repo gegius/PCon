@@ -18,9 +18,9 @@ namespace PCon.View
 {
     public partial class OverlaySettings
     {
+        public DesktopSettings DesktopSettings { get; set; }
         private Overlay overlay;
         private readonly string mainProcess;
-        public DesktopSettings DesktopSettings { get; set; }
         private MediaObject currentMediaObject;
         private VlcControl vlcControlElement;
         private readonly ServiceCollection _serviceCollection;
@@ -110,7 +110,7 @@ namespace PCon.View
             cancellationTokenSource = new CancellationTokenSource();
         }
 
-        private void ChangeColor(object sender)
+        private void ChangeColor(object sender) //Вынести
         {
             foreach (var child in Hostings.Children)
             {
@@ -119,7 +119,7 @@ namespace PCon.View
             }
         }
 
-        private Button CreateResultButton(MediaObject video)
+        private Button CreateMediaButton(MediaObject video)
         {
             var img = new Image {Source = new BitmapImage(new Uri(video.TitleThumbnails))};
             var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10), Width = 300};
@@ -135,7 +135,7 @@ namespace PCon.View
 
         private async void Find_Media_OnClick(object sender, RoutedEventArgs e)
         {
-            SetDefaultSettings();
+            SetDefaultSettings(); //Вынести в метод
             CancelSearch();
             ClearResult();
             ClearBox();
@@ -148,11 +148,11 @@ namespace PCon.View
                     .WithCancellation(cancelToken))
                 {
                     if (cancelToken.IsCancellationRequested) break;
-                    var anotherResultButton = CreateResultButton(video);
+                    var anotherResultButton = CreateMediaButton(video);
                     ResultPanel.Children.Add(anotherResultButton);
                 }
             }
-            catch (Exception ase)
+            catch
             {
                 ErrorHandler.ThrowErrorConnection();
             }
@@ -173,17 +173,18 @@ namespace PCon.View
                     .WithCancellation(cancelToken))
                 {
                     if (cancelToken.IsCancellationRequested) break;
-                    var anotherResultButton = CreateResultButton(video);
+                    var anotherResultButton = CreateMediaButton(video);
                     ResultPanel.Children.Add(anotherResultButton);
                 }
             }
-            catch
+            catch(Exception es)
             {
+                Console.WriteLine(es);
                 ErrorHandler.ThrowErrorConnection();
             }
         }
 
-        private void Button_Click_Result(object sender, RoutedEventArgs e)
+        private void Button_Click_Result(object sender, RoutedEventArgs e) //Спасти
         {
             ClearBox();
             var mainPanel = new StackPanel
