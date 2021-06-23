@@ -8,7 +8,6 @@ namespace PCon.View
         {
             MessageBox.Show("Упс... Что-то пошло не так.\n\nПроверьте соединение с интернетом.", "PCon", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
         
         public static void ThrowErrorNotSelectedProcess()
         {

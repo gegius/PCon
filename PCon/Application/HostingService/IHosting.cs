@@ -8,8 +8,8 @@ namespace PCon.Application.HostingService
     public interface IHosting
     {
         IPlayerSettings GetPlayerSettings();
-        Task<Uri> GetUri(string link);
-        IAsyncEnumerable<MediaObject> SearchMedia(string query);
-        IAsyncEnumerable<MediaObject> SearchTrends();
+        Task<Uri> GetUriAsync(string link);
+        IAsyncEnumerable<MediaObject> SearchMediaAsync(string query);
+        IAsyncEnumerable<MediaObject> SearchTrendsAsync();
     }
 }

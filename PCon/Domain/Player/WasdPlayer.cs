@@ -2,11 +2,10 @@
 
 namespace PCon.Domain.Player
 {
-    // ReSharper disable once IdentifierTypo
     public class WasdPlayer : IPlayerSettings
     {
-        public System.Windows.Visibility SliderVisibility { get; } = System.Windows.Visibility.Hidden;
-        public System.Windows.Visibility PlayButtonVisibility { get; } = System.Windows.Visibility.Hidden;
-        public System.Windows.Visibility PauseButtonVisibility { get; } = System.Windows.Visibility.Hidden;
+        public Visibility SliderVisibility { get; } = Visibility.Hidden;
+        public Visibility PlayButtonVisibility { get; } = Visibility.Hidden;
+        public Visibility PauseButtonVisibility { get; } = Visibility.Hidden;
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+
 namespace PCon.Infrastructure
 {
     public static class WindowInfo
@@ -21,10 +22,10 @@ namespace PCon.Infrastructure
             size.Height = bounds.Height;
             return size;
         }
-        
-        public static async Task<IntPtr> GetWindowHandleAsync(string windowTitle)
+
+        public static async Task<IntPtr> GetWindowHandleAsync(string process)
         {
-            await new ProcessChecker(windowTitle).WaitShowAsync(new CancellationToken());
+            await ProcessChecker.WaitProcessShowAsync(process, new CancellationToken());
             return WinApi.GetForegroundWindow();
         }
     }

@@ -7,7 +7,6 @@ using WasdAPI;
 
 namespace PCon.Application.HostingService
 {
-    // ReSharper disable once IdentifierTypo
     public class WasdHost : IHosting
     {
         public IPlayerSettings GetPlayerSettings()
@@ -15,14 +14,14 @@ namespace PCon.Application.HostingService
             return new WasdPlayer();
         }
 
-        public async Task<Uri> GetUri(string link)
+        public async Task<Uri> GetUriAsync(string link)
         {
             var userName = link.Replace("https://wasd.tv/", "");
             var media = await WasdApi.GetM3U8WithQuality(await WasdApi.GetIdByName(userName));
             return new Uri(media.First().Value);
         }
 
-        public async IAsyncEnumerable<MediaObject> SearchMedia(string query)
+        public async IAsyncEnumerable<MediaObject> SearchMediaAsync(string query)
         {
             foreach (var media in await WasdApi.SearchUsersByName(query))
             {
@@ -36,11 +35,12 @@ namespace PCon.Application.HostingService
                     yield return new MediaObject(
                         $"https://wasd.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция не идёт",
-                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue, description: media.UserDescription);
+                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue,
+                        description: media.UserDescription);
             }
         }
 
-        public async IAsyncEnumerable<MediaObject> SearchTrends()
+        public async IAsyncEnumerable<MediaObject> SearchTrendsAsync()
         {
             foreach (var video in await WasdApi.GetTopStreams())
             {

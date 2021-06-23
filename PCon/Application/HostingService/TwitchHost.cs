@@ -21,14 +21,14 @@ namespace PCon.Application.HostingService
             return new TwitchPlayer();
         }
 
-        public async Task<Uri> GetUri(string link)
+        public async Task<Uri> GetUriAsync(string link)
         {
             var userName = link.Replace("https://www.twitch.tv/", "");
             var media = await TwitchApi.GetM3U8WithQuality(userName);
             return new Uri(media.First().Value);
         }
 
-        public async IAsyncEnumerable<MediaObject> SearchMedia(string query)
+        public async IAsyncEnumerable<MediaObject> SearchMediaAsync(string query)
         {
             foreach (var media in await twitchTwitchApi.SearchUsersByName(query))
             {
@@ -41,11 +41,12 @@ namespace PCon.Application.HostingService
                     : new MediaObject(
                         $"https://www.twitch.tv/{media.Name}",
                         $"{media.FollowersCount} подписчиков. Трансляция не идёт",
-                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue, description: media.UserDescription);
+                        author: media.Name, titleThumbnails: media.ProfileImageUrl, duration: TimeSpan.MinValue,
+                        description: media.UserDescription);
             }
         }
 
-        public async IAsyncEnumerable<MediaObject> SearchTrends()
+        public async IAsyncEnumerable<MediaObject> SearchTrendsAsync()
         {
             foreach (var video in await TwitchApi.GetTopStreams())
             {

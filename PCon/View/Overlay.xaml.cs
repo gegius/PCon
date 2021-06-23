@@ -25,7 +25,6 @@ namespace PCon.View
         private ProcessChecker _processChecker;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ServiceProvider _serviceProvider;
-        private int _volumeValue = 50;
 
         public Overlay(MediaObject video, string mainProcess, VlcControl vlcControl,
             IServiceCollection serviceCollection)
@@ -38,26 +37,25 @@ namespace PCon.View
             InitAll(video);
         }
 
-        private async void WaitChangedOverlayVisibility() //Поменять название/подумать над работой метода
+        private async void ChangedOverlayVisibilityAsync() //Поменять название/подумать над работой метода
         {
+
             while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
-                await _processChecker.WaitHideAsync("Overlay", _cancellationTokenSource.Token);
-                if (_cancellationTokenSource.Token.IsCancellationRequested) break;
+                if(await _snapper.TryWaitProcessHideAsync(_processChecker, "Overlay", _cancellationTokenSource)) break;
                 Visibility = Visibility.Hidden;
-                await _processChecker.WaitShowAsync(_cancellationTokenSource.Token);
-                if (_cancellationTokenSource.Token.IsCancellationRequested) break;
+                if(await _snapper.TryWaitProcessShowAsync(_mainProcess, _cancellationTokenSource)) break;
                 Visibility = Visibility.Visible;
             }
         }
-
+        
         private async void InitAll(MediaObject video)
         {
             InitTimer();
             InitSnapper();
             await InitOverlaySettings(video);
             _processChecker = new ProcessChecker(_mainProcess);
-            WaitChangedOverlayVisibility();
+            ChangedOverlayVisibilityAsync();
             Show();
         }
 
@@ -74,7 +72,7 @@ namespace PCon.View
             Button_Play(null, null);
             _cancellationTokenSource = new CancellationTokenSource();
             Visibility = Visibility.Visible;
-            WaitChangedOverlayVisibility();
+            ChangedOverlayVisibilityAsync();
             _mainPlayer.Audio.Volume = (int) VolumeSlider.Value;
         }
 
@@ -109,8 +107,8 @@ namespace PCon.View
 
         private void InitSnapper()
         {
-            _snapper = new WindowSnapper(this, _mainProcess);
-            _snapper.AttachAsync();
+            _snapper = new WindowSnapper(this);
+            _snapper.AttachAsync(_mainProcess);
         }
 
         private void Overlay_OnMouseEnter(object sender, MouseEventArgs e)
@@ -141,10 +139,9 @@ namespace PCon.View
         {
             try
             {
-                _mediaUri = await _serviceProvider.GetService<IHosting>().GetUri(video.Url);
+                _mediaUri = await _serviceProvider.GetService<IHosting>().GetUriAsync(video.Url);
                 _mainPlayer.SetMedia(_mediaUri);
                 VolumeSlider.Value = 70;
-                _volumeValue = (int) VideoSlider.Value;
                 Button_Play(null, null);
             }
             catch
@@ -174,7 +171,6 @@ namespace PCon.View
         {
             ((Slider) sender).SelectionEnd = e.NewValue;
             _mainPlayer.Audio.Volume = (int) e.NewValue;
-            _volumeValue = _mainPlayer.Audio.Volume;
         }
 
         private void PlayPlayerCommand_Execute(object sender, ExecutedRoutedEventArgs e)

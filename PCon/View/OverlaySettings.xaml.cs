@@ -138,7 +138,7 @@ namespace PCon.View
             var cancelToken = cancellationTokenSource.Token;
             try
             {
-                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMedia(text)
+                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMediaAsync(text)
                     .WithCancellation(cancelToken))
                 {
                     if (cancelToken.IsCancellationRequested) break;
@@ -159,7 +159,7 @@ namespace PCon.View
             var cancelToken = cancellationTokenSource.Token;
             try
             {
-                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrends()
+                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrendsAsync()
                     .WithCancellation(cancelToken))
                 {
                     if (cancelToken.IsCancellationRequested) break;

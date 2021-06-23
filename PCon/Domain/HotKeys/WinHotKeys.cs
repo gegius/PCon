@@ -1,6 +1,6 @@
 ﻿namespace PCon.Domain.HotKeys
 {
-    public static class WindowsHotKeys
+    public static class WinHotKeys
     {
         public const int HotKeyId = 9000;
         public const uint VkTab = 0x09;
