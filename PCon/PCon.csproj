@@ -33,7 +33,8 @@
       <None Remove="View\ImageFolder\stars.jpg" />
       <Resource Include="View\ImageFolder\stars.jpg" />
       <None Remove="View\ImageFolder\stars2.jpg" />
-      <Resource Include="View\ImageFolder\stars2.jpg" />
+      <None Remove="View\ImageFolder\star2.jpg" />
+      <None Remove="View\ImageFolder\star3.jpg" />
     </ItemGroup>
 
     <ItemGroup>

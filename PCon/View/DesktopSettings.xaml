@@ -36,7 +36,7 @@
             <VisualBrush Stretch="Uniform">
                 <VisualBrush.Visual>
                     <StackPanel>
-                        <Image Source="pack://application:,,,/View/ImageFolder/stars2.jpg"></Image>
+                        <Image Source="pack://application:,,,/View/ImageFolder/star3.jpg"></Image>
                     </StackPanel>
                 </VisualBrush.Visual>
             </VisualBrush >

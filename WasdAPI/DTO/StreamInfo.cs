@@ -1,5 +1,4 @@
-﻿// ReSharper disable once IdentifierTypo
-
+﻿
 namespace WasdAPI.DTO
 {
     public class StreamInfo

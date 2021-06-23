@@ -182,44 +182,71 @@ namespace PCon.View
             }
         }
 
-        private void Button_Click_Result(object sender, RoutedEventArgs e)
+        private StackPanel CreatePanel()
         {
-            ClearBox();
-            var mainPanel = new StackPanel
-                {VerticalAlignment = VerticalAlignment.Top, Orientation = Orientation.Vertical};
-            var video = (MediaObject) ((GroupBox) ((StackPanel) ((Button) sender).Content).Children[2]).Content;
-            currentMediaObject = video;
-            var resultBox = new GroupBox
-            {
-                Name = "ResultBox", Width = 300, Height = 650, Visibility = Visibility.Visible,
-                BorderBrush = Brushes.Black, Margin = new Thickness(10)
-            };
-            var img = new Image();
-            if (video.DescriptionThumbnails != null)
-                img = new Image {Source = new BitmapImage(new Uri(video.DescriptionThumbnails))};
-
             var panel = new StackPanel {Orientation = Orientation.Vertical, Margin = new Thickness(10)};
+
             var label = new TextBlock
             {
-                Text = video.Author + "\n\n" + video.Description, TextWrapping = TextWrapping.Wrap
+                Text = currentMediaObject.Author + "\n\n" + currentMediaObject.Description,
+                TextWrapping = TextWrapping.Wrap
             };
+
+            var img = new Image();
+            if (currentMediaObject.DescriptionThumbnails != null)
+                img = new Image {Source = new BitmapImage(new Uri(currentMediaObject.DescriptionThumbnails))};
 
             panel.Children.Add(img);
             panel.Children.Add(label);
+
+            return panel;
+        }
+
+        private Button CreateButtonStart()
+        {
+            var buttonStart = new Button
+            {
+                Width = 300, Height = 60, Content = "Start", FontSize = 30, FontStyle = FontStyles.Oblique,
+                Margin = new Thickness(10), Style = FindResource("RoundCorner") as Style
+            };
+
+            if (currentMediaObject.Duration >= TimeSpan.Zero)
+                buttonStart.Click += Button_Click_Show;
+
+            return buttonStart;
+        }
+
+        private void Button_Click_Result(object sender, RoutedEventArgs e)
+        {
+            ClearBox();
+            currentMediaObject =
+                (MediaObject) ((GroupBox) ((StackPanel) ((Button) sender).Content).Children[2]).Content;
+            var panel = CreatePanel();
+
             var scrollBoxSelected = new ScrollViewer
             {
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
                 Content = panel
             };
-            resultBox.Content = scrollBoxSelected;
-            mainPanel.Children.Add(resultBox);
-            var buttonStart = new Button
+
+            var resultBox = new GroupBox
             {
-                Width = 300, Height = 60, Content = "Start", FontSize = 30, FontStyle = FontStyles.Oblique,
-                Margin = new Thickness(10), Style = FindResource("RoundCorner") as Style
+                Name = "ResultBox",
+                Width = 300,
+                Height = 650,
+                Visibility = Visibility.Visible,
+                BorderBrush = Brushes.Black,
+                Margin = new Thickness(10),
+                Content = scrollBoxSelected
             };
-            if (video.Duration >= TimeSpan.Zero) buttonStart.Click += Button_Click_Show;
+
+            var mainPanel = new StackPanel
+                {VerticalAlignment = VerticalAlignment.Top, Orientation = Orientation.Vertical};
+
+            var buttonStart = CreateButtonStart();
+
+            mainPanel.Children.Add(resultBox);
             mainPanel.Children.Add(buttonStart);
             BoxPanel.Children.Add(mainPanel);
         }
