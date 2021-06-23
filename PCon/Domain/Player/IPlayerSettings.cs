@@ -2,6 +2,8 @@
 {
     public interface IPlayerSettings
     {
-        System.Windows.Visibility GetSliderVisibility();
+        System.Windows.Visibility SliderVisibility { get; }
+        System.Windows.Visibility PlayButtonVisibility { get; }
+        System.Windows.Visibility PauseButtonVisibility { get; }
     }
 }

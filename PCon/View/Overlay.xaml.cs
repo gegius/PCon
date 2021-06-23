@@ -1,3 +1,4 @@
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,36 +17,37 @@ namespace PCon.View
 {
     public partial class Overlay
     {
-        private readonly string mainProcess;
-        private WindowSnapper snapper;
-        private readonly VlcMediaPlayer mainPlayer;
-        private double duration;
-        private Uri mediaUri;
-        private DispatcherTimer timerVideoTime;
-        private ProcessChecker processChecker;
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly string _mainProcess;
+        private WindowSnapper _snapper;
+        private readonly VlcMediaPlayer _mainPlayer;
+        private double _duration;
+        private Uri _mediaUri;
+        private DispatcherTimer _timerVideoTime;
+        private ProcessChecker _processChecker;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ServiceProvider _serviceProvider;
+        private int _volumeValue = 50;
 
         public Overlay(MediaObject video, string mainProcess, VlcControl vlcControl,
             IServiceCollection serviceCollection)
         {
             _serviceProvider = serviceCollection.BuildServiceProvider();
             InitializeComponent();
-            this.mainProcess = mainProcess;
+            _mainProcess = mainProcess;
             VlcControlPanel.Children.Add(vlcControl);
-            mainPlayer = vlcControl.SourceProvider.MediaPlayer;
+            _mainPlayer = vlcControl.SourceProvider.MediaPlayer;
             InitAll(video);
         }
 
         private async void WaitChangedOverlayVisibility() //Поменять название/подумать над работой метода
         {
-            while (!cancellationTokenSource.Token.IsCancellationRequested)
+            while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
-                await processChecker.WaitHideAsync("Overlay", cancellationTokenSource.Token);
-                if (cancellationTokenSource.Token.IsCancellationRequested) break;
+                await _processChecker.WaitHideAsync("Overlay", _cancellationTokenSource.Token);
+                if (_cancellationTokenSource.Token.IsCancellationRequested) break;
                 Visibility = Visibility.Hidden;
-                await processChecker.WaitShowAsync(cancellationTokenSource.Token);
-                if (cancellationTokenSource.Token.IsCancellationRequested) break;
+                await _processChecker.WaitShowAsync(_cancellationTokenSource.Token);
+                if (_cancellationTokenSource.Token.IsCancellationRequested) break;
                 Visibility = Visibility.Visible;
             }
         }
@@ -54,8 +56,8 @@ namespace PCon.View
         {
             InitTimer();
             InitSnapper();
-            await InitOverlaysSettings(video);
-            processChecker = new ProcessChecker(mainProcess);
+            await InitOverlaySettings(video);
+            _processChecker = new ProcessChecker(_mainProcess);
             WaitChangedOverlayVisibility();
             Show();
         }
@@ -63,50 +65,52 @@ namespace PCon.View
         public void StopOverlayAttach()
         {
             Button_Pause(null, null);
-            cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Cancel();
             Visibility = Visibility.Hidden;
+            _mainPlayer.Audio.Volume = 0;
         }
 
         public void StartOverlayAttach()
         {
             Button_Play(null, null);
-            cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
             Visibility = Visibility.Visible;
             WaitChangedOverlayVisibility();
+            _mainPlayer.Audio.Volume = (int) VolumeSlider.Value;
         }
 
-        private async Task InitOverlaysSettings(MediaObject video)
+        private async Task InitOverlaySettings(MediaObject video)
         {
             var settings = _serviceProvider.GetService<IHosting>().GetPlayerSettings();
-            VideoSlider.Visibility = settings.GetSliderVisibility();
+            VideoSlider.Visibility = settings.SliderVisibility;
+            Play.Visibility = settings.PlayButtonVisibility;
+            Pause.Visibility = settings.PauseButtonVisibility;
             if (video.Duration != null && video.Duration != TimeSpan.Zero)
             {
                 var totalSeconds = video.Duration.Value.TotalSeconds;
                 VideoSlider.Maximum = totalSeconds;
-                duration = totalSeconds;
+                _duration = totalSeconds;
             }
-
             await SetMedia(video);
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             ((Slider) sender).SelectionEnd = e.NewValue;
-            if (mainPlayer.State == MediaStates.Ended || mainPlayer.State == MediaStates.NothingSpecial)
+            if (_mainPlayer.State == MediaStates.Ended || _mainPlayer.State == MediaStates.NothingSpecial)
             {
-                mainPlayer.SetMedia(mediaUri);
-                mainPlayer.Play();
+                _mainPlayer.SetMedia(_mediaUri);
+                _mainPlayer.Play();
             }
-
+            
             if (Math.Abs(e.NewValue - e.OldValue) >= 0.520)
-                mainPlayer.Position = (float) e.NewValue / (float) duration;
+                _mainPlayer.Position = (float) e.NewValue / (float) _duration;
         }
-
 
         private void InitSnapper()
         {
-            snapper = new WindowSnapper(this, mainProcess);
-            snapper.AttachAsync();
+            _snapper = new WindowSnapper(this, _mainProcess);
+            _snapper.AttachAsync();
         }
 
         private void Overlay_OnMouseEnter(object sender, MouseEventArgs e)
@@ -121,25 +125,26 @@ namespace PCon.View
 
         private void Button_Pause(object sender, RoutedEventArgs e)
         {
-            if (!mainPlayer.IsPlaying()) return;
-            mainPlayer.Pause();
-            timerVideoTime.Stop();
+            if (!_mainPlayer.IsPlaying()) return;
+            _mainPlayer.Pause();
+            _timerVideoTime.Stop();
         }
 
         private void Button_Play(object sender, RoutedEventArgs e)
         {
-            if (mainPlayer.IsPlaying()) return;
-            mainPlayer.Play();
-            timerVideoTime.Start();
+            if (_mainPlayer.IsPlaying()) return;
+            _mainPlayer.Play();
+            _timerVideoTime.Start();
         }
 
         private async Task SetMedia(MediaObject video)
         {
             try
             {
-                mediaUri = await _serviceProvider.GetService<IHosting>().GetUri(video.Url);
-                mainPlayer.SetMedia(mediaUri);
-                VolumeSlider.Value = 100;
+                _mediaUri = await _serviceProvider.GetService<IHosting>().GetUri(video.Url);
+                _mainPlayer.SetMedia(_mediaUri);
+                VolumeSlider.Value = 70;
+                _volumeValue = (int) VideoSlider.Value;
                 Button_Play(null, null);
             }
             catch
@@ -150,25 +155,26 @@ namespace PCon.View
 
         private void InitTimer()
         {
-            timerVideoTime = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(1)};
-            timerVideoTime.Tick += Timer_Tick;
-            timerVideoTime.Tick += ShowVideosTime;
+            _timerVideoTime = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(1)};
+            _timerVideoTime.Tick += timer_Tick;
+            _timerVideoTime.Tick += show_Time_Video;
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
-            VideoSlider.Value = mainPlayer.Position * duration;
+            VideoSlider.Value = _mainPlayer.Position * _duration;
         }
 
-        private void ShowVideosTime(object sender, EventArgs e)
+        private void show_Time_Video(object sender, EventArgs e)
         {
-            TimeShow.Content = TimeSpan.FromSeconds(mainPlayer.Position * duration).ToString("hh\\:mm\\:ss");
+            TimeShow.Content = TimeSpan.FromSeconds(_mainPlayer.Position * _duration).ToString("hh\\:mm\\:ss");
         }
 
         private void VolumeSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             ((Slider) sender).SelectionEnd = e.NewValue;
-            mainPlayer.Audio.Volume = (int) e.NewValue;
+            _mainPlayer.Audio.Volume = (int) e.NewValue;
+            _volumeValue = _mainPlayer.Audio.Volume;
         }
 
         private void PlayPlayerCommand_Execute(object sender, ExecutedRoutedEventArgs e)
