@@ -37,13 +37,13 @@ namespace PCon.Infrastructure
             }, cancellationToken);
         }
 
-        public static bool IsWindowShowed(string handle)
+        public bool IsWindowShowed(string handle)
         {
             var topWindowText = GetTopWindowText();
             return topWindowText.Contains(handle);
         }
 
-        private bool IsWindowHidden(string windowHandle)
+        public bool IsWindowHidden(string windowHandle)
         {
             var topWindowText = GetTopWindowText();
             return !topWindowText.Contains(process) && !topWindowText.Contains(windowHandle);

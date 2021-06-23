@@ -1,4 +1,3 @@
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -91,6 +90,7 @@ namespace PCon.View
                 VideoSlider.Maximum = totalSeconds;
                 _duration = totalSeconds;
             }
+
             await SetMedia(video);
         }
 
@@ -102,7 +102,7 @@ namespace PCon.View
                 _mainPlayer.SetMedia(_mediaUri);
                 _mainPlayer.Play();
             }
-            
+
             if (Math.Abs(e.NewValue - e.OldValue) >= 0.520)
                 _mainPlayer.Position = (float) e.NewValue / (float) _duration;
         }

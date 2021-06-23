@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -16,13 +17,13 @@ namespace PCon.View
         public Overlay Overlay { get; set; }
         private readonly ServiceCollection _serviceCollection;
         private IntPtr _windowHandle;
-        private HwndSource _source;
-        private OverlaySettings overlaySettings;
-        private ProcessChecker processChecker;
-        private string mainProcess;
-        private WindowSnapper snapper;
-        private bool overlaySettingsStarted;
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private HwndSource _hwndSource;
+        private OverlaySettings _overlaySettings;
+        private ProcessChecker _processChecker;
+        private string _mainProcess;
+        private WindowSnapper _snapper;
+        private bool _overlaySettingsStarted;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public DesktopSettings(ServiceCollection serviceCollection)
         {
@@ -34,8 +35,8 @@ namespace PCon.View
         {
             base.OnSourceInitialized(e);
             _windowHandle = new WindowInteropHelper(this).Handle;
-            _source = HwndSource.FromHwnd(_windowHandle);
-            _source?.AddHook(HwndHook);
+            _hwndSource = HwndSource.FromHwnd(_windowHandle);
+            _hwndSource?.AddHook(HwndHook);
             WinApi.RegisterHotKey(_windowHandle, WindowsHotKeys.HotKeyId, WindowsHotKeys.ModControl,
                 WindowsHotKeys.VkTab);
         }
@@ -45,23 +46,21 @@ namespace PCon.View
             if (msg != WindowsHotKeys.WmHotKey) return IntPtr.Zero;
             if (wParam.ToInt32() != WindowsHotKeys.HotKeyId) return IntPtr.Zero;
             var vKey = ((int) lParam >> 16) & 0xFFFF;
-            if (vKey == WindowsHotKeys.VkTab && overlaySettingsStarted)
+            if (vKey == WindowsHotKeys.VkTab && _overlaySettingsStarted)
             {
-                switch (overlaySettings.Visibility)
+                switch (_overlaySettings.Visibility)
                 {
-                    case Visibility.Visible when ProcessChecker.IsWindowShowed("OverlaySettings") ||
-                                                 ProcessChecker.IsWindowShowed(mainProcess):
+                    case Visibility.Visible when _processChecker.IsWindowShowed("OverlaySettings") ||
+                                                 _processChecker.IsWindowShowed(_mainProcess):
                         StopOverlaySettingsAttach();
                         Overlay?.StartOverlayAttach();
                         break;
-                    case Visibility.Hidden when ProcessChecker.IsWindowShowed(mainProcess) ||
-                                                ProcessChecker.IsWindowShowed("Overlay"):
+                    case Visibility.Hidden when _processChecker.IsWindowShowed(_mainProcess) ||
+                                                _processChecker.IsWindowShowed("Overlay"):
                         Overlay?.StopOverlayAttach();
                         StartOverlaySettingsAttach();
                         break;
                     case Visibility.Collapsed:
-                        break;
-                    default:
                         break;
                 }
             }
@@ -71,60 +70,73 @@ namespace PCon.View
 
         public void StopOverlaySettingsAttach()
         {
-            cancellationTokenSource.Cancel();
-            overlaySettings.Visibility = Visibility.Hidden;
+            _cancellationTokenSource.Cancel();
+            _overlaySettings.Visibility = Visibility.Hidden;
         }
 
         private void StartOverlaySettingsAttach()
         {
-            cancellationTokenSource = new CancellationTokenSource();
-            overlaySettings.Visibility = Visibility.Visible;
-            var size = WindowInfo.GetMainProcessWindowSize(snapper.WindowHandle);
-            overlaySettings.Width = size.Width;
-            overlaySettings.Height = size.Height;
-            WaitChangedOverlaySettingsVisibility();
+            _cancellationTokenSource = new CancellationTokenSource();
+            _overlaySettings.Visibility = Visibility.Visible;
+            var size = WindowInfo.GetMainProcessWindowSize(_snapper.WindowHandle);
+            _overlaySettings.Width = size.Width;
+            _overlaySettings.Height = size.Height;
+            ChangeOverlayVisibility().Wait();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            _source.RemoveHook(HwndHook);
+            _hwndSource.RemoveHook(HwndHook);
             WinApi.UnregisterHotKey(_windowHandle, WindowsHotKeys.HotKeyId);
             base.OnClosed(e);
         }
-
-
+        
         private void Button_Click_Start(object sender, RoutedEventArgs e)
         {
-            if (mainProcess is null)
+            if (_mainProcess is null)
             {
                 ErrorHandler.ThrowErrorNotSelectedProcess();
                 return;
             }
-            processChecker = new ProcessChecker(mainProcess);
-            overlaySettings = new OverlaySettings(mainProcess, _serviceCollection) {DesktopSettings = this};
+            
+            _processChecker = new ProcessChecker(_mainProcess);
+            _overlaySettings = new OverlaySettings(_mainProcess, _serviceCollection) {DesktopSettings = this};
             InitSnapper();
-            overlaySettingsStarted = true;
-            overlaySettings.Visibility = Visibility.Hidden;
+            _overlaySettingsStarted = true;
+            _overlaySettings.Visibility = Visibility.Hidden;
             Hide();
         }
 
         private async void WaitChangedOverlaySettingsVisibility() //Поменять название/подумать над работой метода
         {
-            while (!cancellationTokenSource.Token.IsCancellationRequested)
+            while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
-                await processChecker.WaitHideAsync("OverlaySettings", cancellationTokenSource.Token);
-                if (cancellationTokenSource.Token.IsCancellationRequested) break;
-                overlaySettings.Visibility = Visibility.Hidden;
-                await processChecker.WaitShowAsync(cancellationTokenSource.Token);
-                if (cancellationTokenSource.Token.IsCancellationRequested) break;
-                overlaySettings.Visibility = Visibility.Visible;
+                await _processChecker.WaitHideAsync("OverlaySettings", _cancellationTokenSource.Token);
+                if (_cancellationTokenSource.Token.IsCancellationRequested) break;
+                _overlaySettings.Visibility = Visibility.Hidden;
+                await _processChecker.WaitShowAsync(_cancellationTokenSource.Token);
+                if (_cancellationTokenSource.Token.IsCancellationRequested) break;
+                _overlaySettings.Visibility = Visibility.Visible;
             }
         }
 
+        private async Task ChangeOverlayVisibility()
+        {
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (_processChecker.IsWindowHidden("OverlaySettings"))
+                        _overlaySettings.Visibility = Visibility.Hidden;
+                    if (_processChecker.IsWindowShowed(_mainProcess))
+                        _overlaySettings.Visibility = Visibility.Visible;
+                }
+            });
+        }
         private void InitSnapper()
         {
-            snapper = new WindowSnapper(overlaySettings, mainProcess);
-            snapper.AttachAsync();
+            _snapper = new WindowSnapper(_overlaySettings, _mainProcess);
+            _snapper.AttachAsync();
         }
 
         private void ProcessLabel_OnClick(object sender, RoutedEventArgs e)
@@ -132,13 +144,13 @@ namespace PCon.View
             var label = (Label) sender;
             label.Background = FindResource("AwesomeGreenColor") as Brush;
             if (!PanelInsideProcessPrograms.Children.Contains(label)) return;
-            ChangeColor(sender);
-            mainProcess = label.Content.ToString();
+            ChangeLabelColor(sender);
+            _mainProcess = label.Content.ToString();
         }
 
         private void Update_OnClick(object sender, RoutedEventArgs e)
         {
-            mainProcess = null;
+            _mainProcess = default;
             PanelInsideProcessPrograms.Children.Clear();
             var processlist = Process.GetProcesses();
             foreach (var process in processlist)
@@ -164,7 +176,7 @@ namespace PCon.View
             return label;
         }
         
-        private void ChangeColor(object sender)
+        private void ChangeLabelColor(object sender)
         {
             foreach (var child in PanelInsideProcessPrograms.Children)
             {
