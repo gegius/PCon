@@ -24,10 +24,10 @@
             }
         }
 
-        public int Left { get; set; }
-        public int Top { get; set; }
-        public int Right { get; set; }
-        private int Bottom { get; set; }
+        public int Left { get; }
+        public int Top { get; }
+        public int Right { get; }
+        private int Bottom { get; }
 
         public int Height => Bottom - Top;
         public int Width => Right - Left;

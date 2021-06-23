@@ -6,8 +6,6 @@ namespace PCon.Application.HostingService
     {
         public string Url { get; }
         public string Title { get; }
-
-        // ReSharper disable once MemberCanBePrivate.Global
         public string Description { get; }
         public string Author { get; }
         public TimeSpan? Duration { get; }

@@ -23,23 +23,23 @@ namespace PCon.Application.HostingService
             return new YouTubePlayer();
         }
 
-        public async Task<Uri> GetUri(string link)
+        public async Task<Uri> GetUriAsync(string link)
         {
             var streamManifest = await _youtubeClient.Videos.Streams.GetManifestAsync(link);
             return new Uri(streamManifest.GetMuxedStreams().TryGetWithHighestVideoQuality().Url);
         }
 
-        public IAsyncEnumerable<MediaObject> SearchTrends()
+        public IAsyncEnumerable<MediaObject> SearchTrendsAsync()
         {
-            return GetVideoFromPage("https://www.youtube.com/feed/trending");
+            return GetVideoFromPageAsync("https://www.youtube.com/feed/trending");
         }
 
-        public IAsyncEnumerable<MediaObject> SearchMedia(string query)
+        public IAsyncEnumerable<MediaObject> SearchMediaAsync(string query)
         {
-            return GetVideoFromPage($"https://www.youtube.com/results?search_query={query}&sp=EgIQAQ%253D%253D");
+            return GetVideoFromPageAsync($"https://www.youtube.com/results?search_query={query}&sp=EgIQAQ%253D%253D");
         }
 
-        private async IAsyncEnumerable<MediaObject> GetVideoFromPage(string url)
+        private async IAsyncEnumerable<MediaObject> GetVideoFromPageAsync(string url)
         {
             using var client = new WebClient();
             var htmlCode = await client.DownloadStringTaskAsync(url);

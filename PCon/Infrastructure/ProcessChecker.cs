@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,28 +14,26 @@ namespace PCon.Infrastructure
             this.process = process;
         }
 
-        public async Task WaitShowAsync(CancellationToken cancellationToken)
+        private static async Task WaitAsync(string windowHandle, CancellationToken cancellationToken,
+            Func<string, bool> func)
         {
             await Task.Run(() =>
             {
-                var isFound = false;
-                while (!cancellationToken.IsCancellationRequested && !isFound)
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    if (IsWindowShowed(process)) isFound = true;
+                    if (func(windowHandle)) break;
                 }
             }, cancellationToken);
         }
 
-        public async Task WaitHideAsync(string windowHandle, CancellationToken cancellationToken)
+        public static async Task WaitProcessShowAsync(string windowHandle, CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
-            {
-                var isFound = false;
-                while (!cancellationToken.IsCancellationRequested && !isFound)
-                {
-                    if (IsWindowHidden(windowHandle)) isFound = true;
-                }
-            }, cancellationToken);
+            await WaitAsync(windowHandle, cancellationToken, IsWindowShowed);
+        }
+
+        public async Task WaitProcessHideAsync(string windowHandle, CancellationToken cancellationToken)
+        {
+            await WaitAsync(windowHandle, cancellationToken, IsWindowHidden);
         }
 
         public static bool IsWindowShowed(string handle)

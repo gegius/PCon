@@ -36,16 +36,16 @@ namespace PCon.View
             _windowHandle = new WindowInteropHelper(this).Handle;
             _source = HwndSource.FromHwnd(_windowHandle);
             _source?.AddHook(HwndHook);
-            WinApi.RegisterHotKey(_windowHandle, WindowsHotKeys.HotKeyId, WindowsHotKeys.ModControl,
-                WindowsHotKeys.VkTab);
+            WinApi.RegisterHotKey(_windowHandle, WinHotKeys.HotKeyId, WinHotKeys.ModControl,
+                WinHotKeys.VkTab);
         }
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg != WindowsHotKeys.WmHotKey) return IntPtr.Zero;
-            if (wParam.ToInt32() != WindowsHotKeys.HotKeyId) return IntPtr.Zero;
+            if (msg != WinHotKeys.WmHotKey) return IntPtr.Zero;
+            if (wParam.ToInt32() != WinHotKeys.HotKeyId) return IntPtr.Zero;
             var vKey = ((int) lParam >> 16) & 0xFFFF;
-            if (vKey == WindowsHotKeys.VkTab && overlaySettingsStarted)
+            if (vKey == WinHotKeys.VkTab && overlaySettingsStarted)
             {
                 switch (overlaySettings.Visibility)
                 {
@@ -65,6 +65,7 @@ namespace PCon.View
                         break;
                 }
             }
+
             handled = true;
             return IntPtr.Zero;
         }
@@ -82,13 +83,13 @@ namespace PCon.View
             var size = WindowInfo.GetMainProcessWindowSize(snapper.WindowHandle);
             overlaySettings.Width = size.Width;
             overlaySettings.Height = size.Height;
-            WaitChangedOverlaySettingsVisibility();
+            ChangedOverlaySettingsVisibilityAsync();
         }
 
         protected override void OnClosed(EventArgs e)
         {
             _source.RemoveHook(HwndHook);
-            WinApi.UnregisterHotKey(_windowHandle, WindowsHotKeys.HotKeyId);
+            WinApi.UnregisterHotKey(_windowHandle, WinHotKeys.HotKeyId);
             base.OnClosed(e);
         }
 
@@ -108,23 +109,22 @@ namespace PCon.View
             Hide();
         }
 
-        private async void WaitChangedOverlaySettingsVisibility() //Поменять название/подумать над работой метода
+        private async void ChangedOverlaySettingsVisibilityAsync()
         {
             while (!cancellationTokenSource.Token.IsCancellationRequested)
             {
-                await processChecker.WaitHideAsync("OverlaySettings", cancellationTokenSource.Token);
-                if (cancellationTokenSource.Token.IsCancellationRequested) break;
+                if (await snapper.TryWaitProcessHideAsync(processChecker, "OverlaySettings", cancellationTokenSource)
+                ) break;
                 overlaySettings.Visibility = Visibility.Hidden;
-                await processChecker.WaitShowAsync(cancellationTokenSource.Token);
-                if (cancellationTokenSource.Token.IsCancellationRequested) break;
+                if (await snapper.TryWaitProcessShowAsync(mainProcess, cancellationTokenSource)) break;
                 overlaySettings.Visibility = Visibility.Visible;
             }
         }
 
         private void InitSnapper()
         {
-            snapper = new WindowSnapper(overlaySettings, mainProcess);
-            snapper.AttachAsync();
+            snapper = new WindowSnapper(overlaySettings);
+            snapper.AttachAsync(mainProcess);
         }
 
         private void ProcessLabel_OnClick(object sender, RoutedEventArgs e)
@@ -163,13 +163,15 @@ namespace PCon.View
             label.MouseUp += ProcessLabel_MouseUp;
             return label;
         }
-        
+
         private void ChangeColor(object sender)
         {
             foreach (var child in PanelInsideProcessPrograms.Children)
             {
                 var label = (Label) child;
-                label.Background = label == (Label) sender ? FindResource("AwesomeGreenColor") as Brush : FindResource("Empty") as Brush;
+                label.Background = label == (Label) sender
+                    ? FindResource("AwesomeGreenColor") as Brush
+                    : FindResource("Empty") as Brush;
             }
         }
 

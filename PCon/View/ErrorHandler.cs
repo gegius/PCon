@@ -8,7 +8,6 @@ namespace PCon.View
         {
             MessageBox.Show("Упс... Что-то пошло не так", "PCon", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
         
         public static void ThrowErrorNotSelectedProcess()
         {

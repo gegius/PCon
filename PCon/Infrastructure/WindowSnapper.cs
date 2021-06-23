@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -10,21 +12,19 @@ namespace PCon.Infrastructure
         public IntPtr WindowHandle { get; private set; }
         private Rect _lastBounds;
         private readonly Window _window;
-        private readonly string _windowTitle;
 
-        public WindowSnapper(Window window, string windowTitle)
+        public WindowSnapper(Window window)
         {
             _window = window;
             _window.Topmost = true;
-            _windowTitle = windowTitle;
             _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(1)};
             _timer.Tick += (x, y) => SnapToWindow();
             _timer.IsEnabled = false;
         }
 
-        public async void AttachAsync()
+        public async void AttachAsync(string mainProcess)
         {
-            WindowHandle = await WindowInfo.GetWindowHandleAsync(_windowTitle);
+            WindowHandle = await WindowInfo.GetWindowHandleAsync(mainProcess);
             _timer.Start();
         }
 
@@ -43,7 +43,21 @@ namespace PCon.Infrastructure
                     _window.Left = bounds.Right - _window.Width;
                     break;
             }
+
             _lastBounds = bounds;
+        }
+
+        public async Task<bool> TryWaitProcessHideAsync(ProcessChecker processChecker, string process,
+            CancellationTokenSource cancellationTokenSource)
+        {
+            await processChecker.WaitProcessHideAsync(process, cancellationTokenSource.Token);
+            return cancellationTokenSource.Token.IsCancellationRequested;
+        }
+
+        public async Task<bool> TryWaitProcessShowAsync(string process, CancellationTokenSource cancellationTokenSource)
+        {
+            await ProcessChecker.WaitProcessShowAsync(process, cancellationTokenSource.Token);
+            return cancellationTokenSource.Token.IsCancellationRequested;
         }
     }
 }
