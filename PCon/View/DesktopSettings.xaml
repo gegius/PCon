@@ -12,7 +12,7 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
             <GroupBox BorderBrush="White" HorizontalAlignment="Left" Margin="50" Width="250" Height="290">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <TextBlock Text="Здравствуйте, это оверлей приложение для просмотра видео. Нажмите кнопку update, выберите процесс, к которому вы хотите прицепить оверлей. После выбора он будет указан в боксе ниже, откуда, если вы захотите, можно его убрать. Нажмите кнопку старт для начала работы оверлея и в выбранной программе введите комбинацию клавиш Ctrl+Tab. Приятного использования!" FontSize="16" TextWrapping="Wrap" Foreground="White">
+                    <TextBlock Text="Здравствуйте, это оверлей приложение для просмотра видео. Нажмите кнопку update, выберите процесс, к которому вы хотите прицепить оверлей. После выбора он будет выделен. Нажмите кнопку старт для начала работы оверлея и в выбранной программе введите комбинацию клавиш Ctrl+Tab. Приятного использования!" FontSize="16" TextWrapping="Wrap" Foreground="White">
                         <TextBlock.Background>
                             <StaticResource ResourceKey="Empty" />
                         </TextBlock.Background>
