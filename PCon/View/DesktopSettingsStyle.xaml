@@ -1,0 +1,18 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="BlackAndWhite">
+        <Setter Property="Control.Background">
+            <Setter.Value>
+                <LinearGradientBrush>
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Color="White" Offset="0" />
+                        <GradientStop Color="Black" Offset="1" />
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Control.FontFamily" Value="Verdana" />
+        <Setter Property="Control.Foreground" Value="White" />
+        <Setter Property="Control.Margin" Value="10" />
+    </Style>
+</ResourceDictionary>
