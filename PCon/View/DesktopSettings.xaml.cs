@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -138,7 +139,9 @@ namespace PCon.View
         {
             mainProcess = null;
             PanelInsideProcessPrograms.Children.Clear();
-            var processlist = Process.GetProcesses();
+            var processlist = Process.GetProcesses()
+                .Where(p => (long)p.MainWindowHandle != 0)
+                .ToArray();
             foreach (var process in processlist)
             {
                 var name = process.MainWindowTitle;

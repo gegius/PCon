@@ -5,9 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:PCon.View"
         mc:Ignorable="d"
-        Title="DesktopSettings" Height="910" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="DesktopSettings" Height="910" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" BorderThickness="10" BorderBrush="Aqua">
     <Grid>
-        <Label Content="PCon" FontSize="70" FontStyle="Italic" Foreground="Yellow" VerticalAlignment="Top" HorizontalAlignment="Center"></Label>
+        <Label Content="PCon" FontSize="70" FontStyle="Italic" Foreground="Yellow" VerticalAlignment="Top" HorizontalAlignment="Center" Style="{StaticResource BlackAndWhite}"></Label>
         
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
             <GroupBox BorderBrush="White" HorizontalAlignment="Left" Margin="50" Width="250" Height="290">
@@ -29,7 +29,6 @@
                 </GroupBox>
                 <Button x:Name="Show" Width="200" Height="60" Foreground="White" Content="Start" FontSize="30" FontStyle="Oblique" VerticalAlignment="Bottom" Click="Button_Click_Start" HorizontalAlignment="Right" Margin="50" Style="{DynamicResource RoundCorner}"></Button>  
             </StackPanel>
-            
         </StackPanel>
         
         <Grid.Background>
