@@ -247,5 +247,35 @@ namespace PCon.View
             questionWindow.Owner = this;
             questionWindow.Show();
         }
+
+        private void OpenDota2(object sender, MouseButtonEventArgs e)
+        {
+            mainProcess = ProcessConst.dota2Process;
+            Start();
+        }
+
+        private void OpenCSGO(object sender, MouseButtonEventArgs e)
+        {
+            mainProcess = ProcessConst.csgoProcess;
+            Start();
+        }
+
+        private void OpenCiva(object sender, MouseButtonEventArgs e)
+        {
+            mainProcess = ProcessConst.csgoProcess;
+            Start();
+        }
+
+        private void OpenMB(object sender, MouseButtonEventArgs e)
+        {
+            mainProcess = ProcessConst.csgoProcess;
+            Start();
+        }
+
+        private void OpenSeaThieves(object sender, MouseButtonEventArgs e)
+        {
+            mainProcess = ProcessConst.csgoProcess;
+            Start();
+        }
     }
 }

@@ -250,31 +250,31 @@
                     
                     
                     
-                    <WrapPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                    <WrapPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" MouseDown="OpenDota2">
                         <Image Width="100" Height="100" Source="../Photos/Games/dota2.jpg">
                         
                         </Image>
                     </WrapPanel>
                     
-                    <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                    <WrapPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" MouseDown="OpenCSGO">
                         <Image Width="100" Height="100" Source="../Photos/Games/csgo.png">
                         
                         </Image>
                     </WrapPanel>
                     
-                    <WrapPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                    <WrapPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" MouseDown="OpenCiva">
                         <Image Width="100" Height="100" Source="../Photos/Games/civa.jpg">
                         
                         </Image>
                     </WrapPanel>
                     
-                    <WrapPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                    <WrapPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" MouseDown="OpenMB">
                         <Image Width="100" Height="100" Source="../Photos/Games/mb.jpg">
                         
                         </Image>
                     </WrapPanel>
                     
-                    <WrapPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                    <WrapPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" MouseDown="OpenSeaThieves">
                         <Image Width="100" Height="100" Source="../Photos/Games/sea thieves.jpg">
                         
                         </Image>
