@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:PCon.View"
         mc:Ignorable="d"
-        Title="SelectProcess" Height="920" Width="1200">
+        Title="SelectProcess" Height="400" Width="290" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid>
         <Label Content="PCon" FontSize="70" FontStyle="Italic" Foreground="Yellow" VerticalAlignment="Top" HorizontalAlignment="Center" Style="{StaticResource BlackAndWhite}"></Label>
         
