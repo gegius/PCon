@@ -1,0 +1,23 @@
+<Window x:Class="PCon.View.QuestionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PCon.View"
+        mc:Ignorable="d"
+        Title="QuestionWindow" Height="620" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <TextBlock Style="{DynamicResource Geometria}" Width="280" Height="600" TextWrapping="Wrap" FontSize="20">
+            Приложение PCon.
+            <LineBreak/>
+            Сначала запустите приложение на которое вы хотите навесить оверлей.
+            <LineBreak/>
+            Кнопка запуска предложит вам выбрать процесс на которое вы хотите навесить оверлей.
+            <LineBreak/>
+            После того как вы выбрали, всего лишь откройте запущенное приложение и нажмите Ctrl + Tab. (Значение по умолчанию)
+            <LineBreak/>
+            Дальше вы можете выбрать видео, и запустить его. Соответствующие команды вы можете посмотреть в кнопке настроек на главной странице.
+            <LineBreak/>
+        </TextBlock>
+    </Grid>
+</Window>
