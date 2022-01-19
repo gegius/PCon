@@ -64,7 +64,7 @@ namespace PCon.View
 
         private Label CreateProcessLabel(object content)
         {
-            var label = new Label {Foreground = Brushes.White, Content = content};
+            var label = new Label {Foreground = Brushes.Black, Content = content};
             label.MouseDown += ProcessLabel_OnClick;
             label.MouseEnter += ProcessLabel_MouseEnter;
             label.MouseLeave += ProcessLabel_MouseLeave;
