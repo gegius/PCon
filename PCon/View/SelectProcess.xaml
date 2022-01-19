@@ -1,0 +1,44 @@
+<Window x:Class="PCon.View.SelectProcess"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PCon.View"
+        mc:Ignorable="d"
+        Title="SelectProcess" Height="920" Width="1200">
+    <Grid>
+        <Label Content="PCon" FontSize="70" FontStyle="Italic" Foreground="Yellow" VerticalAlignment="Top" HorizontalAlignment="Center" Style="{StaticResource BlackAndWhite}"></Label>
+        
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" >
+            <GroupBox BorderBrush="White" HorizontalAlignment="Left" Margin="50" Width="250" Height="290">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <TextBlock Text="Здравствуйте, это оверлей приложение для просмотра видео. Нажмите кнопку update, выберите процесс, к которому вы хотите прицепить оверлей. После выбора он будет выделен. Нажмите кнопку старт для начала работы оверлея и в выбранной программе введите комбинацию клавиш Ctrl+Tab. Приятного использования!" FontSize="16" TextWrapping="Wrap" Foreground="White">
+                        <TextBlock.Background>
+                            <StaticResource ResourceKey="Empty" />
+                        </TextBlock.Background>
+                    </TextBlock>
+                </ScrollViewer>
+            </GroupBox>
+            <StackPanel Orientation="Vertical" Margin="50">
+                <Button x:Name="Update" Width="50" Height="30" Content="Update" Foreground="White" Click="Update_OnClick" HorizontalAlignment="Right" Style="{DynamicResource RoundCorner}"></Button>
+                <GroupBox x:Name = "ProcessPrograms" BorderBrush="White" HorizontalAlignment="Right" Width="250" Height="400" VerticalAlignment="Top">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="PanelInsideProcessPrograms" Orientation="Vertical">
+                        </StackPanel>
+                    </ScrollViewer>
+                </GroupBox>
+                <Button x:Name="Show" Width="200" Height="60" Foreground="White" Content="Start" FontSize="30" FontStyle="Oblique" VerticalAlignment="Bottom" Click="Button_Click_Start" HorizontalAlignment="Right" Margin="50" Style="{DynamicResource RoundCorner}"></Button>  
+            </StackPanel>
+        </StackPanel>
+        
+        <Grid.Background>
+            <VisualBrush Stretch="Uniform">
+                <VisualBrush.Visual>
+                    <StackPanel>
+                        <Image Source="pack://application:,,,/View/ImageFolder/fac.jpg"></Image>
+                    </StackPanel>
+                </VisualBrush.Visual>
+            </VisualBrush >
+        </Grid.Background>
+    </Grid>
+</Window>

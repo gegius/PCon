@@ -37,6 +37,40 @@
       <None Remove="View\ImageFolder\star3.jpg" />
       <None Remove="View\ImageFolder\fac.jpg" />
       <Resource Include="View\ImageFolder\fac.jpg" />
+      <None Remove="Photos\Games\add.png" />
+      <Resource Include="Photos\Games\add.png" />
+      <None Remove="Photos\Games\civa.jpg" />
+      <Resource Include="Photos\Games\civa.jpg" />
+      <None Remove="Photos\Games\csgo.png" />
+      <Resource Include="Photos\Games\csgo.png" />
+      <None Remove="Photos\Games\dota2.jpg" />
+      <Resource Include="Photos\Games\dota2.jpg" />
+      <None Remove="Photos\Games\mb.jpg" />
+      <Resource Include="Photos\Games\mb.jpg" />
+      <None Remove="Photos\Games\sea thieves.jpg" />
+      <Resource Include="Photos\Games\sea thieves.jpg" />
+      <None Remove="Photos\devushka-bronya-mech-nebo-lug.jpg" />
+      <Resource Include="Photos\devushka-bronya-mech-nebo-lug.jpg" />
+      <None Remove="Photos\help another.jpg" />
+      <Resource Include="Photos\help another.jpg" />
+      <None Remove="Photos\help button.png" />
+      <Resource Include="Photos\help button.png" />
+      <None Remove="Photos\img1.jpg" />
+      <Resource Include="Photos\img1.jpg" />
+      <None Remove="Photos\logo.svg" />
+      <Resource Include="Photos\logo.svg" />
+      <None Remove="Photos\play-button.png" />
+      <Resource Include="Photos\play-button.png" />
+      <None Remove="Photos\setting.png" />
+      <Resource Include="Photos\setting.png" />
+      <None Remove="Fonts\Banty Bold.ttf" />
+      <Resource Include="Fonts\Banty Bold.ttf" />
+      <None Remove="Fonts\Geometria.eot" />
+      <Resource Include="Fonts\Geometria.eot" />
+      <None Remove="Fonts\Geometria.ttf" />
+      <Resource Include="Fonts\Geometria.ttf" />
+      <None Remove="Fonts\Geometria.woff" />
+      <Resource Include="Fonts\Geometria.woff" />
     </ItemGroup>
 
     <ItemGroup>
