@@ -218,19 +218,19 @@
                         <RowDefinition Height="140"></RowDefinition>
                     </Grid.RowDefinitions>
                     
-                    <WrapPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="Play_OnMouseDown">
+                    <WrapPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="OpenProcessSelect">
                         <Image Width="85" Height="85" Source="../Photos/play-button.png">
                         
                         </Image>
                     </WrapPanel>
                     
-                    <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="OpenSettingsWindow">
                         <Image Width="85" Height="85" Source="../Photos/setting.png">
                         
                         </Image>
                     </WrapPanel>
                     
-                    <WrapPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <WrapPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" MouseDown="OpenQuestionWindow">
                         <Image Width="85" Height="85" Source="../Photos/help another.jpg">
                         
                         </Image>

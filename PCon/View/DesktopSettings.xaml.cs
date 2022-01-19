@@ -143,10 +143,25 @@ namespace PCon.View
             WindowState = WindowState.Minimized;
         }
 
-        private void Play_OnMouseDown(object sender, MouseButtonEventArgs e)
+        private void OpenProcessSelect(object sender, MouseButtonEventArgs e)
         {
             var selectProcess = new SelectProcess(_serviceCollection) {DesktopSettings = this};
+            selectProcess.Owner = this;
             selectProcess.Show();
+        }
+
+        private void OpenSettingsWindow(object sender, MouseButtonEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow();
+            settingsWindow.Owner = this;
+            settingsWindow.Show();
+        }
+
+        private void OpenQuestionWindow(object sender, MouseButtonEventArgs e)
+        {
+            var questionWindow = new QuestionWindow();
+            questionWindow.Owner = this;
+            questionWindow.Show();
         }
     }
 }
