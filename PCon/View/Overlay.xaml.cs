@@ -139,7 +139,7 @@ namespace PCon.View
             try
             {
                 _mediaUri = await _serviceProvider.GetService<IHosting>().GetUriAsync(video.Url);
-                _mainPlayer.SetMedia(_mediaUri);
+                _mainPlayer.SetMedia(_mediaUri, ":prefetch-buffer-size=1048576");
                 VolumeSlider.Value = 70;
                 Button_Play(null, null);
             }
