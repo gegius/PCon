@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Permissions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,13 +19,15 @@ namespace PCon.View
     public partial class OverlaySettings
     {
         public DesktopSettings DesktopSettings { get; set; }
-        private Overlay overlay;
-        private readonly string mainProcess;
-        private MediaObject currentMediaObject;
-        private VlcControl vlcControlElement;
+        private Overlay _overlay;
+        private readonly string _mainProcess;
+        private MediaObject _currentMediaObject;
+        private VlcControl _vlcControlElement;
         private readonly ServiceCollection _serviceCollection;
         private ServiceProvider _serviceProvider;
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private bool _isFullScreenMode;
+        private Size _lastScreenSize;
 
         public OverlaySettings(string mainProcess, ServiceCollection serviceCollection)
         {
@@ -32,14 +35,14 @@ namespace PCon.View
             _serviceProvider = serviceCollection.BuildServiceProvider();
             InitializeComponent();
             InitVlcPlayer();
-            this.mainProcess = mainProcess;
+            this._mainProcess = mainProcess;
         }
 
         private void Button_Click_Show(object sender, RoutedEventArgs e)
         {
-            overlay?.VlcControlPanel.Children.Clear();
-            overlay = new Overlay(currentMediaObject, mainProcess, vlcControlElement, _serviceCollection);
-            DesktopSettings.Overlay = overlay;
+            _overlay?.VlcControlPanel.Children.Clear();
+            _overlay = new Overlay(_currentMediaObject, _mainProcess, _vlcControlElement, _serviceCollection);
+            DesktopSettings.Overlay = _overlay;
             DesktopSettings.StopOverlaySettingsAttach();
             Visibility = Visibility.Hidden;
         }
@@ -104,8 +107,8 @@ namespace PCon.View
 
         private void CancelSearch()
         {
-            cancellationTokenSource.Cancel();
-            cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         private void ChangeColor(object sender)
@@ -140,7 +143,7 @@ namespace PCon.View
             SetInitialState();
             ResultBox.Visibility = Visibility.Visible;
             var text = SearchField.Text;
-            var cancelToken = cancellationTokenSource.Token;
+            var cancelToken = _cancellationTokenSource.Token;
             try
             {
                 await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMediaAsync(text)
@@ -164,7 +167,7 @@ namespace PCon.View
             SetInitialState();
             ClearSearchField();
             ResultBox.Visibility = Visibility.Visible;
-            var cancelToken = cancellationTokenSource.Token;
+            var cancelToken = _cancellationTokenSource.Token;
             try
             {
                 await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrendsAsync()
@@ -188,13 +191,13 @@ namespace PCon.View
 
             var label = new TextBlock
             {
-                Text = currentMediaObject.Author + "\n\n" + currentMediaObject.Description,
+                Text = _currentMediaObject.Author + "\n\n" + _currentMediaObject.Description,
                 TextWrapping = TextWrapping.Wrap
             };
 
             var img = new Image();
-            if (currentMediaObject.DescriptionThumbnails != null)
-                img = new Image {Source = new BitmapImage(new Uri(currentMediaObject.DescriptionThumbnails))};
+            if (_currentMediaObject.DescriptionThumbnails != null)
+                img = new Image {Source = new BitmapImage(new Uri(_currentMediaObject.DescriptionThumbnails))};
 
             panel.Children.Add(img);
             panel.Children.Add(label);
@@ -210,7 +213,7 @@ namespace PCon.View
                 Margin = new Thickness(10), Style = FindResource("RoundCorner") as Style
             };
 
-            if (currentMediaObject.Duration >= TimeSpan.Zero)
+            if (_currentMediaObject.Duration >= TimeSpan.Zero)
                 buttonStart.Click += Button_Click_Show;
 
             return buttonStart;
@@ -219,7 +222,7 @@ namespace PCon.View
         private void Button_Click_Result(object sender, RoutedEventArgs e)
         {
             ClearBox();
-            currentMediaObject =
+            _currentMediaObject =
                 (MediaObject) ((GroupBox) ((StackPanel) ((Button) sender).Content).Children[2]).Content;
             var panel = CreatePanel();
 
@@ -256,8 +259,8 @@ namespace PCon.View
             try
             {
                 var libDirectory = LibVlcHelper.GetVlcPlayerPath();
-                vlcControlElement = new VlcControl();
-                vlcControlElement.SourceProvider.CreatePlayer(libDirectory);
+                _vlcControlElement = new VlcControl();
+                _vlcControlElement.SourceProvider.CreatePlayer(libDirectory);
             }
             catch
             {
@@ -268,6 +271,28 @@ namespace PCon.View
         private void StartSearchCommand_Execute(object sender, ExecutedRoutedEventArgs e)
         {
             if (ResultPanel.Visibility == Visibility.Visible) FindMedia_OnClick(sender, e);
+        }
+
+        private void FullScreenModeCommand_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            var hWnd = WinApi.GetForegroundWindow();
+            var size = WindowInfo.GetMainProcessWindowSize(hWnd);
+            Console.WriteLine(size.Height);
+            Console.WriteLine(size.Width);
+            if (_isFullScreenMode)
+            {
+                _overlay.Height = _lastScreenSize.Height;
+                _overlay.Width = _lastScreenSize.Width;
+                _isFullScreenMode = false;
+            }
+            else
+            {
+                _lastScreenSize.Height = _overlay.Height;
+                _lastScreenSize.Width = _overlay.Width;
+                _overlay.Height = size.Height;
+                _overlay.Width = size.Width;
+                _isFullScreenMode = true;
+            }
         }
     }
 }
