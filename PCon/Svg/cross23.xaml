@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This file is compatible with Silverlight-->
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="Capa_1" Width="94.926" Height="94.926" Canvas.Left="0" Canvas.Top="0">
+  <Canvas.RenderTransform>
+    <TranslateTransform X="0" Y="0"/>
+  </Canvas.RenderTransform>
+  <Canvas.Resources/>
+  <!--Unknown tag: sodipodi:namedview-->
+  <Canvas Name="g7455">
+    <Canvas.RenderTransform>
+      <MatrixTransform Matrix="0.25840426 0 0 0.25840426 35.484455 36.967247"/>
+    </Canvas.RenderTransform>
+    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path7453" Fill="#000000" Data="M 55.931 47.463 94.306 9.09 c 0.826 -0.827 0.826 -2.167 0 -2.994 L 88.833 0.62 C 88.436 0.224 87.896 0 87.335 0 86.773 0 86.234 0.224 85.837 0.62 L 47.463 38.994 9.089 0.62 C 8.294 -0.175 6.887 -0.174 6.094 0.62 L 0.622 6.096 c -0.827 0.827 -0.827 2.167 0 2.994 L 38.996 47.463 0.622 85.836 c -0.827 0.827 -0.827 2.167 0 2.994 l 5.473 5.476 c 0.397 0.396 0.936 0.62 1.498 0.62 0.562 0 1.1 -0.224 1.497 -0.62 L 47.464 55.932 85.838 94.306 c 0.397 0.396 0.937 0.62 1.498 0.62 0.561 0 1.101 -0.224 1.498 -0.62 l 5.473 -5.476 c 0.826 -0.827 0.826 -2.167 0 -2.994 z"/>
+  </Canvas>
+  <Canvas Name="g7457"/>
+  <Canvas Name="g7459"/>
+  <Canvas Name="g7461"/>
+  <Canvas Name="g7463"/>
+  <Canvas Name="g7465"/>
+  <Canvas Name="g7467"/>
+  <Canvas Name="g7469"/>
+  <Canvas Name="g7471"/>
+  <Canvas Name="g7473"/>
+  <Canvas Name="g7475"/>
+  <Canvas Name="g7477"/>
+  <Canvas Name="g7479"/>
+  <Canvas Name="g7481"/>
+  <Canvas Name="g7483"/>
+  <Canvas Name="g7485"/>
+</Canvas>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,7 @@ namespace PCon.View
         private HwndSource _source;
         private OverlaySettings overlaySettings;
         private ProcessChecker processChecker;
-        private string mainProcess;
+        public string mainProcess;
         private WindowSnapper snapper;
         private bool overlaySettingsStarted;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -29,6 +30,12 @@ namespace PCon.View
         {
             _serviceCollection = serviceCollection;
             InitializeComponent();
+        }
+        
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ChangedButton == MouseButton.Left)
+                DragMove();
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -92,7 +99,23 @@ namespace PCon.View
             base.OnClosed(e);
         }
 
-        private void Button_Click_Start(object sender, RoutedEventArgs e)
+        /*private void Button_Click_Start(object sender, RoutedEventArgs e)
+        {
+            if (mainProcess is null)
+            {
+                ErrorHandler.ThrowErrorNotSelectedProcess();
+                return;
+            }
+
+            processChecker = new ProcessChecker(mainProcess);
+            overlaySettings = new OverlaySettings(mainProcess, _serviceCollection) {DesktopSettings = this};
+            InitSnapper();
+            overlaySettingsStarted = true;
+            overlaySettings.Visibility = Visibility.Hidden;
+            Hide();
+        }*/
+
+        public void Start()
         {
             if (mainProcess is null)
             {
@@ -126,7 +149,7 @@ namespace PCon.View
             snapper.AttachAsync(mainProcess);
         }
 
-        private void ProcessLabel_OnClick(object sender, RoutedEventArgs e)
+        /*private void ProcessLabel_OnClick(object sender, RoutedEventArgs e)
         {
             var label = (Label) sender;
             label.Background = FindResource("AwesomeGreenColor") as Brush;
@@ -174,7 +197,7 @@ namespace PCon.View
                     ? FindResource("AwesomeGreenColor") as Brush
                     : FindResource("Empty") as Brush;
             }
-        }
+        }*/
 
         private void ProcessLabel_MouseEnter(object sender, RoutedEventArgs e)
         {
@@ -192,6 +215,22 @@ namespace PCon.View
         {
             if (((Label) sender).Background != FindResource("AwesomeGreenColor") as Brush)
                 ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
+        }
+
+        private void Cross_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
+
+        private void Minus_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void Play_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var selectProcess = new SelectProcess(_serviceCollection) {DesktopSettings = this};
+            selectProcess.Show();
         }
     }
 }
