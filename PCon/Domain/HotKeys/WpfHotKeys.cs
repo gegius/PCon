@@ -18,6 +18,7 @@ namespace PCon.Domain.HotKeys
             PlayPlayerCommand.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control));
             HideOverlayCommand.InputGestures.Add(new KeyGesture(Key.H, ModifierKeys.Control));
             ShowOverlayCommand.InputGestures.Add(new KeyGesture(Key.D, ModifierKeys.Control));
+            
             ScrollDownCommand.InputGestures.Add(new KeyGesture(Key.Down));
         }
     }
