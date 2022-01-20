@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
-using PCon.Application.HostingService;
+using PCon.Application.VideoSource;
 using PCon.Infrastructure;
 using PCon.Infrastructure.Extensions;
 using PCon.Infrastructure.PCon.Infrastructure;
@@ -26,6 +26,7 @@ namespace PCon.View
         private readonly ServiceCollection _serviceCollection;
         private ServiceProvider _serviceProvider;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private VideoSourceFactory.VideoSourceName videoSourceName = VideoSourceFactory.VideoSourceName.Twitch;
 
         public OverlaySettings(string mainProcess, ServiceCollection serviceCollection)
         {
@@ -39,7 +40,7 @@ namespace PCon.View
         private void Button_Click_Show(object sender, RoutedEventArgs e)
         {
             _overlay?.VlcControlPanel.Children.Clear();
-            _overlay = new Overlay(_currentMediaObject, _mainProcess, _vlcControlElement, _serviceCollection);
+            _overlay = new Overlay(_currentMediaObject, videoSourceName, _mainProcess, _vlcControlElement, _serviceCollection);
             DesktopSettings.Overlay = _overlay;
             DesktopSettings.StopOverlaySettingsAttach();
             Visibility = Visibility.Hidden;
@@ -47,22 +48,25 @@ namespace PCon.View
 
         private void Youtube_OnClick(object sender, RoutedEventArgs e)
         {
-            _serviceCollection.Replace<IHosting>(_ => new YouTubeHost(), ServiceLifetime.Singleton);
-            _serviceProvider = _serviceCollection.BuildServiceProvider();
+            videoSourceName = VideoSourceFactory.VideoSourceName.Youtube;
             HostingInit(sender);
         }
 
         private void Twitch_OnClick(object sender, RoutedEventArgs e)
         {
-            _serviceCollection.Replace<IHosting>(_ => new TwitchHost(), ServiceLifetime.Singleton);
-            _serviceProvider = _serviceCollection.BuildServiceProvider();
+            videoSourceName = VideoSourceFactory.VideoSourceName.Twitch;
             HostingInit(sender);
         }
 
         private void Wasd_OnClick(object sender, RoutedEventArgs e)
         {
-            _serviceCollection.Replace<IHosting>(_ => new WasdHost(), ServiceLifetime.Singleton);
-            _serviceProvider = _serviceCollection.BuildServiceProvider();
+            videoSourceName = VideoSourceFactory.VideoSourceName.Wasd;
+            HostingInit(sender);
+        }
+
+        private void Local_OnClick(object sender, RoutedEventArgs e)
+        {
+            videoSourceName = VideoSourceFactory.VideoSourceName.Local;
             HostingInit(sender);
         }
 
@@ -100,7 +104,7 @@ namespace PCon.View
 
         private void ClearSearchField()
         {
-            SearchField.Text = "";
+            SearchField.Text = string.Empty;
         }
 
         private void CancelSearch()
@@ -144,10 +148,14 @@ namespace PCon.View
             var cancelToken = _cancellationTokenSource.Token;
             try
             {
-                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchMediaAsync(text)
+                var factory = _serviceProvider.GetService<VideoSourceFactory>();
+                var videoSource = factory.GetVideoSource(videoSourceName);
+                await foreach (var video in videoSource.SearchMediaAsync(text)
                     .WithCancellation(cancelToken))
                 {
-                    if (cancelToken.IsCancellationRequested) break;
+                    if (cancelToken.IsCancellationRequested)
+                        break;
+                    
                     var anotherResultButton = CreateMediaButton(video);
                     ResultPanel.Children.Add(anotherResultButton);
                 }
@@ -168,7 +176,9 @@ namespace PCon.View
             var cancelToken = _cancellationTokenSource.Token;
             try
             {
-                await foreach (var video in _serviceProvider.GetService<IHosting>().SearchTrendsAsync()
+                var factory = _serviceProvider.GetService<VideoSourceFactory>();
+                var videoSource = factory.GetVideoSource(videoSourceName);
+                await foreach (var video in videoSource.SearchTrendsAsync()
                     .WithCancellation(cancelToken))
                 {
                     if (cancelToken.IsCancellationRequested) break;

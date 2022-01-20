@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PCon.Application.HostingService
+namespace PCon.Application.VideoSource
 {
     public class MediaObject
     {

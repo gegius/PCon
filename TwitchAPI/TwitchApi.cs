@@ -99,7 +99,7 @@ namespace TwitchAPI
         private static async Task<HttpWebResponse> SendRequestAsync(string data)
         {
             var webRequest = WebRequest.Create("https://gql.twitch.tv/gql");
-            var (name, value) = ("client-id", await GetClientId("bratishkinoff"));
+            var (name, value) = ("Client-Id", await GetClientId("bratishkinoff"));
             webRequest.Method = "POST";
             webRequest.Headers.Add(name, value);
             await using var stream = await webRequest.GetRequestStreamAsync();
@@ -111,7 +111,7 @@ namespace TwitchAPI
         {
             using var client = new WebClient();
             var htmlCode = await client.DownloadStringTaskAsync($"{Url}/{channelName}");
-            var regex = new Regex("\"Client-ID\":\"(.*?)\"", RegexOptions.Compiled);
+            var regex = new Regex("clientId=\"(.*?)\"", RegexOptions.Compiled);
             var match = regex.Match(htmlCode);
             if (!match.Success)
                 throw new ArgumentException("Client-ID not found.");

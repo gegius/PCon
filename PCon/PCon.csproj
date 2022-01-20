@@ -72,6 +72,9 @@
       <Resource Include="Fonts\Geometria.ttf" />
       <None Remove="Fonts\Geometria.woff" />
       <Resource Include="Fonts\Geometria.woff" />
+      <None Update="libvlc.zip">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
