@@ -219,8 +219,8 @@ namespace PCon.View
                 _lastLeftBorder = Left;
                 _lastScreenSize.Height = Height;
                 _lastScreenSize.Width = Width;
-                Height = bounds.Bottom;
-                Width = bounds.Right;
+                Height = bounds.Bottom - bounds.Top;
+                Width = bounds.Right - bounds.Left;
                 Left = bounds.Left;
                 _isFullScreenMode = true;
             }
