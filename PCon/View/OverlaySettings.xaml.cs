@@ -64,12 +64,6 @@ namespace PCon.View
             HostingInit(sender);
         }
 
-        private void Local_OnClick(object sender, RoutedEventArgs e)
-        {
-            videoSourceName = VideoSourceFactory.VideoSourceName.Local;
-            HostingInit(sender);
-        }
-
         private void HostingInit(object sender)
         {
             ChangeColor(sender);
@@ -166,8 +160,7 @@ namespace PCon.View
                 ErrorHandler.ThrowErrorConnection();
             }
         }
-
-
+        
         private async void FindTrends_OnClick(object sender, RoutedEventArgs e)
         {
             SetInitialState();
