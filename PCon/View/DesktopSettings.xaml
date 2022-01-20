@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PCon.View"
         mc:Ignorable="d"
         Title="DesktopSettings" WindowStartupLocation="CenterScreen" Height="770" Width="550" WindowStyle="None" ResizeMode="NoResize"
-        AllowsTransparency="True" Background="Transparent" MouseDown="Window_MouseDown">
+        AllowsTransparency="True" Background="Transparent" >
     
     <Border Margin="10" BorderThickness="1" BorderBrush="Black">
         <Border.Effect>
