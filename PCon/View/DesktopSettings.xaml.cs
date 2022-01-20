@@ -93,7 +93,7 @@ namespace PCon.View
         {
             cancellationTokenSource = new CancellationTokenSource();
             overlaySettings.Visibility = Visibility.Visible;
-            var size = WindowInfo.GetStartOverlayPosition(snapper.WindowHandle);
+            var size = WindowInfo.GetOverlayPosition(snapper.WindowHandle);
             overlaySettings.Width = size.Width;
             overlaySettings.Height = size.Height;
             ChangedOverlaySettingsVisibilityAsync();

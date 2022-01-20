@@ -27,6 +27,7 @@ namespace PCon.View
         private readonly ServiceProvider _serviceProvider;
         private bool _isFullScreenMode;
         private Size _lastScreenSize;
+        private double _lastLeftBorder;
 
         public Overlay(MediaObject video, string mainProcess, VlcControl vlcControl,
             IServiceCollection serviceCollection)
@@ -204,21 +205,23 @@ namespace PCon.View
         {
             Console.WriteLine("AAAA");
             var hWnd = WinApi.GetForegroundWindow();
-            var size = WindowInfo.GetWindowHandleSize(hWnd);
-            Console.WriteLine(size.Height);
-            Console.WriteLine(size.Width);
+            var bounds = WindowInfo.GetWindowBounds(_snapper.WindowHandle);
+            var size = WindowInfo.GetOverlayPosition(hWnd);
             if (_isFullScreenMode)
             {
+                Left = _lastLeftBorder;
                 Height = _lastScreenSize.Height;
                 Width = _lastScreenSize.Width;
                 _isFullScreenMode = false;
             }
             else
             {
+                _lastLeftBorder = Left;
                 _lastScreenSize.Height = Height;
                 _lastScreenSize.Width = Width;
-                Height = size.Height;
-                Width = size.Width;
+                Height = bounds.Bottom;
+                Width = bounds.Right;
+                Left = bounds.Left;
                 _isFullScreenMode = true;
             }
         }
