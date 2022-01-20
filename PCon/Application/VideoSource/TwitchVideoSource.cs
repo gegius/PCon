@@ -9,11 +9,11 @@ namespace PCon.Application.VideoSource
 {
     public class TwitchVideoSource : IVideoSource
     {
-        private readonly TwitchApi twitchTwitchApi;
+        private readonly TwitchApi twitchApi;
 
         public TwitchVideoSource()
         {
-            twitchTwitchApi = new TwitchApi();
+            twitchApi = new TwitchApi();
         }
 
         public IPlayerSettings GetPlayerSettings()
@@ -30,7 +30,7 @@ namespace PCon.Application.VideoSource
 
         public async IAsyncEnumerable<MediaObject> SearchMediaAsync(string query)
         {
-            foreach (var media in await twitchTwitchApi.SearchUsersByName(query))
+            foreach (var media in await twitchApi.SearchUsersByName(query))
             {
                 yield return !(media.StreamInfo is null)
                     ? new MediaObject(

@@ -26,7 +26,7 @@ namespace PCon.View
         private readonly ServiceCollection _serviceCollection;
         private ServiceProvider _serviceProvider;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private VideoSourceFactory.VideoSourceName videoSourceName;
+        private VideoSourceFactory.VideoSourceName videoSourceName = VideoSourceFactory.VideoSourceName.Twitch;
 
         public OverlaySettings(string mainProcess, ServiceCollection serviceCollection)
         {
@@ -40,7 +40,7 @@ namespace PCon.View
         private void Button_Click_Show(object sender, RoutedEventArgs e)
         {
             _overlay?.VlcControlPanel.Children.Clear();
-            _overlay = new Overlay(_currentMediaObject, _mainProcess, _vlcControlElement, _serviceCollection);
+            _overlay = new Overlay(_currentMediaObject, videoSourceName, _mainProcess, _vlcControlElement, _serviceCollection);
             DesktopSettings.Overlay = _overlay;
             DesktopSettings.StopOverlaySettingsAttach();
             Visibility = Visibility.Hidden;
@@ -61,6 +61,12 @@ namespace PCon.View
         private void Wasd_OnClick(object sender, RoutedEventArgs e)
         {
             videoSourceName = VideoSourceFactory.VideoSourceName.Wasd;
+            HostingInit(sender);
+        }
+
+        private void Local_OnClick(object sender, RoutedEventArgs e)
+        {
+            videoSourceName = VideoSourceFactory.VideoSourceName.Local;
             HostingInit(sender);
         }
 
@@ -98,7 +104,7 @@ namespace PCon.View
 
         private void ClearSearchField()
         {
-            SearchField.Text = "";
+            SearchField.Text = string.Empty;
         }
 
         private void CancelSearch()

@@ -28,10 +28,12 @@ namespace PCon.View
         private bool _isFullScreenMode;
         private Size _lastScreenSize;
         private double _lastLeftBorder;
+        private VideoSourceFactory.VideoSourceName _videoSourceName;
 
-        public Overlay(MediaObject video, string mainProcess, VlcControl vlcControl,
+        public Overlay(MediaObject video, VideoSourceFactory.VideoSourceName currentVideoSource, string mainProcess, VlcControl vlcControl,
             IServiceCollection serviceCollection)
         {
+            _videoSourceName = currentVideoSource;
             _serviceProvider = serviceCollection.BuildServiceProvider();
             InitializeComponent();
             _mainProcess = mainProcess;
@@ -80,7 +82,7 @@ namespace PCon.View
 
         private async Task InitOverlaysSettings(MediaObject video)
         {
-            var settings = _serviceProvider.GetService<IVideoSource>().GetPlayerSettings();
+            var settings = _serviceProvider.GetService<VideoSourceFactory>()?.GetVideoSource(_videoSourceName).GetPlayerSettings();
             VideoSlider.Visibility = settings.SliderVisibility;
             Play.Visibility = settings.PlayButtonVisibility;
             Pause.Visibility = settings.PauseButtonVisibility;
@@ -141,7 +143,7 @@ namespace PCon.View
         {
             try
             {
-                _mediaUri = await _serviceProvider.GetService<IVideoSource>().GetUriAsync(video.Url);
+                _mediaUri = await _serviceProvider.GetService<VideoSourceFactory>()?.GetVideoSource(_videoSourceName).GetUriAsync(video.Url);
                 _mainPlayer.SetMedia(_mediaUri, ":prefetch-buffer-size=1048576");
                 VolumeSlider.Value = 70;
                 Button_Play(null, null);
@@ -203,7 +205,6 @@ namespace PCon.View
 
         private void FullScreenModeCommand_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            Console.WriteLine("AAAA");
             var hWnd = WinApi.GetForegroundWindow();
             var bounds = WindowInfo.GetWindowBounds(_snapper.WindowHandle);
             var size = WindowInfo.GetOverlayPosition(hWnd);
