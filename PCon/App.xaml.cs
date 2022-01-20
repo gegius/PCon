@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using PCon.Application.HostingService;
+using PCon.Application.VideoSource;
+using PCon.DI;
 using PCon.View;
 
 namespace PCon
@@ -20,9 +21,11 @@ namespace PCon
         }
         */
 
-        private void ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(IServiceCollection serviceCollection)
         {
-            services.AddSingleton<IHosting>(new YouTubeHost());
+            serviceCollection
+                .AddVideoSource()
+                .AddWindows();
         }
 
         private void App_OnStartup(object sender, StartupEventArgs e)

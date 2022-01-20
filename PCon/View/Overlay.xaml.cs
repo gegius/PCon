@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
-using PCon.Application.HostingService;
+using PCon.Application.VideoSource;
 using PCon.Infrastructure;
 using Vlc.DotNet.Core;
 using Vlc.DotNet.Core.Interops.Signatures;
@@ -80,7 +80,7 @@ namespace PCon.View
 
         private async Task InitOverlaysSettings(MediaObject video)
         {
-            var settings = _serviceProvider.GetService<IHosting>().GetPlayerSettings();
+            var settings = _serviceProvider.GetService<IVideoSource>().GetPlayerSettings();
             VideoSlider.Visibility = settings.SliderVisibility;
             Play.Visibility = settings.PlayButtonVisibility;
             Pause.Visibility = settings.PauseButtonVisibility;
@@ -141,7 +141,7 @@ namespace PCon.View
         {
             try
             {
-                _mediaUri = await _serviceProvider.GetService<IHosting>().GetUriAsync(video.Url);
+                _mediaUri = await _serviceProvider.GetService<IVideoSource>().GetUriAsync(video.Url);
                 _mainPlayer.SetMedia(_mediaUri, ":prefetch-buffer-size=1048576");
                 VolumeSlider.Value = 70;
                 Button_Play(null, null);

@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using PCon.Domain.Player;
 using YoutubeAPI;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
-namespace PCon.Application.HostingService
+namespace PCon.Application.VideoSource
 {
-    public class YouTubeHost : IHosting
+    public class YoutubeVideoSource : IVideoSource
     {
         private readonly YoutubeClient _youtubeClient;
         private readonly YoutubeApi _youtubeApi;
 
-        public YouTubeHost()
+        public YoutubeVideoSource()
         {
             _youtubeClient = new YoutubeClient();
             _youtubeApi = new YoutubeApi();
