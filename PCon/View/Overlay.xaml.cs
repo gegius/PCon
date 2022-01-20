@@ -25,6 +25,8 @@ namespace PCon.View
         private ProcessChecker _processChecker;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly ServiceProvider _serviceProvider;
+        private bool _isFullScreenMode;
+        private Size _lastScreenSize;
 
         public Overlay(MediaObject video, string mainProcess, VlcControl vlcControl,
             IServiceCollection serviceCollection)
@@ -196,6 +198,39 @@ namespace PCon.View
             {
                 StartOverlayAttach();
             }
+        }
+
+        private void FullScreenModeCommand_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Console.WriteLine("AAAA");
+            var hWnd = WinApi.GetForegroundWindow();
+            var size = WindowInfo.GetWindowHandleSize(hWnd);
+            Console.WriteLine(size.Height);
+            Console.WriteLine(size.Width);
+            if (_isFullScreenMode)
+            {
+                Height = _lastScreenSize.Height;
+                Width = _lastScreenSize.Width;
+                _isFullScreenMode = false;
+            }
+            else
+            {
+                _lastScreenSize.Height = Height;
+                _lastScreenSize.Width = Width;
+                Height = size.Height;
+                Width = size.Width;
+                _isFullScreenMode = true;
+            }
+        }
+
+        private void SlowVideoSpeedCommand_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (_mainPlayer.Rate > 0.5f) _mainPlayer.Rate -= 0.1f;
+        }
+
+        private void IncreaseVideoSpeedCommand_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (_mainPlayer.Rate < 1.5f) _mainPlayer.Rate += 0.1f;
         }
     }
 }

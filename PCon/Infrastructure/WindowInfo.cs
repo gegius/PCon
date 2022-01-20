@@ -14,12 +14,21 @@ namespace PCon.Infrastructure
             return bounds;
         }
 
-        public static Size GetMainProcessWindowSize(IntPtr handle)
+        public static Size GetStartOverlayPosition(IntPtr handle)
         {
             var size = new Size();
             var bounds = GetWindowBounds(handle);
             size.Width = bounds.Width;
             size.Height = bounds.Height;
+            return size;
+        }
+
+        public static Size GetWindowHandleSize(IntPtr handle)
+        {
+            var size = new Size();
+            var bounds = GetWindowBounds(handle);
+            size.Height = 1080;
+            size.Width = 1920;
             return size;
         }
 

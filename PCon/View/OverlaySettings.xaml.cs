@@ -26,8 +26,6 @@ namespace PCon.View
         private readonly ServiceCollection _serviceCollection;
         private ServiceProvider _serviceProvider;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private bool _isFullScreenMode;
-        private Size _lastScreenSize;
 
         public OverlaySettings(string mainProcess, ServiceCollection serviceCollection)
         {
@@ -271,28 +269,6 @@ namespace PCon.View
         private void StartSearchCommand_Execute(object sender, ExecutedRoutedEventArgs e)
         {
             if (ResultPanel.Visibility == Visibility.Visible) FindMedia_OnClick(sender, e);
-        }
-
-        private void FullScreenModeCommand_Execute(object sender, ExecutedRoutedEventArgs e)
-        {
-            var hWnd = WinApi.GetForegroundWindow();
-            var size = WindowInfo.GetMainProcessWindowSize(hWnd);
-            Console.WriteLine(size.Height);
-            Console.WriteLine(size.Width);
-            if (_isFullScreenMode)
-            {
-                _overlay.Height = _lastScreenSize.Height;
-                _overlay.Width = _lastScreenSize.Width;
-                _isFullScreenMode = false;
-            }
-            else
-            {
-                _lastScreenSize.Height = _overlay.Height;
-                _lastScreenSize.Width = _overlay.Width;
-                _overlay.Height = size.Height;
-                _overlay.Width = size.Width;
-                _isFullScreenMode = true;
-            }
         }
     }
 }

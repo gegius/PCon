@@ -27,7 +27,7 @@
         public int Left { get; }
         public int Top { get; }
         public int Right { get; }
-        private int Bottom { get; }
+        public int Bottom { get; }
 
         public int Height => Bottom - Top;
         public int Width => Right - Left;

@@ -16,6 +16,10 @@
         <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.PausePlayerCommand}" Executed="PausePlayerCommand_Execute"/>
         <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.HideOverlayCommand}" Executed="HideOverlayCommand_Execute"/>
         <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.ShowOverlayCommand}" Executed="ShowOverlayCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.FullScreenModeCommand}" Executed="FullScreenModeCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.IncreaseVideoSpeedCommand}" Executed="IncreaseVideoSpeedCommand_Execute"/>
+        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.SlowVideoSpeedCommand      }" Executed="SlowVideoSpeedCommand_Execute"/>
+        
     </Window.CommandBindings>
     <Window.Resources>
         <!--Control colors.-->

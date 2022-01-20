@@ -11,7 +11,6 @@
         ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None">
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.StartSearchCommand}" Executed="StartSearchCommand_Execute"/>
-        <CommandBinding Command="{x:Static hotKeys:WpfHotKeys.FullScreenModeCommand}" Executed="FullScreenModeCommand_Execute"/>
     </Window.CommandBindings>
     <Window.Background>
         <SolidColorBrush Opacity="0.3" Color="White"/>
