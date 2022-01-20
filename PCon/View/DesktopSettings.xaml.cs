@@ -37,6 +37,13 @@ namespace PCon.View
             if(e.ChangedButton == MouseButton.Left)
                 DragMove();
         }
+        
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            if (e.LeftButton == MouseButtonState.Pressed)
+                Window.GetWindow(this).DragMove();
+        }
 
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -99,22 +106,6 @@ namespace PCon.View
             base.OnClosed(e);
         }
 
-        /*private void Button_Click_Start(object sender, RoutedEventArgs e)
-        {
-            if (mainProcess is null)
-            {
-                ErrorHandler.ThrowErrorNotSelectedProcess();
-                return;
-            }
-
-            processChecker = new ProcessChecker(mainProcess);
-            overlaySettings = new OverlaySettings(mainProcess, _serviceCollection) {DesktopSettings = this};
-            InitSnapper();
-            overlaySettingsStarted = true;
-            overlaySettings.Visibility = Visibility.Hidden;
-            Hide();
-        }*/
-
         public void Start()
         {
             if (mainProcess is null)
@@ -148,74 +139,7 @@ namespace PCon.View
             snapper = new WindowSnapper(overlaySettings);
             snapper.AttachAsync(mainProcess);
         }
-
-        /*private void ProcessLabel_OnClick(object sender, RoutedEventArgs e)
-        {
-            var label = (Label) sender;
-            label.Background = FindResource("AwesomeGreenColor") as Brush;
-            if (!PanelInsideProcessPrograms.Children.Contains(label)) return;
-            ChangeColor(sender);
-            mainProcess = label.Content.ToString();
-        }
-
-        private void Update_OnClick(object sender, RoutedEventArgs e)
-        {
-            mainProcess = null;
-            PanelInsideProcessPrograms.Children.Clear();
-            var processlist = Process.GetProcesses()
-                .Where(p => (long)p.MainWindowHandle != 0)
-                .ToArray();
-            foreach (var process in processlist)
-            {
-                var name = process.MainWindowTitle;
-                if (IsCorrectProcess(name))
-                    PanelInsideProcessPrograms.Children.Add(CreateProcessLabel(name));
-            }
-        }
-
-        private static bool IsCorrectProcess(string name)
-        {
-            return !string.IsNullOrEmpty(name) && name != "DesktopSettings";
-        }
-
-        private Label CreateProcessLabel(object content)
-        {
-            var label = new Label {Foreground = Brushes.White, Content = content};
-            label.MouseDown += ProcessLabel_OnClick;
-            label.MouseEnter += ProcessLabel_MouseEnter;
-            label.MouseLeave += ProcessLabel_MouseLeave;
-            label.MouseUp += ProcessLabel_MouseUp;
-            return label;
-        }
-
-        private void ChangeColor(object sender)
-        {
-            foreach (var child in PanelInsideProcessPrograms.Children)
-            {
-                var label = (Label) child;
-                label.Background = label == (Label) sender
-                    ? FindResource("AwesomeGreenColor") as Brush
-                    : FindResource("Empty") as Brush;
-            }
-        }*/
-
-        private void ProcessLabel_MouseEnter(object sender, RoutedEventArgs e)
-        {
-            if (((Label) sender).Background != FindResource("AwesomeGreenColor") as Brush)
-                ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
-        }
-
-        private void ProcessLabel_MouseLeave(object sender, RoutedEventArgs e)
-        {
-            if (((Label) sender).Background != FindResource("AwesomeGreenColor") as Brush)
-                ((Label) sender).Background = FindResource("Empty") as Brush;
-        }
-
-        private void ProcessLabel_MouseUp(object sender, RoutedEventArgs e)
-        {
-            if (((Label) sender).Background != FindResource("AwesomeGreenColor") as Brush)
-                ((Label) sender).Background = FindResource("AwesomeAquamarineColor") as Brush;
-        }
+        
 
         private void Cross_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -229,23 +153,37 @@ namespace PCon.View
 
         private void OpenProcessSelect(object sender, MouseButtonEventArgs e)
         {
-            var selectProcess = new SelectProcess(_serviceCollection) {DesktopSettings = this};
-            selectProcess.Owner = this;
-            selectProcess.Show();
+            var selectProcess = new SelectProcess(_serviceCollection)
+            {
+                DesktopSettings = this,
+                Owner = this
+            };
+            if (selectProcess.ShowDialog() == true)
+            {
+                // Пользователь разрешил действие. Продолжить1
+            }
+            else
+            {
+                // Пользователь отменил действие.
+            }
         }
 
         private void OpenSettingsWindow(object sender, MouseButtonEventArgs e)
         {
-            var settingsWindow = new SettingsWindow();
-            settingsWindow.Owner = this;
-            settingsWindow.Show();
+            var settingsWindow = new SettingsWindow
+            {
+                Owner = this
+            };
+            settingsWindow.ShowDialog();
         }
 
         private void OpenQuestionWindow(object sender, MouseButtonEventArgs e)
         {
-            var questionWindow = new QuestionWindow();
-            questionWindow.Owner = this;
-            questionWindow.Show();
+            var questionWindow = new QuestionWindow
+            {
+                Owner = this
+            };
+            questionWindow.ShowDialog();
         }
 
         private void OpenDota2(object sender, MouseButtonEventArgs e)

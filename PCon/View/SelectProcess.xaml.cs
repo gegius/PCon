@@ -1,5 +1,6 @@
 using System.Windows;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -19,13 +20,13 @@ namespace PCon.View
         public Overlay Overlay { get; set; }
         private readonly ServiceCollection _serviceCollection;
         private string mainProcess;
-        
+
         public SelectProcess(ServiceCollection serviceCollection)
         {
             _serviceCollection = serviceCollection;
             InitializeComponent();
         }
-        
+
         private void Button_Click_Start(object sender, RoutedEventArgs e)
         {
             DesktopSettings.mainProcess = mainProcess;
@@ -47,7 +48,7 @@ namespace PCon.View
             mainProcess = null;
             PanelInsideProcessPrograms.Children.Clear();
             var processlist = Process.GetProcesses()
-                .Where(p => (long)p.MainWindowHandle != 0)
+                .Where(p => (long) p.MainWindowHandle != 0)
                 .ToArray();
             foreach (var process in processlist)
             {

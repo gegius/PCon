@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:PCon.View"
         mc:Ignorable="d"
-        Title="SelectProcess" Height="400" Width="290" ResizeMode="NoResize">
+        Title="SelectProcess" Height="400" Width="290" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid>
         <StackPanel Orientation="Vertical" Height="400" Width="270" Style="{DynamicResource Geometria}">
             <Button x:Name="Update" Width="50" Height="30" Content="Update" Foreground="Black" Click="Update_OnClick" HorizontalAlignment="Right" Style="{DynamicResource RoundCorner}"></Button>
